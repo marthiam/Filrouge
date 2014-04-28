@@ -5,6 +5,7 @@ import java.util.*;
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.ExistingSubscriberException;
+import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.BettingPasswordsVerifier;
 
 /**
@@ -39,10 +40,11 @@ public class BettingSoft implements Betting {
 	 */
 	private Collection<Subscriber> subscribers;
 
+
 	/**
 	 * constructor of BettingSoft
 	 * 
-	 * @param a_managerPwd
+	 * @param managerPwd
 	 *            manager password.
 	 * 
 	 * @throws BadParametersException
@@ -68,39 +70,42 @@ public class BettingSoft implements Betting {
 	 * From Betting interface
 	 */
 	@Override
-	public String subscribe(String a_lastName, String a_firstName,
-			String a_username, String a_managerPwd)
-			throws AuthenticationException, ExistingSubscriberException,
+	public String subscribe(String lastName, String firstName, String username,
+			String borndate, String managerPwd) throws AuthenticationException,
+			ExistingSubscriberException, SubscriberException,
 			BadParametersException {
 		// Authenticate manager
-		authenticateMngr(a_managerPwd);
+		authenticateMngr(managerPwd);
 		// Look if a subscriber with the same username already exists
-		Subscriber s = searchSubscriberByUsername(a_username);
+		Subscriber s = searchSubscriberByUsername(username);
 		if (s != null)
 			throw new ExistingSubscriberException(
 					"A subscriber with the same username already exists");
 		// Creates the new subscriber
-		s = new Subscriber(a_lastName, a_firstName, a_username);
+		s = new Subscriber(lastName, firstName, username);
 		// Add it to the collection of subscribers
 		subscribers.add(s);
 		return s.getPassword();
-	}
+		}
 
 	/**
 	 * From Betting interface
 	 */
 	@Override
-	public void unsubscribe(String a_username, String a_managerPwd)
+	public long unsubscribe(String a_username, String a_managerPwd)
 			throws AuthenticationException, ExistingSubscriberException {
+		
 		// Authenticate manager
 		authenticateMngr(a_managerPwd);
 		// Look if a subscriber with the same username already exists
 		Subscriber s = searchSubscriberByUsername(a_username);
-		if (s != null)
+		if (s != null){
+			int result= s.getCompte().getSolde();
 			subscribers.remove(s); // remove it
-		else
+			
+		}else
 			throw new ExistingSubscriberException("Subscriber does not exist");
-	}
+	    }
 
 	/**
 	 * From Betting interface
@@ -165,4 +170,6 @@ public class BettingSoft implements Betting {
 		}
 		return null;
 	}
+	
+
 }
