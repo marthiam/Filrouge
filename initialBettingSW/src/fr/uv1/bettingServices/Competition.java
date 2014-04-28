@@ -3,8 +3,6 @@
  */
 package fr.uv1.bettingServices;
 
-import java.util.Date;
-
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.utils.MyCalendar;
 
@@ -13,8 +11,17 @@ import fr.uv1.utils.MyCalendar;
  *
  */
 public class Competition {
+	/**
+	 * La taille minimum du nom d'une compétition
+	 */
 	private static final int LONG_COMPETITION = 4;
+	
+	/**
+	 * La contrainte que le nom de la compétition doit verifier
+	 */
 	private static final String REGEX_COMPETITION = new String("[a-zA-Z0-9\\-\\\\_\\]*");
+	
+	
 	/**
 	 * Le nom de la compétition
 	 */
@@ -23,7 +30,7 @@ public class Competition {
 	/**
 	 * La date de la compétition
 	 */
-	private MyCalendar date;	
+	private MyCalendar dateCompetition;	
 	
 	/**
 	 * Le montant total misé sur la compétition
@@ -38,10 +45,10 @@ public class Competition {
 	 * @param date La date de la compétition
 	 * @throws BadParametersException 
 	 */
-	public Competition(String nomCompetition, MyCalendar date) throws BadParametersException{
+	public Competition(String nomCompetition, MyCalendar dateCompetition) throws BadParametersException{
 		
 		this.setNomCompetition(nomCompetition);
-		this.setDate(date);
+		this.setDateCompetition(dateCompetition);
 	}
 
 	/**
@@ -64,15 +71,15 @@ public class Competition {
 	/**
 	 * @return la date de la compétition
 	 */
-	public MyCalendar getDate() {
-		return date;
+	public MyCalendar getDateCompetition() {
+		return dateCompetition;
 	}
 
 	/**
 	 * @param date la nouvelle date de la compétition
 	 */
-	public void setDate(MyCalendar date) {
-		this.date = date;
+	public void setDateCompetition(MyCalendar date) {
+		MyCalendar.setDate(date);
 	}
 
 	/**
@@ -84,8 +91,11 @@ public class Competition {
 
 	/**
 	 * @param montantTotalMise Le montant total misé sur la compétition 
+	 * @throws BadParametersException 
 	 */
-	public static void setMontantTotalMise(int montantTotalMise) {
+	public static void setMontantTotalMise(int montantTotalMise) throws BadParametersException {
+		if (montantTotalMise<0)
+			throw new BadParametersException(montantTotalMise + " est un montant total invalide");
 		Competition.montantTotalMise = montantTotalMise;
 	}	
 	
