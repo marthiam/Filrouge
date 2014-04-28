@@ -129,7 +129,7 @@ public class Subscriber implements Serializable {
 		if (!(an_object instanceof Subscriber))
 			return false;
 		Subscriber s = (Subscriber) an_object;
-		return this.firstname.equals(s.getFirstname());
+		return this.username.equals(s.getUsername());
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class Subscriber implements Serializable {
 	 *            string to check.
 	 * 
 	 * @throws BadParametersException
-	 *             raised if invalid.
+	 *             raised if invalid.serialVersionUID
 	 */
 	private static void checkStringLastName(String a_lastname)
 			throws BadParametersException {
@@ -189,7 +189,7 @@ public class Subscriber implements Serializable {
 	/**
 	 * check the validity of a string for a subscriber username, letters and
 	 * digits are allowed. username length should at least be LONG_USERNAME
-	 * characters
+	 * charactersserialVersionUID
 	 * 
 	 * @param a_username
 	 *            string to check.

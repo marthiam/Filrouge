@@ -4,11 +4,9 @@ import fr.uv1.bettingServices.exceptions.BadParametersException;
 
 /**
  * @author Mariam
- *		La classe réprésente le compte d'un  joueur 
+ *		La classe rÃˆprÃˆsente le compte d'un  joueur 
  */
 public class Compte {
-	
-	//Coucou Cisse
 	
 	/**
 	 * le solde du compte 
@@ -28,7 +26,7 @@ public class Compte {
 	}
 
 	/**
-	 * Construit un compte avec un solde egal à 0
+	 * Construit un compte avec un solde egal â€¡ 0
 	 * 
 	 */
 	public Compte() {
@@ -45,14 +43,17 @@ public class Compte {
 	/**
 	 * Met a jour le solde du compte 
 	 * 		@param solde le nouveau solde du compte
+	 * 		@throws BadParametersException 
 	 */
-	public void setSolde(int solde) {
+	public void setSolde(int solde) throws BadParametersException {
 		if (solde>=0)
-		this.solde = solde;
+			this.solde = solde;
+		else
+			throw new BadParametersException(solde +" n'est pas un solde valide dans setSolde() ");
 	}
 	/**
-	 *Enlève un montant  du solde d'un compte 
-	 * 		@param  montant le montant à enlever 
+	 *EnlÃ‹ve un montant  du solde d'un compte 
+	 * 		@param  montant le montant â€¡ enlever 
 	 * 		@throws BadParametersException
 	 */
 	public void debiterCompte(int montant) throws BadParametersException{
@@ -65,10 +66,10 @@ public class Compte {
 	}
 	/**
 	 * Ajoute un  montant  au  solde du compe 
-	 * 		@param montant la somme a ajouté.
+	 * 		@param montant la somme a ajoutÃˆ.
 	 * 		@throws BadParametersException
 	 */
-	public void crebiterCompte(int montant) throws BadParametersException{
+	public void crediterCompte(int montant) throws BadParametersException{
 		if (montant>=0){
 			this.solde = solde+montant; 
 		}else{
@@ -76,7 +77,4 @@ public class Compte {
 			
 		}
 	}
-	
-	
-
 }
