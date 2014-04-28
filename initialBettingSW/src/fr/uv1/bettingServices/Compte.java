@@ -4,7 +4,7 @@ import fr.uv1.bettingServices.exceptions.BadParametersException;
 
 /**
  * @author Mariam
- *		La classe rÈprÈsente le compte d'un  joueur 
+ *		La classe represente le compte d'un  joueur 
  */
 public class Compte {
 	
@@ -52,7 +52,7 @@ public class Compte {
 			throw new BadParametersException(solde +" n'est pas un solde valide dans setSolde() ");
 	}
 	/**
-	 *EnlËve un montant  du solde d'un compte 
+	 *Enleve un montant  du solde d'un compte 
 	 * 		@param  montant le montant ‡ enlever 
 	 * 		@throws BadParametersException
 	 */
@@ -66,7 +66,7 @@ public class Compte {
 	}
 	/**
 	 * Ajoute un  montant  au  solde du compe 
-	 * 		@param montant la somme a ajoutÈ.
+	 * 		@param montant la somme a ajouté.
 	 * 		@throws BadParametersException
 	 */
 	public void crediterCompte(int montant) throws BadParametersException{
