@@ -1,5 +1,6 @@
 package fr.uv1.tests.unit;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -41,4 +42,21 @@ public class PersonTest {
 	public void testInvalidFirstnamePerson() throws BadParametersException {
 		new Person(new String("Duran"), new String(""));
 	}
+	@Test
+	public void testSetFirstname() throws BadParametersException {
+		person = new Subscriber(new String("Cisse"), new String("Mariam"),
+				new String("mcisse"));
+		person.setFirstname(new String("Kadidiatou"));
+		assertFalse(person.getFirstname().equals(new String("Mariam")));
+		assertTrue(person.getFirstname().equals(new String("Kadidiatou")));
+		}
+	
+	@Test
+	public void testSetLastname() throws BadParametersException {
+		person = new Subscriber(new String("Cisse"), new String("Mariam"),
+				new String("mcisse"));
+		person.setLastname(new String("Thiam"));
+		assertFalse(subs.getLastname().equals(new String("Cisse")));
+		assertTrue(subs.getLastname().equals(new String("Thiam")));
+		}
 }

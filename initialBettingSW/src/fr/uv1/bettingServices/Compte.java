@@ -11,7 +11,7 @@ public class Compte {
 	/**
 	 * le solde du compte 
 	 */
-	private int solde;
+	private long solde;
 
 	/**
 	 * 	Construit un compte avec un solde initial 
@@ -36,7 +36,7 @@ public class Compte {
 	/**
 	 * @return le solde du compte 
 	 */
-	public int getSolde() {
+	public long getSolde() {
 		return solde;
 	}
 
@@ -45,7 +45,7 @@ public class Compte {
 	 * 		@param solde le nouveau solde du compte
 	 * 		@throws BadParametersException 
 	 */
-	public void setSolde(int solde) throws BadParametersException {
+	public void setSolde(long solde) throws BadParametersException {
 		if (solde>=0)
 			this.solde = solde;
 		else
@@ -56,7 +56,7 @@ public class Compte {
 	 * 		@param  montant le montant ‡ enlever 
 	 * 		@throws BadParametersException
 	 */
-	public void debiterCompte(int montant) throws BadParametersException{
+	public void debiterCompte(long montant) throws BadParametersException{
 		if (montant<=solde && montant>=0){
 			this.solde = solde-montant; 
 		}else{
@@ -69,7 +69,7 @@ public class Compte {
 	 * 		@param montant la somme a ajouté.
 	 * 		@throws BadParametersException
 	 */
-	public void crediterCompte(int montant) throws BadParametersException{
+	public void crediterCompte(long montant) throws BadParametersException{
 		if (montant>=0){
 			this.solde = solde+montant; 
 		}else{
