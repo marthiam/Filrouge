@@ -21,40 +21,18 @@ public class SubscriberTest {
 	public void testSubscriber() throws BadParametersException {
 		subs = new Subscriber(new String("Duran"), new String("Miguel"),
 				new String("worldChamp"));
-		assertTrue(subs.getFirstname().equals("Miguel"));
-		assertTrue(subs.getLastname().equals("Duran"));
 		assertTrue(subs.getUsername().equals("worldChamp"));
 		assertTrue(subs.getPassword() != null);
 	}
 	
 
-	@Test(expected = BadParametersException.class)
-	public void testNullLastnameSubscriber() throws BadParametersException {
-		new Subscriber(null, new String("Miguel"), new String("worldChamp"));
-	}
-
-	@Test(expected = BadParametersException.class)
-	public void testNullFirstnameSubscriber() throws BadParametersException {
-		new Subscriber(new String("Duran"), null, new String("worldChamp"));
-	}
 
 	@Test(expected = BadParametersException.class)
 	public void testNullUsernameSubscriber() throws BadParametersException {
 		new Subscriber(new String("Duran"), new String("Miguel"), null);
 	}
 
-	@Test(expected = BadParametersException.class)
-	public void testInvalidLastnameSubscriber() throws BadParametersException {
-		new Subscriber(new String(" "), new String("Miguel"), new String(
-				"worldChamp"));
-	}
-
-	@Test(expected = BadParametersException.class)
-	public void testInvalidFirstnameSubscriber() throws BadParametersException {
-		new Subscriber(new String("Duran"), new String(""), new String(
-				"worldChamp"));
-	}
-
+	
 	@Test(expected = BadParametersException.class)
 	public void testInvalidUsernameSubscriber() throws BadParametersException {
 		new Subscriber(new String("Duran"), new String("Miguel"),
@@ -90,23 +68,6 @@ public class SubscriberTest {
 		assertFalse(subs.equals(s));
 	}
 	
-	@Test
-	public void testSetFirstname() throws BadParametersException {
-		subs = new Subscriber(new String("Cisse"), new String("Mariam"),
-				new String("mcisse"));
-		subs.setFirstname(new String("Kadidiatou"));
-		assertFalse(subs.getFirstname().equals(new String("Mariam")));
-		assertTrue(subs.getFirstname().equals(new String("Kadidiatou")));
-		}
-	
-	@Test
-	public void testSetLastname() throws BadParametersException {
-		subs = new Subscriber(new String("Cisse"), new String("Mariam"),
-				new String("mcisse"));
-		subs.setLastname(new String("Thiam"));
-		assertFalse(subs.getLastname().equals(new String("Cisse")));
-		assertTrue(subs.getLastname().equals(new String("Thiam")));
-		}
 	
 	@Test
 	public void testSetUsername() throws BadParametersException {
@@ -160,5 +121,16 @@ public class SubscriberTest {
 				new String("mcisse"));
 		assertTrue(subs.getUsername().equals(new String("mcisse")));
 		assertFalse(subs.getUsername().equals(new String("bcisse")));
+		}
+	@Test
+	public void testEquals() throws BadParametersException {
+		subs = new Subscriber(new String("Cisse"), new String("Mariam"),
+				new String("mcisse"));
+		Subscriber subs1= new Subscriber(new String("Thiam"), new String("Mamadou"),
+				new String("mcisse"));
+		Subscriber subs2= new Subscriber(new String("Thiam"), new String("Mamadou"),
+				new String("mcisse1"));
+		assertTrue(subs.equals(subs1));
+		assertFalse(subs.equals(subs2));
 		}
 }

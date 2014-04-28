@@ -28,47 +28,53 @@ import fr.uv1.utils.*;
  *         </ul>
  * 
  */
-public class Subscriber implements Serializable {
+public class Subscriber extends Person implements Serializable {
 	private static final long serialVersionUID = 6050931528781005411L;
 	/*
 	 * Minimal size for a subscriber's username
 	 */
 	private static final int LONG_USERNAME = 4;
 	/*
-	 * Constraints for last and firstname and username
+	 * Constraints for a username
 	 */
-	private static final String REGEX_NAME = new String("[a-zA-Z][a-zA-Z\\-\\ ]*");
 	private static final String REGEX_USERNAME = new String("[a-zA-Z0-9]*");
 
-	private String firstname;
-	private String lastname;
+
 	/** 
 	 * @uml.property name="username"
 	 */
 	private String username;
 	private String password;
+	private Compte compte;
+
+	/**
+	 *
+	 * @return the compte 
+	 */
+	public Compte getCompte() {
+		return compte;
+	}
+
+	/**
+	 * @param compte the compte to set
+	 */
+	public void setCompte(Compte compte) {
+		this.compte = compte;
+	}
 
 	/*
 	 * the constructor calculates a password for the subscriber. No test on the
 	 * validity of names
 	 */
-	public Subscriber(String a_name, String a_firstName, String a_username)
-			throws BadParametersException {
-		this.setLastname(a_name);
-		this.setFirstname(a_firstName);
+	public Subscriber(String a_name, String a_firstName, String a_username) throws BadParametersException {
+		super(a_firstName,a_name );
 		this.setUsername(a_username);
 		// Generate password
 		password = RandPass.getPass(Constraints.LONG_PWD);
 		this.setPassword(password);
 	}
 
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
+	
 
 	public String getUsername() {
 		return username;
@@ -78,19 +84,6 @@ public class Subscriber implements Serializable {
 		return password;
 	}
 
-	public void setLastname(String lastname) throws BadParametersException {
-		if (lastname == null)
-			throw new BadParametersException("lastname is not valid");
-		checkStringLastName(lastname);
-		this.lastname = lastname;
-	}
-
-	public void setFirstname(String firstname) throws BadParametersException {
-		if (firstname == null)
-			throw new BadParametersException("firstname is not valid");
-		checkStringFirstName(firstname);
-		this.firstname = firstname;
-	}
 
 	public void setUsername(String username) throws BadParametersException {
 		if (username == null)
@@ -139,52 +132,9 @@ public class Subscriber implements Serializable {
 
 	@Override
 	public String toString() {
-		return " " + firstname + " " + lastname + " " + username;
+		return " " + super.getFirstname() + " " + super.getLastname() + " " + username;
 	}
 
-	/**
-	 * check the validity of a string for a subscriber lastname, letters, dashes
-	 * and spaces are allowed. First character should be a letter. lastname
-	 * length should at least be 1 character
-	 * 
-	 * @param a_lastname
-	 *            string to check.
-	 * 
-	 * @throws BadParametersException
-	 *             raised if invalid.serialVersionUID
-	 */
-	private static void checkStringLastName(String a_lastname)
-			throws BadParametersException {
-
-		if (a_lastname == null)
-			throw new BadParametersException("name not instantiated");
-		if (a_lastname.length() < 1)
-			throw new BadParametersException(
-					"name length less than 1 character");
-		// First character should be a letter ; then just letters, dashes or
-		// spaces
-		if (!a_lastname.matches(REGEX_NAME))
-			throw new BadParametersException("the name " + a_lastname
-					+ " does not verify constraints ");
-	}
-
-	/**
-	 * check the validity of a string for a subscriber firstname, letters,
-	 * dashes and spaces are allowed. First character should be a letter.
-	 * firstname length should at least be 1 character
-	 * 
-	 * @param a_firstname
-	 *            string to check.
-	 * 
-	 * @throws BadParametersException
-	 *             raised if invalid.
-	 */
-	private static void checkStringFirstName(String a_firstname)
-			throws BadParametersException {
-		// Same rules as for the last name
-		checkStringLastName(a_firstname);
-
-	}
 
 	/**
 	 * check the validity of a string for a subscriber username, letters and
@@ -210,4 +160,6 @@ public class Subscriber implements Serializable {
 			throw new BadParametersException("the username " + a_username
 					+ " does not verify constraints ");
 	}
+	
+	
 }
