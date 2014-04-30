@@ -56,7 +56,7 @@ public class PersonTest {
 		person = new Subscriber(new String("Cisse"), new String("Mariam"),
 				new String("mcisse"));
 		person.setLastname(new String("Thiam"));
-		assertFalse(subs.getLastname().equals(new String("Cisse")));
-		assertTrue(subs.getLastname().equals(new String("Thiam")));
+		assertFalse(person.getLastname().equals(new String("Cisse")));
+		assertTrue(person.getLastname().equals(new String("Thiam")));
 		}
 }
