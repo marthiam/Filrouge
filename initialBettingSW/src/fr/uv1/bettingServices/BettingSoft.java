@@ -70,7 +70,26 @@ public class BettingSoft implements Betting {
 			throw new BadParametersException("manager's password not valid");
 		this.managerPassword = managerPassword;
 	}
-
+	/**
+	 * From Betting interface
+	 */
+	@Override
+	public String subscribe(String lastName, String firstName, String username,
+		 String managerPwd) throws AuthenticationException,
+			ExistingSubscriberException, BadParametersException {
+		// Authenticate manager
+		authenticateMngr(managerPwd);
+		// Look if a subscriber with the same username already exists
+		Subscriber s = searchSubscriberByUsername(username);
+		if (s != null)
+			throw new ExistingSubscriberException(
+					"A subscriber with the same username already exists");
+		// Creates the new subscriber
+		s = new Subscriber(lastName, firstName, username);
+		// Add it to the collection of subscribers
+		subscribers.add(s);
+		return s.getPassword();
+		}
 	/**
 	 * From Betting interface
 	 */

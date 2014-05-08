@@ -1,19 +1,29 @@
 package fr.uv1.bettingServices;
 
 import java.util.Collection;
+import java.util.HashSet;
+
 
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 
-public  class Competiteur extends Person implements Competitor {
+public  class Team implements Competitor {
 	
 	private String pseudo;
-	private Collection<Competitor> menbers;
+	private Collection<Competitor> members;
 	
 	
-	public Competiteur(String lastname, String firstname) {
-		super(lastname, firstname);
-		// TODO Auto-generated constructor stub
+	
+
+	public Team(String pseudo) {
+		this.pseudo = pseudo;
+		this.members = new HashSet<Competitor>();
+		
+	}
+
+	public Team(String pseudo, Collection<Competitor> menbers) {
+		this.pseudo = pseudo;
+		this.members = menbers;
 	}
 
 	/**
@@ -35,6 +45,12 @@ public  class Competiteur extends Person implements Competitor {
 	 */
 	public void addMember(Competitor member) throws ExistingCompetitorException,
 			BadParametersException{
+		if(member==null || !member.hasValidName()) throw new BadParametersException(member +"est pas un parametre valide dans addMenber");
+		if(members.contains(member)){
+			members.add(member);
+		}else{
+			throw new ExistingCompetitorException(member +" existe déja "); 
+		}
 		
 	}
 
@@ -51,5 +67,6 @@ public  class Competiteur extends Person implements Competitor {
 			ExistingCompetitorException{
 		
 	}
+	  
 
 }

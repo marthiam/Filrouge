@@ -1,6 +1,7 @@
 package fr.uv1.bettingServices;
 
 import fr.uv1.bettingServices.exceptions.BadParametersException;
+import fr.uv1.utils.MyCalendar;
 
 public class Person {
 	
@@ -8,6 +9,7 @@ public class Person {
 	private static final String REGEX_NAME = new String("[a-zA-Z][a-zA-Z\\-\\ ]*");
 	private String firstname;
 	private String lastname;
+	private String borndate;
 	
 	
 	
@@ -24,8 +26,40 @@ public class Person {
 	public String getLastname() {
 		return lastname;
 	}
+	/**
+	 * @return the borndate
+	 */
+	public String getBorndate() {
+		return borndate;
+	}
+
+	/**
+	 * @param borndate the borndate to set
+	 */
+	public void setBorndate(String borndate) {
+		this.borndate = borndate;
+	}
+
+	/**
+	 * Constructeur 
+	 * @param lastname
+	 * @param firstname
+	 * @throws BadParametersException
+	 */
+	public Person(String lastname, String firstname,String borndate) throws BadParametersException {
+		this.firstname = firstname;
+		this.lastname = lastname;
+	}
 	
-	public Person(String lastname, String firstname) {
+	/**
+	 * Constructeur 
+	 * @param lastname
+	 * @param firstname
+	 * @throws BadParametersException
+	 */
+	public Person(String lastname, String firstname) throws BadParametersException {
+		checkStringLastName(lastname);
+		checkStringFirstName(firstname);
 		this.firstname = firstname;
 		this.lastname = lastname;
 	}

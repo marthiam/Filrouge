@@ -6,6 +6,7 @@ package fr.uv1.bettingServices;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.utils.MyCalendar;
 
+
 /**
  * @author mcisse
  *
@@ -45,7 +46,7 @@ public class Competition {
 	 * @param date La date de la compétition
 	 * @throws BadParametersException 
 	 */
-	public Competition(String nomCompetition, MyCalendar dateCompetition) throws BadParametersException{
+	public Competition(String nomCompetition,  MyCalendar dateCompetition) throws BadParametersException{
 		
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
@@ -71,15 +72,15 @@ public class Competition {
 	/**
 	 * @return la date de la compétition
 	 */
-	public MyCalendar getDateCompetition() {
+	public  MyCalendar getDateCompetition() {
 		return dateCompetition;
 	}
 
 	/**
 	 * @param date la nouvelle date de la compétition
 	 */
-	public void setDateCompetition(MyCalendar date) {
-		MyCalendar.setDate(date);
+	public void setDateCompetition( MyCalendar date) {
+		 dateCompetition.setDate(date);
 	}
 
 	/**

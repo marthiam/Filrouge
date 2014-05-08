@@ -35,7 +35,7 @@ public class PersonTest {
 	
 	@Test(expected = BadParametersException.class)
 	public void testInvalidLastnamePerson() throws BadParametersException {
-		new Person(new String(" "), new String("Miguel"));
+		new Person(new String(""), new String("Miguel"));
 	}
 
 	@Test(expected = BadParametersException.class)

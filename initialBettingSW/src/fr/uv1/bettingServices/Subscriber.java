@@ -67,7 +67,7 @@ public class Subscriber extends Person implements Serializable {
 	 * validity of names
 	 */
 	public Subscriber(String a_name, String a_firstName, String a_username) throws BadParametersException {
-		super(a_firstName,a_name );
+		super(a_name ,a_firstName);
 		this.setUsername(a_username);
 		// Generate password
 		password = RandPass.getPass(Constraints.LONG_PWD);
