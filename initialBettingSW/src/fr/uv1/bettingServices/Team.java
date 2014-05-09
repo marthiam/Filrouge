@@ -3,26 +3,43 @@ package fr.uv1.bettingServices;
 import java.util.Collection;
 import java.util.HashSet;
 
-
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 
 public  class Team implements Competitor {
 	
-	private String pseudo;
+	private String teamName;
 	private Collection<Competitor> members;
+	/**
+	 * La taille minimum du nom d'une equipe
+	 * 
+	 */
+	private static final int LONG_TEAMNAME = 4;
+	
+	/**
+	 * La contrainte que le nom de l'equipe doit verifier
+	 */
+	private static final String REGEX_TEAMNAME = new String("[a-zA-Z0-9\\-\\\\_\\]*");
 	
 	
 	
 
-	public Team(String pseudo) {
-		this.pseudo = pseudo;
+	/**
+	 * Construit une equipe sans menbres 
+	 * @param teamName le 
+	 */
+	public Team(String teamName) {
+		this.teamName = teamName;
 		this.members = new HashSet<Competitor>();
-		
 	}
 
-	public Team(String pseudo, Collection<Competitor> menbers) {
-		this.pseudo = pseudo;
+	/**
+	 * Constructeur  
+	 * @param teamName
+	 * @param menbers
+	 */
+	public Team(String teamName, Collection<Competitor> menbers) {
+		this.teamName = teamName;
 		this.members = menbers;
 	}
 
@@ -32,7 +49,7 @@ public  class Team implements Competitor {
 	 * @return true if the competitor has a valid name.
 	 */
 	public boolean hasValidName(){
-		return false;
+		return teamName.length()>=LONG_TEAMNAME && teamName.matches(REGEX_TEAMNAME);
 	}
 	
 	/**
@@ -65,7 +82,12 @@ public  class Team implements Competitor {
 	 */
 	public void deleteMember(Competitor member) throws BadParametersException,
 			ExistingCompetitorException{
-		
+		if(member==null || !member.hasValidName()) throw new BadParametersException(member +"est pas un parametre valide dans addMenber");
+		if(members.contains(member)){
+			members.remove(member);
+		}else{
+			throw new ExistingCompetitorException(member +"ne peut pas être supprimer car elle n'existe pas"); 
+		}
 	}
 	  
 
