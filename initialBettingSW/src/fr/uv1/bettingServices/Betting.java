@@ -70,41 +70,6 @@ public interface Betting {
 			String borndate, String managerPwd) throws AuthenticationException,
 			ExistingSubscriberException, SubscriberException,
 			BadParametersException;
-	/**
-	 * Subscribe.
-	 * 
-	 * @param a_lastName
-	 *            the last name of the subscriber.
-	 * @param a_firstName
-	 *            the first name of the subscriber.
-	 * @param a_username
-	 *            the username of the subscriber.
-	 * @param a_managerPwd
-	 *            the manager's password.
-	 * 
-	 * @throws AuthenticationException
-	 *             raised if the manager's password is incorrect.
-	 * @throws ExistingSubscriberException
-	 *             raised if a subscriber exists with the same username.
-	 * @throws BadParametersException
-	 *             raised if last name, first name or username are invalid.
-	 * 
-	 * @return password for the new subscriber
-	 */
-	String subscribe(String a_lastName, String a_firstName, String a_username,
-			String a_managerPwd) throws AuthenticationException,
-			ExistingSubscriberException, BadParametersException;
-	/**
-	 * authenticate manager.
-	 * 
-	 * @param a_managerPwd
-	 *            the manager's password.
-	 * 
-	 * @throws AuthenticationException
-	 *             raised if the manager's password is incorrect.
-	 */
-	void authenticateMngr(String a_managerPwd) throws AuthenticationException;
-
 
 	/**
 	 * delete a subscriber. His currents bets are canceled. He looses betted
@@ -609,4 +574,6 @@ public interface Betting {
 
 	ArrayList<String> consultBetsCompetition(String competition)
 			throws ExistingCompetitionException;
+
+	void authenticateMngr(String string) throws AuthenticationException;
 }

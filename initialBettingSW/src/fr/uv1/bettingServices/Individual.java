@@ -5,13 +5,22 @@ import java.util.Collection;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 
-public  class individual extends Person implements Competitor {
+public  class Individual extends Person implements Competitor {
 	
+	/**
+	 * La taille minimum du nom d'une equipe
+	 * 
+	 */
+	private static final int LONG_INDIV = 4;
 	
-	
+	/**
+	 * La contrainte que le nom de l'equipe doit verifier
+	 */
+	private static final String REGEX_INDIV = new String("[a-zA-Z0-9\\-\\\\_\\]*");
+	private static final String REGEX_DATE= new String("(\\d{2})/(\\d{2})/(\\d{4})");
 	
 
-	public individual(String lastname, String firstname ,String borndate)
+	public Individual(String lastname, String firstname ,String borndate)
 			throws BadParametersException {
 		super(lastname, firstname,borndate);
 		// TODO Auto-generated constructor stub
@@ -47,7 +56,7 @@ public  class individual extends Person implements Competitor {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		individual other = (individual) obj;
+		Individual other = (Individual) obj;
 		if (getBorndate() == null) {
 			if (other.getBorndate() != null) {
 				return false;
@@ -78,7 +87,9 @@ public  class individual extends Person implements Competitor {
 	 * @return true if the competitor has a valid name.
 	 */
 	public boolean hasValidName(){
-		return false;
+		boolean result =this.getFirstname().length()>=LONG_INDIV && this.getFirstname().matches(REGEX_INDIV);
+		result &=this.getLastname().length()>=LONG_INDIV && this.getLastname().matches(REGEX_INDIV);
+		return result;
 	}
 	
 	/**

@@ -10,6 +10,11 @@ package fr.uv1.bettingServices;
  *
  */
 public class Pari {
+	private long mise; 
+
+	public long getMise() {
+		return mise;
+	}
 	
 
 

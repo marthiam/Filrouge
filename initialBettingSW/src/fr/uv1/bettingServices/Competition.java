@@ -47,7 +47,6 @@ public class Competition {
 	 * @throws BadParametersException 
 	 */
 	public Competition(String nomCompetition,  MyCalendar dateCompetition) throws BadParametersException{
-		
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
 	}

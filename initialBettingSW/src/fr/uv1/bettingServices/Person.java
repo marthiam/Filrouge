@@ -7,6 +7,7 @@ public class Person {
 	
 
 	private static final String REGEX_NAME = new String("[a-zA-Z][a-zA-Z\\-\\ ]*");
+	private static final String REGEX_DATE= new String("(\\d{2})/(\\d{2})/(\\d{4})");
 	private String firstname;
 	private String lastname;
 	private String borndate;
@@ -35,34 +36,39 @@ public class Person {
 
 	/**
 	 * @param borndate the borndate to set
+	 * @throws BadParametersException 
 	 */
-	public void setBorndate(String borndate) {
+	public void setBorndate(String borndate) throws BadParametersException {
+		checkStringBorndate(borndate);
 		this.borndate = borndate;
 	}
 
 	/**
 	 * Constructeur 
-	 * @param lastname
-	 * @param firstname
+	 * @param the lastname 
+	 * @param the firstname
+	 * @param the borndate
 	 * @throws BadParametersException
 	 */
 	public Person(String lastname, String firstname,String borndate) throws BadParametersException {
-		this.firstname = firstname;
-		this.lastname = lastname;
+		setLastname(lastname);
+		setFirstname(firstname);
+		setBorndate(borndate);
+		
 	}
-	
 	/**
 	 * Constructeur 
-	 * @param lastname
-	 * @param firstname
+	 * @param the lastname 
+	 * @param the firstname
 	 * @throws BadParametersException
 	 */
 	public Person(String lastname, String firstname) throws BadParametersException {
-		checkStringLastName(lastname);
-		checkStringFirstName(firstname);
-		this.firstname = firstname;
-		this.lastname = lastname;
+		setLastname(lastname);
+		setFirstname(firstname);
+		
 	}
+	
+	
 
 	/**
 	 * Met à jour le nom d'une personne 
@@ -70,8 +76,6 @@ public class Person {
 	 * @throws BadParametersException
 	 */
 	public void setLastname(String lastname) throws BadParametersException {
-		if (lastname == null)
-			throw new BadParametersException("lastname is not valid");
 		checkStringLastName(lastname);
 		this.lastname = lastname;
 	}
@@ -83,8 +87,6 @@ public class Person {
 	 * 			
 	 */
 	public void setFirstname(String firstname) throws BadParametersException {
-		if (firstname == null)
-			throw new BadParametersException("firstname is not valid");
 		checkStringFirstName(firstname);
 		this.firstname = firstname;
 	}
@@ -112,6 +114,20 @@ public class Person {
 		// spaces
 		if (!a_lastname.matches(REGEX_NAME))
 			throw new BadParametersException("the name " + a_lastname
+					+ " does not verify constraints ");
+	}
+	
+	/**
+	 * @param borndate
+	 * 			String to check
+	 * @throws BadParametersException
+	 */
+	private static void checkStringBorndate(String borndate)
+			throws BadParametersException {
+		if (borndate == null)
+			throw new BadParametersException("date not instantiated");
+		if (!borndate.matches(REGEX_DATE))
+			throw new BadParametersException("the date " + borndate
 					+ " does not verify constraints ");
 	}
 

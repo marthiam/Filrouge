@@ -42,6 +42,10 @@ public class BettingSoft implements Betting {
 	 * @uml.associationEnd multiplicity="(0 -1)" inverse="bettingSoft:fr.uv1.bettingServices.Subscriber"
 	 */
 	private Collection<Subscriber> subscribers;
+	/*
+	 * Subscribers of the betting software
+	 */
+	private Collection<Competition> competitions;
 	
 	
 
@@ -70,26 +74,7 @@ public class BettingSoft implements Betting {
 			throw new BadParametersException("manager's password not valid");
 		this.managerPassword = managerPassword;
 	}
-	/**
-	 * From Betting interface
-	 */
-	@Override
-	public String subscribe(String lastName, String firstName, String username,
-		 String managerPwd) throws AuthenticationException,
-			ExistingSubscriberException, BadParametersException {
-		// Authenticate manager
-		authenticateMngr(managerPwd);
-		// Look if a subscriber with the same username already exists
-		Subscriber s = searchSubscriberByUsername(username);
-		if (s != null)
-			throw new ExistingSubscriberException(
-					"A subscriber with the same username already exists");
-		// Creates the new subscriber
-		s = new Subscriber(lastName, firstName, username);
-		// Add it to the collection of subscribers
-		subscribers.add(s);
-		return s.getPassword();
-		}
+
 	/**
 	 * From Betting interface
 	 */
@@ -106,7 +91,7 @@ public class BettingSoft implements Betting {
 			throw new ExistingSubscriberException(
 					"A subscriber with the same username already exists");
 		// Creates the new subscriber
-		s = new Subscriber(lastName, firstName, username);
+		s = new Subscriber(lastName, firstName, username,borndate);
 		// Add it to the collection of subscribers
 		subscribers.add(s);
 		return s.getPassword();
@@ -146,6 +131,7 @@ public class BettingSoft implements Betting {
 		for (Subscriber s : subscribers) {
 			subsData.add(s.getLastname());
 			subsData.add(s.getFirstname());
+			subsData.add(s.getBorndate());
 			subsData.add(s.getUsername());
 
 			result.add(subsData);
@@ -254,7 +240,9 @@ public class BettingSoft implements Betting {
 	@Override
 	public Competitor createCompetitor(String lastName, String firstName,
 			String borndate, String managerPwd) throws AuthenticationException, BadParametersException{
-		return null;
+		this.authenticateMngr(managerPwd);
+		Competitor indiv= new Individual(lastName,firstName,borndate);
+		return indiv;
 	}
 
 	/**
@@ -278,7 +266,9 @@ public class BettingSoft implements Betting {
 	public Competitor createCompetitor(String name, String managerPwd)
 			throws AuthenticationException,
 			BadParametersException{
-		return null;
+		this.authenticateMngr(managerPwd);
+		Competitor team= new Team(name);
+		return team;
 	}
 
 	/**
@@ -333,7 +323,9 @@ public class BettingSoft implements Betting {
 	public void creditSubscriber(String username, long numberTokens, String managerPwd)
 			throws AuthenticationException, ExistingSubscriberException,
 			BadParametersException{
-		
+		this.authenticateMngr(managerPwd);
+		Subscriber subs= this.searchSubscriberByUsername(username);
+		subs.getCompte().crediterCompte(numberTokens);
 	}
 
 	/**
@@ -359,7 +351,9 @@ public class BettingSoft implements Betting {
 	public void debitSubscriber(String username, long numberTokens, String managerPwd)
 			throws AuthenticationException, ExistingSubscriberException,
 			SubscriberException, BadParametersException{
-		
+			this.authenticateMngr(managerPwd);
+			Subscriber subs= this.searchSubscriberByUsername(username);
+			subs.getCompte().debiterCompte(numberTokens);
 	}
 
 	/**
@@ -535,7 +529,8 @@ public class BettingSoft implements Betting {
 	@Override
 	public void changeSubsPwd(String username, String newPwd, String currentPwd)
 			throws AuthenticationException, BadParametersException{
-		
+			Subscriber subs= this.searchSubscriberByUsername(username);
+			if(!newPwd.equals(currentPwd)) subs.changePassword(newPwd,currentPwd);
 	}
 
 	/**
@@ -565,7 +560,16 @@ public class BettingSoft implements Betting {
 	@Override
 	public ArrayList<String> infosSubscriber(String username, String pwdSubs)
 			throws AuthenticationException{
-		return null; 
+		ArrayList<String> subsData= new ArrayList<String>();
+		Subscriber s= this.searchSubscriberByUsername(username);
+		subsData.add(s.getLastname());
+		subsData.add(s.getFirstname());
+		subsData.add(s.getBorndate());
+		subsData.add(s.getUsername());
+		subsData.add(""+s.getNumberToken());
+		
+		
+		return subsData; 
 		
 	}
 

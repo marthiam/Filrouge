@@ -1,7 +1,9 @@
 package fr.uv1.bettingServices;
 
 import java.io.Serializable;
+import java.util.Collection;
 
+import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.utils.*;
 
@@ -44,10 +46,21 @@ public class Subscriber extends Person implements Serializable {
 	 * @uml.property name="username"
 	 */
 	private String username;
-	private String password;
-	private Compte compte;
-
+	
 	/**
+	 * the subscriber's password
+	 */
+	private String password;
+	/**
+	 * the subscriber's compte
+	 */
+	private Compte compte;
+	/**
+	 * the subscriber's bets
+	 */
+	private Collection<Pari> paris; 
+
+	/*
 	 *
 	 * @return the compte 
 	 */
@@ -55,19 +68,27 @@ public class Subscriber extends Person implements Serializable {
 		return compte;
 	}
 
-	/**
+	/*
 	 * @param compte the compte to set
 	 */
 	public void setCompte(Compte compte) {
 		this.compte = compte;
 	}
+	/*
+	 *
+	 * @return the number of token 
+	 */
+	public long getNumberToken() {
+		return compte.getSolde();
+	}
+
 
 	/*
 	 * the constructor calculates a password for the subscriber. No test on the
 	 * validity of names
 	 */
-	public Subscriber(String a_name, String a_firstName, String a_username) throws BadParametersException {
-		super(a_name ,a_firstName);
+	public Subscriber(String a_name, String a_firstName, String borndate, String a_username) throws BadParametersException {
+		super(a_name ,a_firstName,borndate);
 		this.setUsername(a_username);
 		// Generate password
 		password = RandPass.getPass(Constraints.LONG_PWD);
@@ -98,6 +119,26 @@ public class Subscriber extends Person implements Serializable {
 		if (!BettingPasswordsVerifier.verify(password))
 			throw new BadParametersException("password is not valid");
 		this.password = password;
+	}
+	
+	public void authenticateSubscribe(String a_subscribersPwd)
+			throws AuthenticationException {
+		if (a_subscribersPwd == null)
+			throw new AuthenticationException("invalid manager's password");
+
+		if (!this.password.equals(a_subscribersPwd))
+			throw new AuthenticationException("incorrect manager's password");
+	}
+	/**
+	 * Change the subscriber's password
+	 * @param password
+	 * @throws BadParametersException
+	 */
+	public void changePassword(String newPwd, String currentPwd) throws BadParametersException , AuthenticationException{
+			// Authenticate manager
+			authenticateSubscribe(currentPwd);
+			// Change password if valid
+			setPassword(newPwd);
 	}
 
 	/*
@@ -134,8 +175,24 @@ public class Subscriber extends Person implements Serializable {
 	public String toString() {
 		return " " + super.getFirstname() + " " + super.getLastname() + " " + username;
 	}
-
-
+	
+	/**
+	 * @return la lste des paris du joueur 
+	 */
+	public String getParis() {
+		String result ="";
+		for(Pari p : paris){
+			result+= p +" ";
+		}
+		return  result;
+	}
+	public long numberTokenBetted(){
+		long result =0;
+		for(Pari p : paris){
+			result+= p.getMise();
+		}
+		return  result;
+	}
 	/**
 	 * check the validity of a string for a subscriber username, letters and
 	 * digits are allowed. username length should at least be LONG_USERNAME
