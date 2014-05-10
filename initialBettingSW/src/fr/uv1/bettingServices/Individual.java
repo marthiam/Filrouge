@@ -16,7 +16,7 @@ public  class Individual extends Person implements Competitor {
 	/**
 	 * La contrainte que le nom de l'equipe doit verifier
 	 */
-	private static final String REGEX_INDIV = new String("[a-zA-Z0-9\\-\\\\_\\]*");
+	private static final String REGEX_INDIV = new String("[a-zA-Z][a-zA-Z\\-\\ ]*");
 	private static final String REGEX_DATE= new String("(\\d{2})/(\\d{2})/(\\d{4})");
 	
 

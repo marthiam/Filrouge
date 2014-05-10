@@ -567,8 +567,8 @@ public class BettingSoft implements Betting {
 		subsData.add(s.getBorndate());
 		subsData.add(s.getUsername());
 		subsData.add(""+s.getNumberToken());
-		
-		
+		subsData.add(""+s.numberTokenBetted());
+		subsData.add(s.getParis());
 		return subsData; 
 		
 	}
