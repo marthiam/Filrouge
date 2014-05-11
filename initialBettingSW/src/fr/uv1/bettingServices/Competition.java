@@ -3,41 +3,41 @@
  */
 package fr.uv1.bettingServices;
 
-import java.util.Collection;
-
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.utils.MyCalendar;
-
 
 /**
  * @author mcisse
  *
  */
 public class Competition {
-	/** La taille minimum du nom d'une compÃ©tition */
+	/**
+	 * La taille minimum du nom d'une compétition
+	 */
 	private static final int LONG_COMPETITION = 4;
 	
-	/** La contrainte que le nom de la compÃ©tition doit verifier */
+	/**
+	 * La contrainte que le nom de la compétition doit verifier
+	 */
 	private static final String REGEX_COMPETITION = new String("[a-zA-Z0-9\\-\\\\_\\]*");
 	
 	
-	/** Le nom de la compÃ©tition */
+	/**
+	 * Le nom de la compétition
+	 */
 	private String nomCompetition;
 	
-	/** La date de la compÃ©tition */
+	/**
+	 * La date de la compétition
+	 */
 	private MyCalendar dateCompetition;	
 	
-	/** Le montant total misÃ© sur la compÃ©tition */
-	private int montantTotalMise=0;
-	
-	/** Les competiteurs de la compÃ©tition */
-	private Collection<Competitor> competitors;
-	
+	/**
+	 * Le montant total misé sur la compétition
+	 */
+	private static int montantTotalMise=0;
 	
 
-<<<<<<< HEAD
-	
-=======
 	/**
 	 * 
 	 * Construit une compétition avec son nom et sa date  
@@ -45,80 +45,80 @@ public class Competition {
 	 * @param date La date de la compétition
 	 * @throws BadParametersException 
 	 */
-	public Competition(String nomCompetition,  MyCalendar dateCompetition) throws BadParametersException{
+	public Competition(String nomCompetition, MyCalendar dateCompetition) throws BadParametersException{
+		
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
 	}
->>>>>>> c770bf5a2cb5b7b308fc6a25b8d9adc07a7a3913
 
 	/**
-	 * @return le nom de la compÃ©tition
+	 * @return le nom de la compétition
 	 */
 	public String getNomCompetition() {
 		return nomCompetition;
 	}
 
 	/**
-	 * @param nomCompetition le nouveau nom de la compÃ©tition
+	 * @param nomCompetition le nouveau nom de la compétition
 	 */
 	public void setNomCompetition(String nomCompetition) throws BadParametersException{
 		if (nomCompetition==null)
-			throw new BadParametersException("Le nom de la compï¿½tition n'est pas valide");
+			throw new BadParametersException("Le nom de la compétition n'est pas valide");
 		checkStringNomCompetition(nomCompetition);
 		this.nomCompetition = nomCompetition;
 	}
 
 	/**
-	 * @return la date de la compÃ©tition
+	 * @return la date de la compétition
 	 */
-	public  MyCalendar getDateCompetition() {
+	public MyCalendar getDateCompetition() {
 		return dateCompetition;
 	}
 
 	/**
-	 * @param date la nouvelle date de la compÃ©tition
+	 * @param date la nouvelle date de la compétition
 	 */
-	public void setDateCompetition( MyCalendar date) {
-		 dateCompetition.setDate(date);
+	public void setDateCompetition(MyCalendar date) {
+		MyCalendar.setDate(date);
 	}
 
 	/**
-	 * @return Le montant total misÃ© sur la compÃ©tition
+	 * @return Le montant total misé sur la compétition
 	 */
-	public int getMontantTotalMise() {
+	public static int getMontantTotalMise() {
 		return montantTotalMise;
 	}
 
 	/**
-	 * @param montantTotalMise Le montant total misÃ© sur la compÃ©tition 
+	 * @param montantTotalMise Le montant total misé sur la compétition 
 	 * @throws BadParametersException 
 	 */
-	public void setMontantTotalMise(int montantTotalMise) throws BadParametersException {
+	public static void setMontantTotalMise(int montantTotalMise) throws BadParametersException {
 		if (montantTotalMise<0)
 			throw new BadParametersException(montantTotalMise + " est un montant total invalide");
-		this.montantTotalMise = montantTotalMise;
+		Competition.montantTotalMise = montantTotalMise;
 	}	
 	
 	/**
-	 * Cette mÃ©thode verifie la validitÃ© du nom d'une compÃ©tition.
-	 * Seuls les lettres, les chiffres, les tirets et underscore sont autorisÃ©s.
-	 * La taille de la chaine de caractÃ¨res doit Ãªtre au moins LONG_COMPETITION caractÃ¨res
+	 * Cette méthode verifie la validité du nom d'une compétition.
+	 * Seuls les lettres, les chiffres, les tirets et underscore sont autorisés.
+	 * La taille de la chaine de caractères doit être au moins LONG_COMPETITION caractères
 	 * 
 	 * @param nomCompetition
-	 *            Le nom de la compÃ©tition Ã  vÃ©rifier
+	 *            Le nom de la compétition à verifier
 	 * 
 	 * @throws BadParametersException
-	 *             exception levÃ© si le nom de la compï¿½tition est invalide
+	 *             exception levé si le nom de la compétition est invalide
 	 */
 	private static void checkStringNomCompetition(String nomCompetition)
 			throws BadParametersException {
 		if (nomCompetition == null)
-			throw new BadParametersException("Le nom de la compÃ©tition n'a pas Ã©tÃ© instanciÃ©");
+			throw new BadParametersException("Le nom de la compétition n'a pas été instancié");
 		
 		if (nomCompetition.length() < LONG_COMPETITION)
-			throw new BadParametersException("Le nom de la compÃ©tition est moins que "
-					+ LONG_COMPETITION + "caractÃ¨res");
-		// Seuls les lettres, les chiffres, les tirets et underscore sont autorisÃ©s
+			throw new BadParametersException("Le nom de la compétition est moins que "
+					+ LONG_COMPETITION + "caractères");
+		// Seuls les lettres, les chiffres, les tirets et underscore sont autorisés
 		if (!nomCompetition.matches(REGEX_COMPETITION))
 			throw new BadParametersException("la competition " + nomCompetition
 					+ " ne verifie pas les contraintes ");
