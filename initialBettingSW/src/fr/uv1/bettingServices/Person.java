@@ -1,5 +1,9 @@
 package fr.uv1.bettingServices;
 
+
+import java.util.Calendar;
+import java.util.Date;
+
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.utils.MyCalendar;
 
@@ -116,6 +120,30 @@ public class Person {
 			throw new BadParametersException("the name " + a_lastname
 					+ " does not verify constraints ");
 	}
+	public static int getYears(int y,int m,int d)
+	{
+	  MyCalendar curr =  MyCalendar.getDate();
+	  MyCalendar birth = new MyCalendar(y,m,d);
+	  int yeardiff = curr.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
+	  curr.add(Calendar.YEAR,-yeardiff);
+	  if(birth.after(curr))
+	  {
+	    yeardiff = yeardiff - 1;
+	  }
+	  return yeardiff;
+	}
+	
+	public static boolean validDate(String date){
+		String [] s = date.split("/");
+		int jour = new Integer(s[0]);
+		int mois = new Integer(s[1]);
+		int annee = new Integer(s[2]);
+		if(jour>=1 && jour<=31 && mois>=1 && mois<=12 ){
+			long age= getYears(annee,mois,jour);
+			return age>=18;
+		}
+		return false;
+	}
 	
 	/**
 	 * @param borndate
@@ -126,8 +154,8 @@ public class Person {
 			throws BadParametersException {
 		if (borndate == null)
 			throw new BadParametersException("date not instantiated");
-		if (!borndate.matches(REGEX_DATE))
-			throw new BadParametersException("the date " + borndate
+		if (!borndate.matches(REGEX_DATE) || !validDate(borndate) )
+			throw new BadParametersException("the borndate " + borndate
 					+ " does not verify constraints ");
 	}
 
@@ -148,5 +176,9 @@ public class Person {
 		checkStringLastName(a_firstname);
 
 	}
+	@Override
+	public String toString() {
+		return " " + this.getFirstname() + " " + this.getLastname()+" " + this.getBorndate() ;
+}
 
 }

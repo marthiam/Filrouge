@@ -64,10 +64,10 @@ public  class Team implements Competitor {
 	public void addMember(Competitor member) throws ExistingCompetitorException,
 			BadParametersException{
 		if(member==null || !member.hasValidName()) throw new BadParametersException(member +"est pas un parametre valide dans addMenber");
-		if(members.contains(member)){
+		if(!members.contains(member)){
 			members.add(member);
 		}else{
-			throw new ExistingCompetitorException(member +" existe déja "); 
+			throw new ExistingCompetitorException(member.toString() +" existe déja "); 
 		}
 		
 	}

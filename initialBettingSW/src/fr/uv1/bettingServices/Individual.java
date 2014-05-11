@@ -92,6 +92,7 @@ public  class Individual extends Person implements Competitor {
 		return result;
 	}
 	
+	
 	/**
 	 * add a member to a team competitor.
 	 * 

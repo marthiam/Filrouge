@@ -55,6 +55,28 @@ public class PersonTest {
 	public void testInvalidBorndateEmptyPerson() throws BadParametersException {
 		new Person(new String("Duran"), new String("Miguel"),new String(""));
 	}
+	@Test(expected = BadParametersException.class)
+	public void testInvalidBorndate2Person() throws BadParametersException {
+		new Person(new String("Duran"), new String("Miguel"),new String("02/11/1997"));
+	}
+	
+	@Test(expected = BadParametersException.class)
+	public void testInvalidBorndate3Person() throws BadParametersException {
+		new Person(new String("Duran"), new String("Miguel"),new String("52/11/1992"));
+	}
+	@Test(expected = BadParametersException.class)
+	public void testInvalidBorndate4Person() throws BadParametersException {
+		new Person(new String("Duran"), new String("Miguel"),new String("12/13/1992"));
+	}
+	@Test(expected = BadParametersException.class)
+	public void testInvalidBorndate5Person() throws BadParametersException {
+		new Person(new String("Duran"), new String("Miguel"),new String("12/0/1992"));
+	}
+	@Test(expected = BadParametersException.class)
+	public void testInvalidBorndate6Person() throws BadParametersException {
+		new Person(new String("Duran"), new String("Miguel"),new String("12/0/1000"));
+	}
+	
 	@Test
 	public void testSetFirstname() throws BadParametersException {
 		person = new Person(new String("Dupont"), new String("Jean"),new String("02/11/1992"));
@@ -73,9 +95,9 @@ public class PersonTest {
 	@Test
 	public void testSetBorndate() throws BadParametersException {
 		person = new Person(new String("Dupont"), new String("Jean"),new String("02/11/1992"));
-		person.setBorndate(new String("02/11/2013"));
+		person.setBorndate(new String("02/11/1993"));
 		assertFalse(person.getBorndate().equals(new String("02/11/1992")));
-		assertTrue(person.getBorndate().equals(new String("02/11/2013")));
+		assertTrue(person.getBorndate().equals(new String("02/11/1993")));
 		}
 	@Test(expected = BadParametersException.class)
 	public void testInvalideSetFirstname() throws BadParametersException {
