@@ -17,7 +17,7 @@ public class Compte {
 	 * 	Construit un compte avec un solde initial 
 	 * 		@param solde le solde initial du compte 
 	 */
-	public Compte(int solde)  throws BadParametersException {
+	public Compte(long solde)  throws BadParametersException {
 		if(solde>=0 )
 		this.solde = solde;
 		else
@@ -42,8 +42,9 @@ public class Compte {
 
 	/**
 	 * Met a jour le solde du compte 
-	 * 		@param solde le nouveau solde du compte
+	 * 		@param solde  le nouveau solde du compte
 	 * 		@throws BadParametersException 
+	 * 
 	 */
 	public void setSolde(long solde) throws BadParametersException {
 		if (solde>=0)
