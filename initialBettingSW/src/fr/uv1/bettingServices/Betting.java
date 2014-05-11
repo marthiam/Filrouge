@@ -574,4 +574,6 @@ public interface Betting {
 
 	ArrayList<String> consultBetsCompetition(String competition)
 			throws ExistingCompetitionException;
+
+	void authenticateMngr(String string) throws AuthenticationException;
 }
