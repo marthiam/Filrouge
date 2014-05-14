@@ -107,5 +107,23 @@ public class TeamTest {
 		assertTrue(myTeam.getMembers().size()==2);
 		
 	}
+	@Test
+	public void testEquals() throws BadParametersException, ExistingCompetitorException{
+		Collection<Competitor> members =new HashSet<Competitor>();
+		members.add(new Individual("Thiam","Maurice", "22/09/1992"));
+		members.add(new Individual("Ketevi","Mariam", "02/11/1992"));
+		myTeam = new Team("Barcelon",members);
+		Collection<Competitor> members1 =new HashSet<Competitor>();
+		members1.add(new Individual("Thiam","Maurice", "22/09/1992"));
+		members1.add(new Individual("Ketevi","Mariam", "02/11/1992"));
+		Team myTeam1 = new Team("Cisse",members1);
+		Collection<Competitor> members2 =new HashSet<Competitor>();
+		members2.add(new Individual("Thiami","Maurice", "22/09/1992"));
+		members2.add(new Individual("Ketevi","Mariam", "02/11/1992"));
+		Team myTeam2 = new Team("Barcelon",members2);
+		assertTrue(myTeam.equals(myTeam1));
+		assertFalse(myTeam.equals(myTeam2));
+		
+	}
 
 }

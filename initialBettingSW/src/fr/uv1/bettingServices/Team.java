@@ -2,6 +2,7 @@ package fr.uv1.bettingServices;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
@@ -63,7 +64,7 @@ public  class Team implements Competitor {
 	 */
 	public void addMember(Competitor member) throws ExistingCompetitorException,
 			BadParametersException{
-		if(member==null || !member.hasValidName()) throw new BadParametersException(member +"est pas un parametre valide dans addMenber");
+		if(member==null || !member.hasValidName() || !(member instanceof Individual)) throw new BadParametersException(member +"est pas un parametre valide dans addMenber");
 		if(!members.contains(member)){
 			members.add(member);
 		}else{
@@ -134,6 +135,23 @@ public  class Team implements Competitor {
 		if(members==null) throw new BadParametersException();
 		this.members = members;
 	}	
+	
+	
+	public boolean equals(Team t){
+		boolean trouver =false; 
+		if(t==null || t.getMembers().size()!=this.members.size()) return false; 
+		Iterator e = this.members.iterator();
+		Iterator e1 = t.getMembers().iterator();
+		while (e.hasNext() && !trouver ){
+			trouver= !t.getMembers().contains(e.next());
+			if(trouver) return false;
+		}
+		if(!e.hasNext() && !trouver ){
+			trouver=true;
+		}
+		
+		return !trouver ;
+	}
 	  
 
 }

@@ -1,6 +1,7 @@
 package fr.uv1.bettingServices;
 
 import fr.uv1.bettingServices.exceptions.BadParametersException;
+import fr.uv1.bettingServices.exceptions.SubscriberException;
 
 /**
  * @author Mariam
@@ -56,12 +57,17 @@ public class Compte {
 	 *Enleve un montant  du solde d'un compte 
 	 * 		@param  montant le montant ‡ enlever 
 	 * 		@throws BadParametersException
+	 * 				est levé si le montant est negative
+	 * 		@throws SubscriberException 
+	 * 				est levé le montant > au solde du compte
 	 */
-	public void debiterCompte(long montant) throws BadParametersException{
+	public void debiterCompte(long montant) throws BadParametersException, SubscriberException {
 		if (montant<=solde && montant>=0){
 			this.solde = solde-montant; 
+		}else if (montant<0){
+			throw new BadParametersException( montant +" est inferieur au solde "+this.solde +"ou n'est pas valide dans debiter compte");
 		}else{
-			throw new BadParametersException( montant +" est inferieur au solde "+this.solde +"ou n'est pas valide dans debiter compte"); 
+			throw new SubscriberException("Vous n'avez pas assez de jetons");
 			
 		}
 	}

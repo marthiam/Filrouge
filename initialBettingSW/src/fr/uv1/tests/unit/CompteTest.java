@@ -1,10 +1,12 @@
 package fr.uv1.tests.unit;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import fr.uv1.bettingServices.Compte;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
+import fr.uv1.bettingServices.exceptions.SubscriberException;
 
 public class CompteTest {
 	
@@ -45,21 +47,21 @@ public class CompteTest {
 	}
 	
 	@Test
-	public void testDebiterCompte() throws BadParametersException{
+	public void testDebiterCompte() throws BadParametersException, SubscriberException{
 		compte = new Compte(100);
 		compte.debiterCompte(30);
 		assertTrue(compte.getSolde()==70);
 		assertFalse(compte.getSolde()==100);
 	}
 	
-	@Test (expected = BadParametersException.class)
-	public void testDebiterCompteMontantSuperieurAuSolde() throws BadParametersException{
+	@Test (expected =  SubscriberException.class)
+	public void testDebiterCompteMontantSuperieurAuSolde() throws BadParametersException, SubscriberException{
 		compte = new Compte(100);
 		compte.debiterCompte(250);
 	}
 	
 	@Test (expected = BadParametersException.class)
-	public void testDebiterCompteMontantNegatif() throws BadParametersException{
+	public void testDebiterCompteMontantNegatif() throws BadParametersException, SubscriberException{
 		compte = new Compte(100);
 		compte.debiterCompte(-250);
 	}	
