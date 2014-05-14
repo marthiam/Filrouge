@@ -146,9 +146,6 @@ public  class Team implements Competitor {
 			trouver= !t.getMembers().contains(e.next());
 			if(trouver) return false;
 		}
-		if(!e.hasNext() && !trouver ){
-			trouver=true;
-		}
 		
 		return !trouver ;
 	}

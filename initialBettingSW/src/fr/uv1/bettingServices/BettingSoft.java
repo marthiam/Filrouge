@@ -91,7 +91,7 @@ public class BettingSoft implements Betting {
 			throw new ExistingSubscriberException(
 					"A subscriber with the same username already exists");
 		// Creates the new subscriber
-		s = new Subscriber(lastName, firstName, username,borndate);
+		s = new Subscriber(lastName, firstName,borndate,username);
 		// Add it to the collection of subscribers
 		subscribers.add(s);
 		return s.getPassword();
@@ -110,6 +110,7 @@ public class BettingSoft implements Betting {
 		Subscriber s = searchSubscriberByUsername(a_username);
 		if (s != null){
 			long result= s.getCompte().getSolde();
+			System.out.println(result);
 			subscribers.remove(s); // remove it
 			return result;
 		}else{
@@ -177,6 +178,7 @@ public class BettingSoft implements Betting {
 		if (a_username == null)
 			return null;
 		for (Subscriber s : subscribers) {
+			System.out.println(s.getUsername());
 			if (s.hasUsername(a_username))
 				return s;
 		}

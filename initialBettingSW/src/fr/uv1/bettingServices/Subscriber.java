@@ -93,6 +93,7 @@ public class Subscriber extends Person implements Serializable {
 		// Generate password
 		password = RandPass.getPass(Constraints.LONG_PWD);
 		this.setPassword(password);
+		this.compte=new Compte();
 	}
 
 	

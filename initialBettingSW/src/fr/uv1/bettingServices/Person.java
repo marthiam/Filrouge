@@ -11,7 +11,7 @@ public class Person {
 	
 
 	private static final String REGEX_NAME = new String("[a-zA-Z][a-zA-Z\\-\\ ]*");
-	private static final String REGEX_DATE= new String("(\\d{2})/(\\d{2})/(\\d{4})");
+	private static final String REGEX_DATE= new String("(\\d{2})-(\\d{2})-(\\d{4})");
 	private String firstname;
 	private String lastname;
 	private String borndate;
@@ -134,7 +134,7 @@ public class Person {
 	}
 	
 	public static boolean validDate(String date){
-		String [] s = date.split("/");
+		String [] s = date.split("-");
 		int jour = new Integer(s[0]);
 		int mois = new Integer(s[1]);
 		int annee = new Integer(s[2]);
