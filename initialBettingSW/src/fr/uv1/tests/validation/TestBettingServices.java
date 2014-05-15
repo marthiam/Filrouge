@@ -1,6 +1,12 @@
 package fr.uv1.tests.validation;
 
+import java.util.ArrayList;
+
+import fr.uv1.bettingServices.Competition;
+import fr.uv1.bettingServices.Competitor;
+import fr.uv1.bettingServices.Individual;
 import fr.uv1.bettingServices.exceptions.*;
+import fr.uv1.utils.MyCalendar;
 
 /**
  * 
@@ -450,5 +456,89 @@ public abstract class TestBettingServices extends ValidationTest {
 							.listSubscribers(this.getManagerPassword()).size()
 					+ ")");
 		}
+	}
+	
+	private void testBetOnPodium() throws AuthenticationException, CompetitionException,
+	ExistingCompetitionException, SubscriberException,
+	BadParametersException{
+		// Tests parameters : null
+		ArrayList<Competitor> competitors = new ArrayList<Competitor>();
+		competitors.add(new Individual("Cisse","Mamadou", "28-09-1992"));
+		competitors.add(new Individual("Cisse","Sanounou", "05-01-1989"));
+		competitors.add(new Individual("Cisse","Pinda", "07-10-1990"));
+		Competition comp=new Competition("courseA", new MyCalendar(2014,06,2),competitors);
+	try {
+		this.getBetting().betOnPodium(null,"courseA");
+		System.out
+				.println("retirer un joueur avec un pseudo non instancié n'a pas levé d'exception");
+	} catch (ExistingSubscriberException e) {
+	}
+	try {
+		this.getBetting().unsubscribe(new String("nanard"), null);
+		System.out
+				.println("retirer un joueur avec un mdp gestionnaire non instancié n'a pas levé d'exception");
+	} catch (AuthenticationException e) {
+	}
+	
+	// Tests parameters: incorrect manager password
+	try {
+		this.getBetting()
+				.unsubscribe(new String("nanard"), new String(" "));
+		System.out
+				.println(" retirer un joueur avec un mdp gestionnaire incorrect (\" \") n'a pas levé d'exception");
+	} catch (AuthenticationException e) {
+	}
+	
+	// Test number
+	int number = this.getBetting()
+			.listSubscribers(this.getManagerPassword()).size();
+	if (number != 7) {
+		System.out.println("le nombre de joueurs est incorrect");
+		System.out.print("Il doit y avoir 7 joueurs. ");
+		System.out.println("Il y en a "
+				+ this.getBetting()
+						.listSubscribers(this.getManagerPassword()).size()
+				+ ")");
+	}
+	
+	// Unsubscribe an existing subscriber
+	try {
+		this.getBetting().unsubscribe(new String("fanfan"),
+				this.getManagerPassword());
+	} catch (ExistingSubscriberException e) {
+		System.out
+				.println("retirer un joueur existant (fanfan) a levée une exception");
+	}
+	
+	number = this.getBetting().listSubscribers(this.getManagerPassword())
+			.size();
+	
+	// Unsubscribe an already unsubscriber subscriber
+	try {
+		this.getBetting().unsubscribe(new String("fanfan"),
+				this.getManagerPassword());
+		System.out
+				.println("retirer un joueur déjà retiré (fanfan) n'a pas levé d'exception");
+	} catch (ExistingSubscriberException e) {
+	}
+	
+	// Unsubscribe a non existing subscriber
+	try {
+		this.getBetting().unsubscribe(new String("tito"),
+				this.getManagerPassword());
+		System.out
+				.println("retirer un joueur non enregistré n'a levé d'exception");
+	} catch (ExistingSubscriberException e) {
+	}
+	
+	// Test number
+	if (this.getBetting().listSubscribers(this.getManagerPassword()).size() != 6) {
+		System.out.println("le nombre de joueurs est incorrect");
+		System.out.print("Il doit y avoir 6 joueurs. ");
+		System.out.println("Il y en a "
+				+ this.getBetting()
+						.listSubscribers(this.getManagerPassword()).size()
+				+ ")");
+	}
 	}
 }

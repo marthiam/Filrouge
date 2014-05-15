@@ -50,17 +50,8 @@ public class Competition {
 	 * @throws BadParametersException 
 	 * @throws CompetitionException 
 	 */
-	public Competition(String nomCompetition, MyCalendar dateCompetition,
-<<<<<<< HEAD
-<<<<<<< HEAD
-		 ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
-		super();
-=======
-			long montantTotalMise, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
->>>>>>> FETCH_HEAD
-=======
-			ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
->>>>>>> FETCH_HEAD
+	public Competition(String nomCompetition, MyCalendar dateCompetition, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
+	
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
 		this.montantTotalMise=0;
