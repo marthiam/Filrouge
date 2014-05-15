@@ -25,7 +25,7 @@ public class CompetitionTest {
 		competitors.add(new Individual("Cisse","Sanounou", "05-01-1989"));
 		competitors.add(new Individual("Cisse","Pinda", "07-10-1990"));
 		
-		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), 0, competitors);
+		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
 		
 		assertTrue(competition.getNomCompetition().equalsIgnoreCase(new String("Tennis")));
 		assertTrue(competition.getMontantTotalMise()==0);
