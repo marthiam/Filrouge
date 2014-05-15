@@ -481,32 +481,29 @@ public abstract class TestBettingServices extends ValidationTest {
 	} catch (BadParametersException e) {
 	}
 	try {
-<<<<<<< HEAD
 		
 		this.getBetting().betOnPodium(200,null,new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",joueurPW);
 			System.out
-					.println("un nom de competition null n'a pas levé d'exception");
+					.println("un nom de competition non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 	try {
 		
 		this.getBetting().betOnPodium(200,"courseA",null,new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",joueurPW);
 			System.out
-					.println("un competiteur null n'a pas levé d'exception");
+					.println("un competiteur non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 	try {
 		
 		this.getBetting().betOnPodium(200,"courseA",new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),null,joueurPW);
 			System.out
-					.println("un joueur avec un username null n'a pas levé d'exception");
+					.println("un joueur avec un username non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 	try {
 		this.getBetting().unsubscribe(new String("nanard"), null);
-=======
-		this.getBetting().betOnPodium(new String("Tennis"), , competitors);
->>>>>>> FETCH_HEAD
+
 		System.out
 				.println("Parier non instancié n'a pas levé d'exception");
 	} catch (AuthenticationException e) {
