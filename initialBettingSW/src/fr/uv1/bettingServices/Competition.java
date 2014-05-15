@@ -51,7 +51,7 @@ public class Competition {
 	 * @throws CompetitionException 
 	 */
 	public Competition(String nomCompetition, MyCalendar dateCompetition,
-			long montantTotalMise, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
+		 ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
 		super();
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);

@@ -63,6 +63,7 @@ public class BettingSoft implements Betting {
 		// The password should be valid
 		setManagerPassword(a_managerPwd);
 		this.subscribers = new ArrayList<Subscriber>();
+		this.competitions =new ArrayList<Competition>();
 	}
 
 	private void setManagerPassword(String managerPassword)
@@ -110,7 +111,6 @@ public class BettingSoft implements Betting {
 		Subscriber s = searchSubscriberByUsername(a_username);
 		if (s != null){
 			long result= s.getCompte().getSolde();
-			System.out.println(result);
 			subscribers.remove(s); // remove it
 			return result;
 		}else{
