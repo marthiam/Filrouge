@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import fr.uv1.bettingServices.Competition;
 import fr.uv1.bettingServices.Competitor;
 import fr.uv1.bettingServices.Individual;
+import fr.uv1.bettingServices.Subscriber;
 import fr.uv1.bettingServices.exceptions.*;
 import fr.uv1.utils.MyCalendar;
 
@@ -460,18 +461,24 @@ public abstract class TestBettingServices extends ValidationTest {
 	
 	private void testBetOnPodium() throws AuthenticationException, CompetitionException,
 	ExistingCompetitionException, SubscriberException,
-	BadParametersException{
-		// Tests parameters : null
+	BadParametersException, ExistingSubscriberException{
+		
 		ArrayList<Competitor> competitors = new ArrayList<Competitor>();
-		competitors.add(new Individual("Cisse","Mamadou", "28-09-1992"));
+		competitors.add(new Individual("Coulibaly","Mamadou", "28-09-1992"));
 		competitors.add(new Individual("Cisse","Sanounou", "05-01-1989"));
 		competitors.add(new Individual("Cisse","Pinda", "07-10-1990"));
+		competitors.add(new Individual("Thiam","Sali", "05-01-1989"));
+		competitors.add(new Individual("Taure","Aminata", "07-10-1990"));
 		Competition comp=new Competition("courseA", new MyCalendar(2014,06,2),competitors);
+		String joueurPW =this.getBetting().subscribe("Dupond","Max","02-10-2014","dmax", this.getManagerPassword());
+		
+		// Tests parameters : null
 	try {
-		this.getBetting().betOnPodium(null,"courseA");
+	
+	this.getBetting().betOnPodium(0,"courseA",new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"fanfon",joueurPW);
 		System.out
 				.println("retirer un joueur avec un pseudo non instancié n'a pas levé d'exception");
-	} catch (ExistingSubscriberException e) {
+	} catch (BadParametersException e) {
 	}
 	try {
 		this.getBetting().unsubscribe(new String("nanard"), null);
