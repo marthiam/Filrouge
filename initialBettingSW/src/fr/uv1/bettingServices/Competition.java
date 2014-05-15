@@ -52,14 +52,18 @@ public class Competition {
 	 */
 	public Competition(String nomCompetition, MyCalendar dateCompetition,
 <<<<<<< HEAD
+<<<<<<< HEAD
 		 ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
 		super();
 =======
 			long montantTotalMise, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
 >>>>>>> FETCH_HEAD
+=======
+			ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
+>>>>>>> FETCH_HEAD
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
-		this.setMontantTotalMise(montantTotalMise);
+		this.montantTotalMise=0;
 		this.setCompetitors(competitors);
 		this.betList = new ArrayList<Pari>();
 	}
@@ -90,8 +94,11 @@ public class Competition {
 
 	/**
 	 * @param date la nouvelle date de la compétition
+	 * @throws BadParametersException 
 	 */
-	public void setDateCompetition( MyCalendar newDate) {
+	public void setDateCompetition( MyCalendar newDate) throws BadParametersException {
+		if (newDate.isInThePast())
+			throw new BadParametersException("Cette date est passée");
 		this.dateCompetition = newDate;
 	}
 
@@ -129,7 +136,6 @@ public class Competition {
 		}
 		else{
 			int i=0;
-			Competitor competitor;
 			if (competitors.get(i) instanceof Individual){
 				while (i<competitors.size()){
 					if (!(competitors.get(i) instanceof Individual)){
