@@ -481,6 +481,7 @@ public abstract class TestBettingServices extends ValidationTest {
 	} catch (BadParametersException e) {
 	}
 	try {
+<<<<<<< HEAD
 		
 		this.getBetting().betOnPodium(200,null,new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",joueurPW);
 			System.out
@@ -503,8 +504,11 @@ public abstract class TestBettingServices extends ValidationTest {
 		}
 	try {
 		this.getBetting().unsubscribe(new String("nanard"), null);
+=======
+		this.getBetting().betOnPodium(new String("Tennis"), , competitors);
+>>>>>>> FETCH_HEAD
 		System.out
-				.println("retirer un joueur avec un mdp gestionnaire non instancié n'a pas levé d'exception");
+				.println("Parier non instancié n'a pas levé d'exception");
 	} catch (AuthenticationException e) {
 	}
 	
