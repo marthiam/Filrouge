@@ -1,0 +1,86 @@
+package fr.uv1.bettingServices;
+
+import fr.uv1.bettingServices.exceptions.AuthenticationException;
+import fr.uv1.bettingServices.exceptions.BadParametersException;
+import fr.uv1.bettingServices.exceptions.CompetitionException;
+import fr.uv1.bettingServices.exceptions.ExistingCompetitionException;
+import fr.uv1.bettingServices.exceptions.SubscriberException;
+
+public class PariPodium extends Pari{
+	/** Le nombre de jetons misé par le joueur */
+	private long mise;
+	/** Le vainqueur de la competition */
+	private Competitor winner;
+	/** Le deuxième de la compétition */
+	private Competitor second;
+	/** Le troisième de la compétition */
+	private Competitor third;
+	
+	
+	/**
+	 * @param mise Le nombre de jetons misé par le joueur
+	 * @param winner Le vainqueur de la competition
+	 * @param second Le deuxième de la compétition
+	 * @param third Le troisième de la compétition
+	 */
+	public PariPodium(long mise, Competitor winner, Competitor second,
+			Competitor third) {
+		super(mise);
+		this.winner = winner;
+		this.second = second;
+		this.third = third;
+	}
+	
+
+	/**
+	 * @return Le vainqueur de la competition
+	 */
+	public Competitor getWinner() {
+		return winner;
+	}
+
+
+	/**
+	 * @param winner Le vainqueur de la competition
+	 */
+	public void setWinner(Competitor winner) {
+		this.winner = winner;
+	}
+
+
+	/**
+	 * @return Le deuxième de la compétition
+	 */
+	public Competitor getSecond() {
+		return second;
+	}
+
+
+	/**
+	 * @param second Le deuxième de la compétition
+	 */
+	public void setSecond(Competitor second) {
+		this.second = second;
+	}
+
+
+	/**
+	 * @return Le troisième de la compétition 
+	 */
+	public Competitor getThird() {
+		return third;
+	}
+
+
+	/**
+	 * @param third Le troisième de la compétition
+	 */
+	public void setThird(Competitor third) {
+		this.third = third;
+	}
+	
+
+	
+	
+	
+}

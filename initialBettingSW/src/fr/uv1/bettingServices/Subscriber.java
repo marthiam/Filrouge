@@ -58,7 +58,7 @@ public class Subscriber extends Person implements Serializable {
 	/**
 	 * the subscriber's bets
 	 */
-	private Collection<Pari> paris; 
+	private Collection<PariWinner> paris; 
 
 	/*
 	 *
@@ -182,14 +182,14 @@ public class Subscriber extends Person implements Serializable {
 	 */
 	public String getParis() {
 		String result ="";
-		for(Pari p : paris){
+		for(PariWinner p : paris){
 			result+= p +" ";
 		}
 		return  result;
 	}
 	public long numberTokenBetted(){
 		long result =0;
-		for(Pari p : paris){
+		for(PariWinner p : paris){
 			result+= p.getMise();
 		}
 		return  result;
