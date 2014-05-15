@@ -771,6 +771,8 @@ public class BettingSoft implements Betting {
 			String managerPwd) throws AuthenticationException,
 			ExistingCompetitionException, CompetitionException,
 			ExistingCompetitorException, BadParametersException{
+			this.searchCompetitionByName(competition);
+		
 		
 	}
 	/**
