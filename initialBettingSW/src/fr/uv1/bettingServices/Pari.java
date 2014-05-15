@@ -5,13 +5,16 @@ import fr.uv1.bettingServices.exceptions.BadParametersException;
 public class Pari {
 	/** Le nombre de jetons misé par le joueur */
 	private long mise;
+	private Subscriber subscriber;
 
 	/**
 	 * @param mise
+	 * @throws BadParametersException 
 	 */
-	public Pari(long mise) {
+	public Pari(long mise, Subscriber subscriber) throws BadParametersException {
 		super();
-		this.mise = mise;
+		this.setMise(mise);
+		this.setSubscriber(subscriber);
 	}
 	
 	/**
@@ -32,5 +35,21 @@ public class Pari {
 			throw new BadParametersException("Le nombre de jetons"+ mise +" est invalide");
 		this.mise = mise;
 	}
+
+	/**
+	 * @return Le joueur
+	 */
+	public Subscriber getSubscriber() {
+		return subscriber;
+	}
+
+	/**
+	 * @param subscriber Le nouveau joueur
+	 */
+	public void setSubscriber(Subscriber subscriber) {
+		this.subscriber = subscriber;
+	}
+	
+	
 
 }
