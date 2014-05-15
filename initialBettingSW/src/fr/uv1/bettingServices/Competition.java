@@ -22,7 +22,7 @@ public class Competition {
 	private static final int LONG_COMPETITION = 4;
 	
 	/**La contrainte que le nom de la compétition doit verifier */
-	private static final String REGEX_COMPETITION = new String("[a-zA-Z0-9\\-\\\\_\\]*");
+	private static final String REGEX_COMPETITION = new String("[a-zA-Z0-9]*");
 	
 	
 	/**Le nom de la compétition*/
@@ -51,8 +51,12 @@ public class Competition {
 	 * @throws CompetitionException 
 	 */
 	public Competition(String nomCompetition, MyCalendar dateCompetition,
+<<<<<<< HEAD
 		 ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
 		super();
+=======
+			long montantTotalMise, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
+>>>>>>> FETCH_HEAD
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
 		this.setMontantTotalMise(montantTotalMise);
@@ -128,11 +132,7 @@ public class Competition {
 			Competitor competitor;
 			if (competitors.get(i) instanceof Individual){
 				while (i<competitors.size()){
-					competitor = competitors.get(i);
-					if (competitors.contains(competitor))
-						throw new CompetitionException("Un meme competiteur est representé au moins" +
-								" deux fois dans la liste des competiteurs");
-					if (!(competitor instanceof Individual)){
+					if (!(competitors.get(i) instanceof Individual)){
 						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
 								"meme classe");
 					}
@@ -141,13 +141,10 @@ public class Competition {
 				}
 				this.competitors = competitors;
 			}
+			i=0;
 			if (competitors.get(i) instanceof Team){
 				while (i<competitors.size()){
-					competitor = competitors.get(i);
-					if (competitors.contains(competitor))
-						throw new CompetitionException("Un meme competiteur est representé au moins" +
-								" deux fois dans la liste des competiteurs");
-					if (!(competitor instanceof Team)){
+					if (!(competitors.get(i) instanceof Team)){
 						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
 								"meme classe");
 					}
@@ -257,7 +254,7 @@ public class Competition {
 		
 		
 		s.getCompte().debiterCompte(numberTokens);
-		Pari pari = new PariPodium(numberTokens, winner, second, third);
+		Pari pari = new PariPodium(numberTokens,s, winner, second, third);
 		
 		// On ajoute le pari à la liste des paris de la compétition
 		this.addPari(pari);

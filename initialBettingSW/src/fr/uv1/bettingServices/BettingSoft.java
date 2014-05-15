@@ -532,7 +532,7 @@ public class BettingSoft implements Betting {
 			}
 		}
 		s.getCompte().debiterCompte(numberTokens);
-		Pari pari = new PariWinner(numberTokens, winner);
+		Pari pari = new PariWinner(numberTokens,s, winner);
 		c.addPari(pari);
 		
 	}
@@ -578,58 +578,15 @@ public class BettingSoft implements Betting {
 	
 		Subscriber s = searchSubscriberByUsername(username);
 		Competition c = searchCompetitionByName(competition);
-		
-		
-		boolean trouveWinner = false;
-		boolean trouveSecond = false;
-		boolean trouveThird = false;
+
 		if (s==null)
 			throw new SubscriberException("Il n'existe pas de joueur dont le username est: " + username);
 		if (!(s.getPassword().equals(pwdSubs)))
 			throw new AuthenticationException("Le mot de passe saisi est un incorrect");
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
-		
-		for (Competitor competitor : c.getCompetitors()){
-			if (competitor.equals(winner))
-				trouveWinner = true;
-			if (competitor.equals(second))
-				trouveSecond = true;
-			if (competitor.equals(third))
-				trouveThird = true;
-		}
-		if (trouveWinner==false || trouveSecond==false || trouveThird==false)
-			throw new CompetitionException("Un ou plusieurs de ces trois competiteurs ne participe pas " +
-					"à cette compétition");
-		
-		if (c.getDateCompetition().isInThePast())
-			throw new CompetitionException("La date de la competition est passée");
-		
-		
-		if (winner instanceof Individual){
-			for (Competitor competitor : c.getCompetitors()){
-				if (competitor.equals(s))
-					throw new CompetitionException("Le joueur est un competiteur de la competition");
-			}
-		}
-		
-		if (winner instanceof Team){
-			Team team;
-			for (Competitor competitor : c.getCompetitors()){
-				team = (Team) competitor;
-				for (Competitor member : team.getMembers()){
-					if (member.equals(s))
-						throw new CompetitionException("Le joueur fait partie d'une équipe de la compétition");
-				}
-			}
-		}
-		
-		
-		s.getCompte().debiterCompte(numberTokens);
-		Pari pari = new PariPodium(numberTokens, winner, second, third);
-		
-		// On ajoute le pari à la liste des paris de la compétition
-		c.addPari(pari);
+
+		c.parierSurLePodium(numberTokens, winner, second, third, s);
 
 	}
 

@@ -22,10 +22,11 @@ public class PariPodium extends Pari{
 	 * @param winner Le vainqueur de la competition
 	 * @param second Le deuxième de la compétition
 	 * @param third Le troisième de la compétition
+	 * @throws BadParametersException 
 	 */
-	public PariPodium(long mise, Competitor winner, Competitor second,
-			Competitor third) {
-		super(mise);
+	public PariPodium(long mise,Subscriber subscriber, Competitor winner, Competitor second,
+			Competitor third) throws BadParametersException {
+		super(mise, subscriber);
 		this.winner = winner;
 		this.second = second;
 		this.third = third;

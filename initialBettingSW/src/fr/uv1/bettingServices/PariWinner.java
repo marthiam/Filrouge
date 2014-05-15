@@ -27,8 +27,8 @@ public class PariWinner extends Pari{
 	 * @param winner Le competiteur sur lequel le joueur a parié
 	 * @throws BadParametersException 
 	 */
-	public PariWinner(long mise, Competitor winner) throws BadParametersException {
-		super(mise);
+	public PariWinner(long mise, Subscriber subscriber, Competitor winner) throws BadParametersException {
+		super(mise, subscriber);
 		this.setWinner(winner);
 	}
 
