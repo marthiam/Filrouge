@@ -481,9 +481,9 @@ public abstract class TestBettingServices extends ValidationTest {
 	} catch (BadParametersException e) {
 	}
 	try {
-		this.getBetting().unsubscribe(new String("nanard"), null);
+		this.getBetting().betOnPodium(new String("Tennis"), , competitors);
 		System.out
-				.println("retirer un joueur avec un mdp gestionnaire non instancié n'a pas levé d'exception");
+				.println("Parier non instancié n'a pas levé d'exception");
 	} catch (AuthenticationException e) {
 	}
 	

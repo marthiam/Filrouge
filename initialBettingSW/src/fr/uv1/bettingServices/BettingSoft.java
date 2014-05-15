@@ -237,7 +237,7 @@ public class BettingSoft implements Betting {
 			Collection<Competitor> competitors, String managerPwd)
 			throws AuthenticationException, ExistingCompetitionException,
 			CompetitionException, BadParametersException{
-		   
+		
 		
 	}
 	/**
@@ -575,7 +575,10 @@ public class BettingSoft implements Betting {
 			throws AuthenticationException, CompetitionException,
 			ExistingCompetitionException, SubscriberException,
 			BadParametersException{
-	
+		
+		if (numberTokens == 0)
+			throw new BadParametersException("Le montant misé est invalide");
+		
 		Subscriber s = searchSubscriberByUsername(username);
 		Competition c = searchCompetitionByName(competition);
 
