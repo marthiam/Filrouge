@@ -54,6 +54,26 @@ public  class Team implements Competitor {
 		return teamName.length()>=LONG_TEAMNAME && teamName.matches(REGEX_TEAMNAME);
 	}
 	
+	
+	/**
+	 * Renvoie si la competiteur est un menbre de l'equipe
+	 * 			@param c le competiteur a testé
+	 * 			@return true si et seulement si  c est un menbre de l'equie 
+	 * @throws BadParametersException
+	 * 				est levée si c n'est pas de type Individual
+	 */
+	public boolean hasMember(Competitor c) throws  BadParametersException{
+		if (c instanceof  Individual) {
+			for ( Competitor i:this.members ){
+				if(c.equals(i) ){
+					return true;
+				}
+			}
+		}else{
+			throw new  BadParametersException("le type de competiteur doit etre de type Indivudual pour etre menbre d'une equipe ");
+		}
+		return false;
+	}
 	/**
 	 * add a member to a team competitor.
 	 * 

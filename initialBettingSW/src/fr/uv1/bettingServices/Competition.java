@@ -18,11 +18,15 @@ import fr.uv1.utils.MyCalendar;
  *
  */
 /**
+<<<<<<< HEAD
  * @author mcisse
  *
  */
 /**
  * @author mcisse
+=======
+ * @author Mariam
+>>>>>>> ee7fc486bbe4e9d7ac5c47ae6161cded2fa72f2c
  *
  */
 public class Competition {
@@ -42,7 +46,9 @@ public class Competition {
 	/**Le montant total misé sur la compétition*/
 	private long montantTotalMise;
 	
-	/**La liste des compétiteurs*/
+	
+	/**La liste des compétiteurs */
+	//ce serait mieux d'utiliser des  Hashset à la place des ArrayList c'est dit dans les consigne cela nous aidera pour la base de donnée
 	private ArrayList<Competitor> competitors;
 	
 	/** La liste des paris */
@@ -176,6 +182,12 @@ public class Competition {
 		this.betList = betList;
 	}
 
+	
+	
+	/**
+	 * Attention un meme joueur de doit pas mise 2 fois une competition
+	 * @param pari
+	 */
 	public void addPari(Pari pari){
 		betList.add(pari);
 		this.montantTotalMise += pari.getMise();
@@ -338,6 +350,28 @@ public class Competition {
 		// On ajoute le pari à la liste des paris de la compétition
 		this.addPari(pari);
 
+	}
+	
+	public void addCompetitor(Competitor newCompetitor) throws CompetitionException{
+		if (this.competitors.get(0) instanceof Team){
+			if((newCompetitor instanceof Team)){
+			this.competitors.add(newCompetitor);
+			}{
+				throw new CompetitionException();
+				
+			}
+		}else if(this.competitors.get(0) instanceof Individual){
+			if((newCompetitor instanceof Individual)){
+				this.competitors.add(newCompetitor);
+				}{
+					throw new CompetitionException();
+				}
+		}
+		
+	}
+	
+	public boolean checkDate(){
+		return false;
 	}
 	
 	

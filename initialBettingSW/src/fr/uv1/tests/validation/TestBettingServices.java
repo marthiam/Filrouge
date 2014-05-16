@@ -459,6 +459,9 @@ public abstract class TestBettingServices extends ValidationTest {
 		}
 	}
 	
+	
+	
+	
 	private void testBetOnPodium() throws AuthenticationException, CompetitionException,
 	ExistingCompetitionException, SubscriberException,
 	BadParametersException, ExistingSubscriberException{
@@ -484,23 +487,24 @@ public abstract class TestBettingServices extends ValidationTest {
 		
 		this.getBetting().betOnPodium(200,null,new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",joueurPW);
 			System.out
-					.println("un nom de competition non instancié n'a pas levé d'exception");
+					.println(" parier sur une competition dont le nom est non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 	try {
 		
 		this.getBetting().betOnPodium(200,"courseA",null,new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",joueurPW);
 			System.out
-					.println("un competiteur non instancié n'a pas levé d'exception");
+					.println("parier sur un competiteur non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 	try {
 		
 		this.getBetting().betOnPodium(200,"courseA",new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),null,joueurPW);
 			System.out
-					.println("un joueur avec un username non instancié n'a pas levé d'exception");
+					.println("le pari fait par un joueur dont le username est non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
+<<<<<<< HEAD
 	
 	try {
 		
@@ -559,33 +563,8 @@ public abstract class TestBettingServices extends ValidationTest {
 	
 	number = this.getBetting().listSubscribers(this.getManagerPassword())
 			.size();
+=======
+>>>>>>> ee7fc486bbe4e9d7ac5c47ae6161cded2fa72f2c
 	
-	// Unsubscribe an already unsubscriber subscriber
-	try {
-		this.getBetting().unsubscribe(new String("fanfan"),
-				this.getManagerPassword());
-		System.out
-				.println("retirer un joueur déjà retiré (fanfan) n'a pas levé d'exception");
-	} catch (ExistingSubscriberException e) {
-	}
-	
-	// Unsubscribe a non existing subscriber
-	try {
-		this.getBetting().unsubscribe(new String("tito"),
-				this.getManagerPassword());
-		System.out
-				.println("retirer un joueur non enregistré n'a levé d'exception");
-	} catch (ExistingSubscriberException e) {
-	}
-	
-	// Test number
-	if (this.getBetting().listSubscribers(this.getManagerPassword()).size() != 6) {
-		System.out.println("le nombre de joueurs est incorrect");
-		System.out.print("Il doit y avoir 6 joueurs. ");
-		System.out.println("Il y en a "
-				+ this.getBetting()
-						.listSubscribers(this.getManagerPassword()).size()
-				+ ")");
-	}
 	}
 }
