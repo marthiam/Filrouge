@@ -110,7 +110,7 @@ public class BettingSoft implements Betting {
 		// Look if a subscriber with the same username already exists
 		Subscriber s = searchSubscriberByUsername(a_username);
 		if (s != null){
-			long result= s.getCompte().getSolde();
+			long result= s.solde();
 			subscribers.remove(s); // remove it
 			return result;
 		}else{
@@ -349,7 +349,7 @@ public class BettingSoft implements Betting {
 			BadParametersException{
 		this.authenticateMngr(managerPwd);
 		Subscriber subs= this.searchSubscriberByUsername(username);
-		subs.getCompte().crediterCompte(numberTokens);
+		subs.crediter(numberTokens);
 	}
 
 	/**
@@ -377,7 +377,7 @@ public class BettingSoft implements Betting {
 			SubscriberException, BadParametersException{
 			this.authenticateMngr(managerPwd);
 			Subscriber subs= this.searchSubscriberByUsername(username);
-			subs.getCompte().debiterCompte(numberTokens);
+			subs.debiter(numberTokens);
 	}
 
 	/**
@@ -514,7 +514,7 @@ public class BettingSoft implements Betting {
 		
 		if (trouve==false)
 			throw new CompetitionException("Ce competiteur ne participe pas à cette competition");
-		PariWinner pari= new PariWinner(numberTokens,s,c,winner);
+		PariWinner pari= new PariWinner(numberTokens,s,winner);
 			
 		c.parierSurLeVainqueur(pari);
 		
@@ -571,8 +571,8 @@ public class BettingSoft implements Betting {
 			
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
-
-		c.parierSurLePodium(numberTokens, winner, second, third, s);
+		PariPodium pari = new PariPodium(numberTokens,s, winner,second,third);
+		c.parierSurLePodium(pari);
 
 	}
 
@@ -676,7 +676,12 @@ public class BettingSoft implements Betting {
 			if (pari.getSubscriber().equals(s))
 				numberTokens += pari.getMise();
 		}
-		s.getCompte().crediterCompte(numberTokens);
+		try {
+			s.crediter(numberTokens);
+		} catch (BadParametersException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 	}
@@ -724,11 +729,8 @@ public class BettingSoft implements Betting {
 		   Competition compet= this.searchCompetitionByName(competition);
 		   if(compet==null) throw new ExistingCompetitionException("la competition "+competition +"n'existe pas");
 		   if(compet.isInThePast()) throw new CompetitionException("la date de fermeture de la competition"+competition+" est passé");
-<<<<<<< HEAD
 		    return compet.getCompetitors();
-=======
-		    	return compet.getCompetitors();
->>>>>>> FETCH_HEAD
+
 	}
 
 	/**

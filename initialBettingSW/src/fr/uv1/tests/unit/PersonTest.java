@@ -133,5 +133,14 @@ public class PersonTest {
 		person.setBorndate(null);
 		
 		}
+	@Test
+	public void testEquals() throws BadParametersException {
+		person = new Person(new String("Dupont"), new String("Jean"),new String("02-11-1992"));
+		assertTrue(person.equals(new Person(new String("Dupont"), new String("Jean"),new String("02-11-1992"))));
+		assertTrue(person.equals(new Subscriber(new String("Dupont"), new String("Jean"),"02-11-1992","djean")));
+		assertFalse(person.equals(new Person(new String("Dupond"), new String("Jean"),"02-11-1992")));
+		}
+	
+	
 	
 }

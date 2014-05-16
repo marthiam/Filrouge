@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
+import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.*;
 
 /**
@@ -155,6 +156,17 @@ public class Subscriber extends Person implements Serializable {
 			return false;
 		return this.username.equals(username);
 	}
+	public void crediter(long argent) throws BadParametersException{
+		this.compte.crediterCompte(argent);
+	}
+	
+	public void debiter(long argent) throws BadParametersException, SubscriberException{
+		this.compte.debiterCompte(argent);
+	}
+	
+	public long solde(){
+		return this.compte.getSolde();
+	}
 
 	/*
 	 * Two subscribers are equal if they have the same username
@@ -174,7 +186,7 @@ public class Subscriber extends Person implements Serializable {
 
 	@Override
 	public String toString() {
-		return " " + super.getFirstname() + " " + super.getLastname() + " " + username;
+		return super.toString();
 	}
 	
 	/**
