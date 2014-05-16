@@ -352,16 +352,18 @@ public class Competition {
 
 	}
 	
-	public void addCompetitor(Competitor newCompetitor) throws CompetitionException{
+	public void addCompetitor(Competitor newCompetitor) throws CompetitionException,ExistingCompetitionException{
 		if (this.competitors.get(0) instanceof Team){
 			if((newCompetitor instanceof Team)){
-			this.competitors.add(newCompetitor);
+				if ( this.competitors.contains(newCompetitor)) throw new ExistingCompetitionException(" le competiteur est deja menbre de l'equipe " + this.nomCompetition);
+					this.competitors.add(newCompetitor);
 			}{
 				throw new CompetitionException();
 				
 			}
 		}else if(this.competitors.get(0) instanceof Individual){
 			if((newCompetitor instanceof Individual)){
+				if ( this.competitors.contains(newCompetitor)) throw new ExistingCompetitionException(" le competiteur est deja menbre de l'equipe " + this.nomCompetition);
 				this.competitors.add(newCompetitor);
 				}{
 					throw new CompetitionException();
