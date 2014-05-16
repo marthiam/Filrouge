@@ -719,10 +719,13 @@ public class BettingSoft implements Betting {
 	 *         </ul>
 	 *         For each team competitor <li>competitor's name</li> </ul>
 	 */
-	@Override
+   @Override
    public Collection<Competitor> listCompetitors(String competition)
 			throws ExistingCompetitionException, CompetitionException{
-		    return null;
+		   Competition compet= this.searchCompetitionByName(competition);
+		   if(compet==null) throw new ExistingCompetitionException("la competition "+competition +"n'existe pas");
+		   if(compet.checkDate()) throw new CompetitionException("la date de fermeture de la competition"+competition+" est passé");
+		    return compet.getCompetitors();
 	}
 
 	/**
@@ -771,7 +774,12 @@ public class BettingSoft implements Betting {
 			String managerPwd) throws AuthenticationException,
 			ExistingCompetitionException, CompetitionException,
 			ExistingCompetitorException, BadParametersException{
-			this.searchCompetitionByName(competition);
+			Competition c= this.searchCompetitionByName(competition);
+			if(c==null) throw new ExistingCompetitionException("la competition ");
+			if(competitor.hasValidName())throw new BadParametersException("le competiteur n'as pas un nom valide");
+			if(c.checkDate()) throw new CompetitionException(" la date de la comptition "+ competition+" es dans le passé ");
+			
+			c.addCompetitor(competitor);
 		
 		
 	}
