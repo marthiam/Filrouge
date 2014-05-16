@@ -17,6 +17,14 @@ import fr.uv1.utils.MyCalendar;
  * @author mcisse
  *
  */
+/**
+ * @author mcisse
+ *
+ */
+/**
+ * @author mcisse
+ *
+ */
 public class Competition {
 	/** La taille minimum du nom d'une compétition */
 	private static final int LONG_COMPETITION = 4;
@@ -172,8 +180,82 @@ public class Competition {
 		betList.add(pari);
 		this.montantTotalMise += pari.getMise();
 	}
+	
+	
 
+	/**
+	 * bet a winner for a competition <br>
+	 * The number of tokens of the subscriber is debited.
+	 * 
+	 * @param numberTokens
+	 *            number of tokens to bet.
+	 * @param competition
+	 *            name of the competition.
+	 * @param winner
+	 *            competitor to bet (winner).
+	 * @param username
+	 *            subscriber's username.
+	 * @param pwdSubs
+	 *            subscriber's password.
+	 * 
+	 * @throws AuthenticationException
+	 *             raised if (username, password) does not exist.
+	 * @throws ExistingCompetitionException
+	 *             raised if the competition does not exist.
+	 * @throws CompetitionException
+	 *             raised if there is no competitor a_winner for the
+	 *             competition; competition is closed (closing date is in the
+	 *             past); the player is a competitor of the competition.
+	 * @throws SubscriberException
+	 *             raised if subscriber has not enough tokens.
+	 * @throws BadParametersException
+	 *             raised if number of tokens less than 0.
+	 * 
+	 */
+	
+	public void parierSurLeVainqueur(long numberTokens, Competitor winner,
+			Subscriber s) throws AuthenticationException,
+			CompetitionException, ExistingCompetitionException,
+			SubscriberException, BadParametersException{
 
+		boolean trouve = false;
+
+		for (Competitor competitor : this.getCompetitors()){
+			if (competitor.equals(winner))
+				trouve = true;
+				break;
+		}
+		
+		if (trouve==false)
+			throw new CompetitionException("Ce competiteur ne participe pas à cette competition");
+			
+		if (this.isInThePast())
+			throw new CompetitionException("La date de la competition est passée");
+		
+		if (winner instanceof Individual){
+			for (Competitor competitor : this.getCompetitors()){
+				if (competitor.equals(s))
+					throw new CompetitionException("Le joueur est un competiteur de la competition");
+			}
+		}
+		if (winner instanceof Team){
+			Team team;
+			for (Competitor competitor : this.getCompetitors()){
+				team = (Team) competitor;
+				for (Competitor member : team.getMembers()){
+					if (member.equals(s))
+						throw new CompetitionException("Le joueur fait partie d'une équipe de la compétition");
+				}
+			}
+		}
+		s.getCompte().debiterCompte(numberTokens);
+		Pari pari = new PariWinner(numberTokens,s, this, winner);
+		this.addPari(pari);
+		
+	}
+	
+
+	
 	/**
 	 * bet on podium <br>
 	 * The number of tokens of the subscriber is debited.
@@ -227,7 +309,7 @@ public class Competition {
 			throw new CompetitionException("Un ou plusieurs de ces trois competiteurs ne participe pas " +
 					"à cette compétition");
 		
-		if (this.getDateCompetition().isInThePast())
+		if (this.isInThePast())
 			throw new CompetitionException("La date de la competition est passée");
 		
 		
@@ -251,7 +333,7 @@ public class Competition {
 		
 		
 		s.getCompte().debiterCompte(numberTokens);
-		Pari pari = new PariPodium(numberTokens,s, winner, second, third);
+		Pari pari = new PariPodium(numberTokens,s, this, winner, second, third);
 		
 		// On ajoute le pari à la liste des paris de la compétition
 		this.addPari(pari);
@@ -259,6 +341,19 @@ public class Competition {
 	}
 	
 	
+	
+	
+	
+	
+	
+	/**
+	 * @return 
+	 * 		Vrai si le closing date de la compétition est dans le passé
+	 * 		Faux sinon
+	 */
+	public boolean isInThePast(){
+		return this.getDateCompetition().isInThePast();
+	}
 	
 	
 	
@@ -286,7 +381,7 @@ public class Competition {
 		if (nomCompetition.length() < LONG_COMPETITION)
 			throw new BadParametersException("Le nom de la compétition est moins que "
 					+ LONG_COMPETITION + "caractères");
-		// Seuls les lettres, les chiffres, les tirets et underscore sont autorisés
+		// Seuls les lettres et les chiffres sont autorisés
 		if (!nomCompetition.matches(REGEX_COMPETITION))
 			throw new BadParametersException("la competition " + nomCompetition
 					+ " ne verifie pas les contraintes ");

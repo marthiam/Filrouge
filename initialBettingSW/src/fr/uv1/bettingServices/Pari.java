@@ -6,15 +6,17 @@ public class Pari {
 	/** Le nombre de jetons misé par le joueur */
 	private long mise;
 	private Subscriber subscriber;
+	private Competition competition;
 
 	/**
 	 * @param mise
 	 * @throws BadParametersException 
 	 */
-	public Pari(long mise, Subscriber subscriber) throws BadParametersException {
+	public Pari(long mise, Subscriber subscriber, Competition competition) throws BadParametersException {
 		super();
 		this.setMise(mise);
 		this.setSubscriber(subscriber);
+		this.setCompetition(competition);
 	}
 	
 	/**
@@ -48,6 +50,20 @@ public class Pari {
 	 */
 	public void setSubscriber(Subscriber subscriber) {
 		this.subscriber = subscriber;
+	}
+
+	/**
+	 * @return La competition sur laquell est fait le pari
+	 */
+	public Competition getCompetition() {
+		return competition;
+	}
+
+	/**
+	 * @param competition La nouvelle compétition
+	 */
+	public void setCompetition(Competition competition) {
+		this.competition = competition;
 	}
 	
 	

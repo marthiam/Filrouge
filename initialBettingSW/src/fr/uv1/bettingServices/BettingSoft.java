@@ -491,6 +491,9 @@ public class BettingSoft implements Betting {
 			CompetitionException, ExistingCompetitionException,
 			SubscriberException, BadParametersException{
 		
+		if (numberTokens == 0)
+			throw new BadParametersException("Le montant misé est invalide");
+		
 		Subscriber s = searchSubscriberByUsername(username);
 		Competition c = searchCompetitionByName(competition);
 		
@@ -512,28 +515,7 @@ public class BettingSoft implements Betting {
 		if (trouve==false)
 			throw new CompetitionException("Ce competiteur ne participe pas à cette competition");
 			
-		if (c.getDateCompetition().isInThePast())
-			throw new CompetitionException("La date de la competition est passée");
-		
-		if (winner instanceof Individual){
-			for (Competitor competitor : c.getCompetitors()){
-				if (competitor.equals(s))
-					throw new CompetitionException("Le joueur est un competiteur de la competition");
-			}
-		}
-		if (winner instanceof Team){
-			Team team;
-			for (Competitor competitor : c.getCompetitors()){
-				team = (Team) competitor;
-				for (Competitor member : team.getMembers()){
-					if (member.equals(s))
-						throw new CompetitionException("Le joueur fait partie d'une équipe de la compétition");
-				}
-			}
-		}
-		s.getCompte().debiterCompte(numberTokens);
-		Pari pari = new PariWinner(numberTokens,s, winner);
-		c.addPari(pari);
+		c.parierSurLeVainqueur(numberTokens, winner, s);
 		
 	}
 
@@ -794,6 +776,13 @@ public class BettingSoft implements Betting {
 			throws AuthenticationException, ExistingCompetitionException,
 			CompetitionException{
 		
+		this.authenticateMngr(managerPwd);
+		Competition c = this.searchCompetitionByName(competition);
+		if (c==null)
+			throw new ExistingCompetitionException("Cette compétition n'existe pas");
+		if (c.isInThePast())
+			throw new CompetitionException("La compétition est fermée");
+		this.competitions.remove(competition);	
 	}
 
 	

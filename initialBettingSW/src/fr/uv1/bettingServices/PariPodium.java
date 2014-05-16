@@ -1,14 +1,9 @@
 package fr.uv1.bettingServices;
 
-import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
-import fr.uv1.bettingServices.exceptions.CompetitionException;
-import fr.uv1.bettingServices.exceptions.ExistingCompetitionException;
-import fr.uv1.bettingServices.exceptions.SubscriberException;
 
 public class PariPodium extends Pari{
-	/** Le nombre de jetons misé par le joueur */
-	private long mise;
+
 	/** Le vainqueur de la competition */
 	private Competitor winner;
 	/** Le deuxième de la compétition */
@@ -24,9 +19,10 @@ public class PariPodium extends Pari{
 	 * @param third Le troisième de la compétition
 	 * @throws BadParametersException 
 	 */
-	public PariPodium(long mise,Subscriber subscriber, Competitor winner, Competitor second,
+	public PariPodium(long mise,Subscriber subscriber, Competition competition, 
+			Competitor winner, Competitor second,
 			Competitor third) throws BadParametersException {
-		super(mise, subscriber);
+		super(mise, subscriber, competition);
 		this.winner = winner;
 		this.second = second;
 		this.third = third;

@@ -501,6 +501,24 @@ public abstract class TestBettingServices extends ValidationTest {
 					.println("un joueur avec un username non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
+	
+	try {
+		
+		this.getBetting().betOnPodium(200,"courseA",new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",null);
+			System.out
+					.println("un mot de passe non instancié n'a pas levé d'exception");
+		} catch (BadParametersException e) {
+		}
+	try {
+		
+		this.getBetting().betOnPodium(200,"courseA",new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",null);
+			System.out
+					.println("un mot de passe non instancié n'a pas levé d'exception");
+		} catch (BadParametersException e) {
+		}
+	
+	
+	
 	try {
 		this.getBetting().unsubscribe(new String("nanard"), null);
 
