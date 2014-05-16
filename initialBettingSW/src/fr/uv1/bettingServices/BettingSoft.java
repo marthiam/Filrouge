@@ -498,8 +498,8 @@ public class BettingSoft implements Betting {
 		boolean trouve = false;
 		if (s==null)
 			throw new SubscriberException("Il n'existe pas de joueur dont le username est: " + username);
-		if (!(s.getPassword().equals(pwdSubs)))
-			throw new AuthenticationException("Le mot de passe saisi est un incorrect");
+		
+		s.authenticateSubscribe(pwdSubs);
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
 
@@ -584,8 +584,8 @@ public class BettingSoft implements Betting {
 
 		if (s==null)
 			throw new SubscriberException("Il n'existe pas de joueur dont le username est: " + username);
-		if (!(s.getPassword().equals(pwdSubs)))
-			throw new AuthenticationException("Le mot de passe saisi est un incorrect");
+		s.authenticateSubscribe(pwdSubs);
+			
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
 
