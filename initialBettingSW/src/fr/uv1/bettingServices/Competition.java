@@ -17,18 +17,7 @@ import fr.uv1.utils.MyCalendar;
  * @author mcisse
  *
  */
-/**
-<<<<<<< HEAD
- * @author mcisse
- *
- */
-/**
- * @author mcisse
-=======
- * @author Mariam
->>>>>>> ee7fc486bbe4e9d7ac5c47ae6161cded2fa72f2c
- *
- */
+
 public class Competition {
 	/** La taille minimum du nom d'une compétition */
 	private static final int LONG_COMPETITION = 4;
@@ -183,17 +172,6 @@ public class Competition {
 	}
 
 	
-	
-	/**
-	 * Attention un meme joueur de doit pas mise 2 fois une competition
-	 * @param pari
-	 */
-	public void addPari(Pari pari){
-		betList.add(pari);
-		this.montantTotalMise += pari.getMise();
-	}
-	
-	
 
 	/**
 	 * bet a winner for a competition <br>
@@ -262,7 +240,8 @@ public class Competition {
 		}
 		s.getCompte().debiterCompte(numberTokens);
 		Pari pari = new PariWinner(numberTokens,s, this, winner);
-		this.addPari(pari);
+		betList.add(pari);
+		this.montantTotalMise += pari.getMise();
 		
 	}
 	
@@ -348,7 +327,8 @@ public class Competition {
 		Pari pari = new PariPodium(numberTokens,s, this, winner, second, third);
 		
 		// On ajoute le pari à la liste des paris de la compétition
-		this.addPari(pari);
+		this.betList.add(pari);
+		this.montantTotalMise += pari.getMise();
 
 	}
 	
@@ -372,15 +352,6 @@ public class Competition {
 		
 	}
 	
-	public boolean checkDate(){
-		return false;
-	}
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * @return 
@@ -390,12 +361,6 @@ public class Competition {
 	public boolean isInThePast(){
 		return this.getDateCompetition().isInThePast();
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	/**

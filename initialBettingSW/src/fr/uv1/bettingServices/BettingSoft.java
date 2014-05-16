@@ -662,6 +662,22 @@ public class BettingSoft implements Betting {
 			String pwdSubs) throws AuthenticationException,
 			CompetitionException, ExistingCompetitionException{
 		
+		Subscriber s = this.searchSubscriberByUsername(username);
+		Competition c = this.searchCompetitionByName(competition);
+		long numberTokens = 0;
+		
+		s.authenticateSubscribe(pwdSubs);
+		if (c==null)
+			throw new ExistingCompetitionException("La compétition "+competition+" n'existe pas");
+		if (c.isInThePast())
+			throw new ExistingCompetitionException("La compétition est fermée");
+		for (Pari pari : c.getBetList()){
+			if (pari.getSubscriber().equals(s))
+				numberTokens += pari.getMise();
+		}
+		s.getCompte().crediterCompte(numberTokens);
+		
+		
 	}
 
 	/***********************************************************************
@@ -706,8 +722,8 @@ public class BettingSoft implements Betting {
 			throws ExistingCompetitionException, CompetitionException{
 		   Competition compet= this.searchCompetitionByName(competition);
 		   if(compet==null) throw new ExistingCompetitionException("la competition "+competition +"n'existe pas");
-		   if(compet.checkDate()) throw new CompetitionException("la date de fermeture de la competition"+competition+" est passé");
-		    return compet.getCompetitors();
+		   if(compet.isInThePast()) throw new CompetitionException("la date de fermeture de la competition"+competition+" est passé");
+		    	return compet.getCompetitors();
 	}
 
 	/**
@@ -759,7 +775,7 @@ public class BettingSoft implements Betting {
 			Competition c= this.searchCompetitionByName(competition);
 			if(c==null) throw new ExistingCompetitionException("la competition ");
 			if(competitor.hasValidName())throw new BadParametersException("le competiteur n'as pas un nom valide");
-			if(c.checkDate()) throw new CompetitionException(" la date de la comptition "+ competition+" es dans le passé ");
+			if(c.isInThePast()) throw new CompetitionException(" la date de la comptition "+ competition+" es dans le passé ");
 			
 			c.addCompetitor(competitor);
 		
@@ -792,7 +808,7 @@ public class BettingSoft implements Betting {
 			throw new ExistingCompetitionException("Cette compétition n'existe pas");
 		if (c.isInThePast())
 			throw new CompetitionException("La compétition est fermée");
-		this.competitions.remove(competition);	
+			
 	}
 
 	
