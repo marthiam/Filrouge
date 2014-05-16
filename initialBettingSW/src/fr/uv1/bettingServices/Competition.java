@@ -17,18 +17,7 @@ import fr.uv1.utils.MyCalendar;
  * @author mcisse
  *
  */
-/**
-<<<<<<< HEAD
- * @author mcisse
- *
- */
-/**
- * @author mcisse
-=======
- * @author Mariam
->>>>>>> ee7fc486bbe4e9d7ac5c47ae6161cded2fa72f2c
- *
- */
+
 public class Competition {
 	/** La taille minimum du nom d'une compétition */
 	private static final int LONG_COMPETITION = 4;
@@ -225,15 +214,15 @@ public class Competition {
 	 * 
 	 */
 	
-	public void parierSurLeVainqueur(long numberTokens, Competitor winner,
-			Subscriber s) throws AuthenticationException,
+	public void parierSurLeVainqueur(PariWinner pari
+			) throws AuthenticationException,
 			CompetitionException, ExistingCompetitionException,
 			SubscriberException, BadParametersException{
 
 		boolean trouve = false;
 
 		for (Competitor competitor : this.getCompetitors()){
-			if (competitor.equals(winner))
+			if (competitor.equals(pari.getWinner()))
 				trouve = true;
 				break;
 		}
@@ -244,24 +233,23 @@ public class Competition {
 		if (this.isInThePast())
 			throw new CompetitionException("La date de la competition est passée");
 		
-		if (winner instanceof Individual){
+		if (pari.getWinner() instanceof Individual){
 			for (Competitor competitor : this.getCompetitors()){
-				if (competitor.equals(s))
+				if (competitor.equals(pari.getSubscriber()))
 					throw new CompetitionException("Le joueur est un competiteur de la competition");
 			}
 		}
-		if (winner instanceof Team){
+		if (pari.getWinner() instanceof Team){
 			Team team;
 			for (Competitor competitor : this.getCompetitors()){
 				team = (Team) competitor;
 				for (Competitor member : team.getMembers()){
-					if (member.equals(s))
+					if (member.equals(pari.getSubscriber()))
 						throw new CompetitionException("Le joueur fait partie d'une équipe de la compétition");
 				}
 			}
 		}
-		s.getCompte().debiterCompte(numberTokens);
-		Pari pari = new PariWinner(numberTokens,s, this, winner);
+		pari.getSubscriber().getCompte().debiterCompte(pari.getMise());
 		this.addPari(pari);
 		
 	}

@@ -24,6 +24,7 @@ public class CompetitionTest {
 	private ArrayList<Competitor> competitors ;
 	private Pari pari;
 	private Subscriber sub;
+	private Competitor competiteur ;
 
 	@Before
 	public void beforeTest() throws BadParametersException{
@@ -77,35 +78,36 @@ public class CompetitionTest {
 	}
 	
 	@Test
-	public void testAddPari() throws BadParametersException, CompetitionException {
+	public void testParierSurLeVainqueur() throws BadParametersException, CompetitionException {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
-		pari = new Pari(100, sub );
-		competition.addPari(pari);
+		competitor(or)
+		pari = new PariWinner(100,sub,  );
+		competition.parierSurLeVainqueur(pari);
 		assertTrue(competition.getMontantTotalMise()==100);
 		pari = new Pari(150, sub );
-		competition.addPari(pari);
+		competition.parierSurLeVainqueur(pari);
 		assertTrue(competition.getMontantTotalMise()==250);
 	}
 	
 	@Test(expected = BadParametersException.class)
-	public void testAddNullPari() throws BadParametersException, CompetitionException {
+	public void testAddNullparierSurLeVainqueur() throws BadParametersException, CompetitionException {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
-		competition.addPari(null);
+		competition.parierSurLeVainqueur(null);
 		
 	}
 	
 	@Test(expected = BadParametersException.class)
 	public void testAddZeroMisePari() throws BadParametersException, CompetitionException {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
-		pari = new Pari(0, sub );
-		competition.addPari(pari);
+		pari = new PariWinner(0, sub );
+		competition.parierSurLeVainqueur(pari);
 		
 	}
 	@Test(expected = BadParametersException.class)
 	public void testAddBadMisePari() throws BadParametersException, CompetitionException {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
 		pari = new Pari(-10, sub );
-		competition.addPari(pari);
+		competition.parierSurLeVainqueur(pari);
 		
 	}
 	
@@ -114,15 +116,16 @@ public class CompetitionTest {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
 		sub= new Subscriber("Cisse","Mamadou", "28-09-1992","mcisse");
 		pari = new Pari(-10, sub );
-		competition.addPari(pari);
+		competition.parierSurLeVainqueur(pari);
 		
 	}
 	@Test(expected = BadParametersException.class)
 	public void testAddPariByNullSubscriber() throws BadParametersException, CompetitionException {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
-		pari = new Pari(-10, null );
-		competition.addPari(pari);
+		pariWinner  = new Pari(-10, null,);
+		competition.parierSurLeVainqueur(pari);
 		
 	}
+	
 	
 }
