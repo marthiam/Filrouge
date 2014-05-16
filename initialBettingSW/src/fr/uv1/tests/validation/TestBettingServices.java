@@ -504,67 +504,6 @@ public abstract class TestBettingServices extends ValidationTest {
 					.println("le pari fait par un joueur dont le username est non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
-<<<<<<< HEAD
-	
-	try {
-		
-		this.getBetting().betOnPodium(200,"courseA",new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",null);
-			System.out
-					.println("un mot de passe non instancié n'a pas levé d'exception");
-		} catch (BadParametersException e) {
-		}
-	try {
-		
-		this.getBetting().betOnPodium(200,"courseA",new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",null);
-			System.out
-					.println("un mot de passe non instancié n'a pas levé d'exception");
-		} catch (BadParametersException e) {
-		}
-	
-	
-	
-	try {
-		this.getBetting().unsubscribe(new String("nanard"), null);
-
-		System.out
-				.println("Parier non instancié n'a pas levé d'exception");
-	} catch (AuthenticationException e) {
-	}
-	
-	// Tests parameters: incorrect manager password
-	try {
-		this.getBetting()
-				.unsubscribe(new String("nanard"), new String(" "));
-		System.out
-				.println(" retirer un joueur avec un mdp gestionnaire incorrect (\" \") n'a pas levé d'exception");
-	} catch (AuthenticationException e) {
-	}
-	
-	// Test number
-	int number = this.getBetting()
-			.listSubscribers(this.getManagerPassword()).size();
-	if (number != 7) {
-		System.out.println("le nombre de joueurs est incorrect");
-		System.out.print("Il doit y avoir 7 joueurs. ");
-		System.out.println("Il y en a "
-				+ this.getBetting()
-						.listSubscribers(this.getManagerPassword()).size()
-				+ ")");
-	}
-	
-	// Unsubscribe an existing subscriber
-	try {
-		this.getBetting().unsubscribe(new String("fanfan"),
-				this.getManagerPassword());
-	} catch (ExistingSubscriberException e) {
-		System.out
-				.println("retirer un joueur existant (fanfan) a levée une exception");
-	}
-	
-	number = this.getBetting().listSubscribers(this.getManagerPassword())
-			.size();
-=======
->>>>>>> ee7fc486bbe4e9d7ac5c47ae6161cded2fa72f2c
 	
 	}
 }

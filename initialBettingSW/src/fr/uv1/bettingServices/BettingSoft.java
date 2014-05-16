@@ -663,6 +663,22 @@ public class BettingSoft implements Betting {
 			String pwdSubs) throws AuthenticationException,
 			CompetitionException, ExistingCompetitionException{
 		
+		Subscriber s = this.searchSubscriberByUsername(username);
+		Competition c = this.searchCompetitionByName(competition);
+		long numberTokens = 0;
+		
+		s.authenticateSubscribe(pwdSubs);
+		if (c==null)
+			throw new ExistingCompetitionException("La compétition "+competition+" n'existe pas");
+		if (c.isInThePast())
+			throw new ExistingCompetitionException("La compétition est fermée");
+		for (Pari pari : c.getBetList()){
+			if (pari.getSubscriber().equals(s))
+				numberTokens += pari.getMise();
+		}
+		s.getCompte().crediterCompte(numberTokens);
+		
+		
 	}
 
 	/***********************************************************************
@@ -708,7 +724,11 @@ public class BettingSoft implements Betting {
 		   Competition compet= this.searchCompetitionByName(competition);
 		   if(compet==null) throw new ExistingCompetitionException("la competition "+competition +"n'existe pas");
 		   if(compet.isInThePast()) throw new CompetitionException("la date de fermeture de la competition"+competition+" est passé");
+<<<<<<< HEAD
 		    return compet.getCompetitors();
+=======
+		    	return compet.getCompetitors();
+>>>>>>> FETCH_HEAD
 	}
 
 	/**
@@ -793,7 +813,7 @@ public class BettingSoft implements Betting {
 			throw new ExistingCompetitionException("Cette compétition n'existe pas");
 		if (c.isInThePast())
 			throw new CompetitionException("La compétition est fermée");
-		this.competitions.remove(competition);	
+			
 	}
 
 	

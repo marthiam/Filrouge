@@ -172,17 +172,6 @@ public class Competition {
 	}
 
 	
-	
-	/**
-	 * Attention un meme joueur de doit pas mise 2 fois une competition
-	 * @param pari
-	 */
-	public void addPari(Pari pari){
-		betList.add(pari);
-		this.montantTotalMise += pari.getMise();
-	}
-	
-	
 
 	/**
 	 * bet a winner for a competition <br>
@@ -249,8 +238,15 @@ public class Competition {
 				}
 			}
 		}
+<<<<<<< HEAD
 		pari.getSubscriber().getCompte().debiterCompte(pari.getMise());
 		this.addPari(pari);
+=======
+		s.getCompte().debiterCompte(numberTokens);
+		Pari pari = new PariWinner(numberTokens,s, this, winner);
+		betList.add(pari);
+		this.montantTotalMise += pari.getMise();
+>>>>>>> FETCH_HEAD
 		
 	}
 	
@@ -336,7 +332,8 @@ public class Competition {
 		Pari pari = new PariPodium(numberTokens,s, this, winner, second, third);
 		
 		// On ajoute le pari à la liste des paris de la compétition
-		this.addPari(pari);
+		this.betList.add(pari);
+		this.montantTotalMise += pari.getMise();
 
 	}
 	
@@ -360,15 +357,6 @@ public class Competition {
 		
 	}
 	
-	public boolean checkDate(){
-		return false;
-	}
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * @return 
@@ -378,12 +366,6 @@ public class Competition {
 	public boolean isInThePast(){
 		return this.getDateCompetition().isInThePast();
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	/**
