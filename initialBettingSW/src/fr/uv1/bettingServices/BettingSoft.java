@@ -730,7 +730,6 @@ public class BettingSoft implements Betting {
 		   if(compet==null) throw new ExistingCompetitionException("la competition "+competition +"n'existe pas");
 		   if(compet.isInThePast()) throw new CompetitionException("la date de fermeture de la competition"+competition+" est passé");
 		    return compet.getCompetitors();
-
 	}
 
 	/**

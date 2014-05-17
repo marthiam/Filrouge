@@ -139,7 +139,6 @@ public class Competition {
 						i++;
 				}
 				this.competitors = competitors;
-				System.out.print("coucou indiv ");
 			}else{
 			
 			i=0;
@@ -152,7 +151,6 @@ public class Competition {
 					else
 						i++;
 				}
-				System.out.print("coucou team ");
 				this.competitors = competitors;
 			 }
 			}
@@ -233,14 +231,17 @@ public class Competition {
 					throw new CompetitionException("Le joueur est un competiteur de la competition");
 				}
 			}
-		}
-		if (pari.getWinner() instanceof Team){
+		}else if (pari.getWinner() instanceof Team){
 			Team team;
+			Person competiteur = null;
 			for (Competitor competitor : this.getCompetitors()){
 				team = (Team) competitor;
-				if(team.getMembers().contains(pari.getSubscriber())){
+				for(Competitor member : team.getMembers()){
+				competiteur = (Person) member;
+				if(pari.getSubscriber().equals(competiteur)){
 						throw new CompetitionException("Le joueur fait partie d'une équipe de la compétition");
 				}
+			  }
 			}
 		}
 		
@@ -288,6 +289,7 @@ public class Competition {
 	public void parierSurLePodium(PariPodium paripod)
 			throws CompetitionException, SubscriberException,
 			BadParametersException{
+		
 		if (paripod==null) throw new BadParametersException("pari avec un pariPodium non instancié");
 		boolean trouveWinner = this.getCompetitors().contains(paripod.getWinner());
 		boolean trouveSecond = this.getCompetitors().contains(paripod.getSecond());
@@ -300,25 +302,24 @@ public class Competition {
 		if (this.isInThePast())
 			throw new CompetitionException("La date de la competition est passée");
 		
-		
 		if (paripod.getWinner() instanceof Individual){
 			Person competiteur;
 			for (Competitor competitor : this.getCompetitors()){
 				competiteur=(Person) competitor;
-				if (competiteur.equals(paripod.getSubscriber()))
+				if (paripod.getSubscriber().equals(competiteur))
 					throw new CompetitionException("Le joueur est un competiteur de la competition");
 			}
-		}
-		
-		if (paripod.getWinner() instanceof Team){
+			
+		} else if (paripod.getWinner() instanceof Team){
 			Person competiteur;
 			Team team;
 			for (Competitor competitor : this.getCompetitors()){
 				team = (Team) competitor;
 				for (Competitor member : team.getMembers()){
 					competiteur=(Person)member;
-					if (member.equals(paripod.getSubscriber()))
+					if (paripod.getSubscriber().equals(competiteur)){
 						throw new CompetitionException("Le joueur fait partie d'une équipe de la compétition");
+					}
 				}
 			}
 		}
