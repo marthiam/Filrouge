@@ -705,6 +705,7 @@ public class BettingSoft implements Betting {
 			if (pari.getSubscriber().equals(s))
 				numberTokens += pari.getMise();
 		}
+		
 		try {
 			s.crediter(numberTokens);
 		} catch (BadParametersException e) {
