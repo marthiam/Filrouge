@@ -170,5 +170,4 @@ public  class Team implements Competitor {
 		return !trouver ;
 	}
 	  
-
 }

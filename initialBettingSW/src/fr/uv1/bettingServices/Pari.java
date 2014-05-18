@@ -26,8 +26,6 @@ public class Pari {
 		return mise;
 	}
 
-
-
 	/**
 	 * @param mise Le nouveau nombre de jetons
 	 * @throws BadParametersException 
@@ -47,13 +45,16 @@ public class Pari {
 
 	/**
 	 * @param subscriber Le nouveau joueur
+	 * @throws BadParametersException 
 	 */
-	public void setSubscriber(Subscriber subscriber) {
+	public void setSubscriber(Subscriber subscriber) throws BadParametersException {
+		if (subscriber==null)
+			throw new BadParametersException("Le joueur n'a pas été instancié");
 		this.subscriber = subscriber;
 	}
 
 	/**
-	 * @return La competition sur laquell est fait le pari
+	 * @return La competition sur laquelle est fait le pari
 	 */
 	public Competition getCompetition() {
 		return competition;
@@ -61,8 +62,11 @@ public class Pari {
 
 	/**
 	 * @param competition La nouvelle compétition
+	 * @throws BadParametersException 
 	 */
-	public void setCompetition(Competition competition) {
+	public void setCompetition(Competition competition) throws BadParametersException {
+		if (competition==null)
+			throw new BadParametersException("La compétition n'a pas été instanciée");
 		this.competition = competition;
 	}
 	

@@ -45,6 +45,8 @@ public class PariWinner extends Pari{
 	 * @throws BadParametersException 
 	 */
 	public void setWinner(Competitor winner) throws BadParametersException {
+		if (winner==null)
+			throw new BadParametersException("Le vainqueur n'a pas été instancié");
 		this.winner = winner;
 	}
 

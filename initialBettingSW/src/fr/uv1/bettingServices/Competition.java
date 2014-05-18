@@ -171,8 +171,52 @@ public class Competition {
 		this.betList = betList;
 	}
 
+	/**
+	 * delete all bets made by a subscriber on a competition.<br>
+	 * subscriber's account is credited with a number of tokens corresponding to
+	 * the bets made by the subscriber for the competition.
+	 * 
+	 * @param competition
+	 *            competition's name.
+	 * @param username
+	 *            subscriber's username.
+	 * @param pwdSubs
+	 *            subscriber's password.
+	 * 
+	 * @throws AuthenticationException
+	 *             raised if (username, password) does not exist.
+	 * @throws CompetitionException
+	 *             raised if closed competition (closing date is in the past).
+	 * @throws ExistingCompetitionException
+	 *             raised if there is no competition a_competition.
+	 */
 	
+	public void supprimerParisCompetition(Subscriber subscriber) throws CompetitionException{
+		
+		long numberTokens = 0;
 
+		if (this.isInThePast())
+			throw new CompetitionException("La compétition est fermée");
+		for (Pari pari : this.betList){
+			if (pari.getSubscriber().equals(subscriber))
+				numberTokens += pari.getMise();
+		}
+		try {
+			subscriber.getCompte().crediterCompte(numberTokens);
+		} catch (BadParametersException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * bet a winner for a competition <br>
 	 * The number of tokens of the subscriber is debited.
@@ -329,21 +373,182 @@ public class Competition {
 		// On ajoute le pari à la liste des paris de la compétition
 		this.betList.add(pari);
 		this.montantTotalMise += pari.getMise();
-
 	}
 	
-	public void addCompetitor(Competitor newCompetitor) throws CompetitionException,ExistingCompetitionException{
+	/**
+	 * settle bets on winner. <br>
+	 * Each subscriber betting on this competition with winner a_winner is
+	 * credited with a number of tokens equals to: <br>
+	 * (number of tokens betted * total tokens betted for the competition) /
+	 * total number of tokens betted for the winner <br>
+	 * If no subscriber bets on the right competitor (the real winner), the
+	 * tokens betted are credited to subscribers betting on the competition
+	 * according to the number of tokens they betted. The competition is then
+	 * deleted if no more bets exist for the competition.<br>
+	 * 
+	 * @param competition
+	 *            the name of the competition.
+	 * @param winner
+	 *            competitor winner.
+	 * @param managerPwd
+	 *            the manager's password.
+	 * 
+	 * @throws AuthenticationException
+	 *             raised if the the manager's password is incorrect.
+	 * @throws ExistingCompetitionException
+	 *             raised if the competition does not exist.
+	 * @throws CompetitionException
+	 *             raised if there is no competitor a_winner for the
+	 *             competition; competition still opened.
+	 */
+	public void solderPariWinner(Competitor winner) throws CompetitionException{
+
+		long tokensBettedForWinner = 0;
+		long tokensWonBySubscriber = 0;
+
+		boolean trouve = false;
+		for (Competitor competitor : this.competitors){
+			if (competitor.equals(winner))
+				trouve = true;
+				break;
+		}
+		
+		if (trouve==false)
+			throw new CompetitionException("Ce competiteur ne participe pas à cette competition");
+			
+		if (!(this.isInThePast()))
+			throw new CompetitionException("Cette compétition est toujours ouverte");
+		
+		
+		for (Pari pari : this.betList){
+			if (pari instanceof PariWinner){
+				if (((PariWinner) pari).getWinner().equals(winner)){
+					tokensBettedForWinner += pari.getMise();
+				}
+			}
+		}
+		
+		for (Pari pari : this.betList){
+			if (pari instanceof PariWinner){
+				if (((PariWinner) pari).getWinner().equals(winner)){
+					tokensWonBySubscriber = (pari.getMise()*this.montantTotalMise)/tokensBettedForWinner;
+					try {
+						pari.getSubscriber().getCompte().crediterCompte(tokensWonBySubscriber);
+					} catch (BadParametersException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}	
+	}
+	
+
+	/**
+	 * settle bets on podium. <br>
+	 * Each subscriber betting on this competition with the right podium is
+	 * credited with a number of tokens equals to: <br>
+	 * (number of tokens betted * total tokens betted for the competition) /
+	 * total number of tokens betted for the podium <br>
+	 * If no subscriber bets on the right podium, the tokens betted are credited
+	 * to subscribers betting on the competition according to the number of
+	 * tokens they betted. The competition is then deleted if no more bets exist
+	 * for the competition.<br>
+	 * 
+	 * @param competition
+	 *            the name of the competition.
+	 * @param winner
+	 *            the winner.
+	 * @param second
+	 *            the second.
+	 * @param third
+	 *            the third.
+	 * @param managerPwd
+	 *            the manager's password.
+	 * 
+	 * @throws AuthenticationException
+	 *             raised if the the manager's password is incorrect.
+	 * @throws ExistingCompetitionException
+	 *             raised if the competition does not exist.
+	 * @throws CompetitionException
+	 *             raised if two competitors in the podium are the same; no
+	 *             competitor (firstname, lastname, borndate or name for teams)
+	 *             a_winner, a_second or a_third for the competition;
+	 *             competition still opened
+	 */
+	
+	public void solderPariPodium(Competitor winner, Competitor second, Competitor third)throws CompetitionException{
+		
+		long tokensBettedForPodium = 0;
+		long tokensWonBySubscriber = 0;
+		
+		boolean trouveWinner = false;
+		boolean trouveSecond = false;
+		boolean trouveThird = false;
+		for (Competitor competitor : this.competitors){
+			if (competitor.equals(winner))
+				trouveWinner = true;
+			if (competitor.equals(second))
+				trouveSecond = true;
+			if (competitor.equals(third))
+				trouveThird = true;
+		}
+		if (trouveWinner==false || trouveSecond==false || trouveThird==false)
+			throw new CompetitionException("Un ou plusieurs de ces trois competiteurs ne participe pas " +
+					"à cette compétition");
+		
+		if (!(this.isInThePast()))
+			throw new CompetitionException("Cette compétition est toujours ouverte");
+		
+		for (Pari pari : this.betList){
+			if (pari instanceof PariPodium){
+				if (((PariPodium) pari).getWinner().equals(winner) 
+					&& ((PariPodium) pari).getSecond().equals(second) 
+					&& ((PariPodium) pari).getThird().equals(third)){
+					tokensBettedForPodium += pari.getMise();
+				}
+			}
+		}
+		
+		for (Pari pari : this.betList){
+			if (pari instanceof PariWinner){
+				if (((PariPodium) pari).getWinner().equals(winner) 
+					&& ((PariPodium) pari).getSecond().equals(second) 
+					&& ((PariPodium) pari).getThird().equals(third)){
+						tokensWonBySubscriber = (pari.getMise()*this.montantTotalMise)/tokensBettedForPodium;
+					try {
+						pari.getSubscriber().getCompte().crediterCompte(tokensWonBySubscriber);
+					} catch (BadParametersException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void addCompetitor(Competitor newCompetitor) throws CompetitionException{
 		if (this.competitors.get(0) instanceof Team){
 			if((newCompetitor instanceof Team)){
-				if ( this.competitors.contains(newCompetitor)) throw new ExistingCompetitionException(" le competiteur est deja menbre de l'equipe " + this.nomCompetition);
-					this.competitors.add(newCompetitor);
+			this.competitors.add(newCompetitor);
 			}{
 				throw new CompetitionException();
 				
 			}
 		}else if(this.competitors.get(0) instanceof Individual){
 			if((newCompetitor instanceof Individual)){
-				if ( this.competitors.contains(newCompetitor)) throw new ExistingCompetitionException(" le competiteur est deja menbre de l'equipe " + this.nomCompetition);
 				this.competitors.add(newCompetitor);
 				}{
 					throw new CompetitionException();
@@ -362,6 +567,16 @@ public class Competition {
 		return this.getDateCompetition().isInThePast();
 	}
 	
+	
+	public boolean equals(Object object){
+		if (object == null)
+			return false;
+		if (!(object instanceof Competition))
+			return false;
+		if (((Competition) object).getNomCompetition()==null)
+			return false;
+		return this.nomCompetition==((Competition) object).getNomCompetition();
+	}
 	
 	/**
 	 * Cette méthode verifie la validité du nom d'une compétition.

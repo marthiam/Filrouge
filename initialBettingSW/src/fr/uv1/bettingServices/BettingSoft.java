@@ -238,8 +238,23 @@ public class BettingSoft implements Betting {
 			throws AuthenticationException, ExistingCompetitionException,
 			CompetitionException, BadParametersException{
 		
+		this.authenticateMngr(managerPwd);
+		
+		Competition c = this.searchCompetitionByName(competition);
+		if (c!=null)
+			throw new ExistingCompetitionException("Une compétition avec le même nom existe déjà");
+		
+		if (competitors.size()<2)
+			throw new CompetitionException("Il y a moins de deux compétiteurs dans la compétition");
+		
+		for (int i=0; i<competitors.size(); i++)
+			for(int j=i+1; j<competitors.size(); j++){
+				
+			}
+		
 		
 	}
+
 	/**
 	 * create a competitor (person) instance. If the competitor is already
 	 * registered, the existing instance is returned. The instance is not
@@ -410,6 +425,13 @@ public class BettingSoft implements Betting {
 			throws AuthenticationException, ExistingCompetitionException,
 			CompetitionException{
 		
+		this.authenticateMngr(managerPwd);
+		Competition c = this.searchCompetitionByName(competition);
+		if (c == null)
+			throw new ExistingCompetitionException("Cette competition n'existe pas");
+		
+		c.solderPariWinner(winner);
+		
 	}
 
 	/**
@@ -449,6 +471,12 @@ public class BettingSoft implements Betting {
 			Competitor third, String managerPwd)
 			throws AuthenticationException, ExistingCompetitionException,
 			CompetitionException{
+		
+		this.authenticateMngr(managerPwd);
+		Competition c = this.searchCompetitionByName(competition);
+		if (c == null)
+			throw new ExistingCompetitionException("Cette competition n'existe pas");
+		c.solderPariPodium(winner, second, third);
 		
 	}
 
@@ -658,26 +686,16 @@ public class BettingSoft implements Betting {
 	 *             raised if there is no competition a_competition.
 	 */
 	@Override
-	public void deleteBetsCompetition(String competition, String username,
+	public void deleteBetsCompetition(String competition, String username, 
 			String pwdSubs) throws AuthenticationException,
 			CompetitionException, ExistingCompetitionException{
 		
 		Subscriber s = this.searchSubscriberByUsername(username);
 		Competition c = this.searchCompetitionByName(competition);
-		long numberTokens = 0;
-		
 		s.authenticateSubscribe(pwdSubs);
 		if (c==null)
 			throw new ExistingCompetitionException("La compétition "+competition+" n'existe pas");
-		if (c.isInThePast())
-			throw new ExistingCompetitionException("La compétition est fermée");
-		for (Pari pari : c.getBetList()){
-			if (pari.getSubscriber().equals(s))
-				numberTokens += pari.getMise();
-		}
-		s.getCompte().crediterCompte(numberTokens);
-		
-		
+		c.supprimerParisCompetition(s);
 	}
 
 	/***********************************************************************
@@ -695,7 +713,7 @@ public class BettingSoft implements Betting {
 	 */
 	@Override
 	public Collection<Competition> listCompetitions(){
-		return null;
+		return this.competitions;
 	}
 
 	/**
@@ -808,7 +826,10 @@ public class BettingSoft implements Betting {
 			throw new ExistingCompetitionException("Cette compétition n'existe pas");
 		if (c.isInThePast())
 			throw new CompetitionException("La compétition est fermée");
-			
+		for (Pari pari : c.getBetList()){
+			this.deleteBetsCompetition(c.getNomCompetition(), pari.getSubscriber().getUsername(), pari.getSubscriber().getPassword());
+		}
+		this.competitions.remove(competition);	
 	}
 
 	

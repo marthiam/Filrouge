@@ -23,9 +23,9 @@ public class PariPodium extends Pari{
 			Competitor winner, Competitor second,
 			Competitor third) throws BadParametersException {
 		super(mise, subscriber, competition);
-		this.winner = winner;
-		this.second = second;
-		this.third = third;
+		this.setWinner(winner);
+		this.setSecond(second);
+		this.setThird(third);
 	}
 	
 
@@ -33,14 +33,17 @@ public class PariPodium extends Pari{
 	 * @return Le vainqueur de la competition
 	 */
 	public Competitor getWinner() {
-		return winner;
+		return this.winner;
 	}
 
 
 	/**
 	 * @param winner Le vainqueur de la competition
+	 * @throws BadParametersException 
 	 */
-	public void setWinner(Competitor winner) {
+	public void setWinner(Competitor winner) throws BadParametersException {
+		if (winner==null)
+			throw new BadParametersException("Le vainqueur n'a pas été instancié");
 		this.winner = winner;
 	}
 
@@ -49,14 +52,17 @@ public class PariPodium extends Pari{
 	 * @return Le deuxième de la compétition
 	 */
 	public Competitor getSecond() {
-		return second;
+		return this.second;
 	}
 
 
 	/**
 	 * @param second Le deuxième de la compétition
+	 * @throws BadParametersException 
 	 */
-	public void setSecond(Competitor second) {
+	public void setSecond(Competitor second) throws BadParametersException {
+		if (second==null)
+			throw new BadParametersException("Le deuxième n'a pas été instancié");
 		this.second = second;
 	}
 
@@ -65,19 +71,19 @@ public class PariPodium extends Pari{
 	 * @return Le troisième de la compétition 
 	 */
 	public Competitor getThird() {
-		return third;
+		return this.third;
 	}
 
 
 	/**
 	 * @param third Le troisième de la compétition
+	 * @throws BadParametersException 
 	 */
-	public void setThird(Competitor third) {
+	public void setThird(Competitor third) throws BadParametersException {
+		if (third==null)
+			throw new BadParametersException("Le troisième n'a pas été instancié");
 		this.third = third;
 	}
-	
-
-	
 	
 	
 }

@@ -79,7 +79,7 @@ public class CompetitionTest {
 	@Test
 	public void testAddPari() throws BadParametersException, CompetitionException {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
-		pari = new Pari(100, sub );
+		pari = new Pari(100, sub);
 		competition.addPari(pari);
 		assertTrue(competition.getMontantTotalMise()==100);
 		pari = new Pari(150, sub );
