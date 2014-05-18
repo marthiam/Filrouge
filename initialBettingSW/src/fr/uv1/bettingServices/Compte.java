@@ -62,8 +62,8 @@ public class Compte {
 	 * 				est levé le montant > au solde du compte
 	 */
 	public void debiterCompte(long montant) throws BadParametersException, SubscriberException {
-		if (montant<=solde && montant>=0){
-			this.solde = solde-montant; 
+		if (montant<=this.solde && montant>=0){
+			this.solde = this.solde-montant; 
 		}else if (montant<0){
 			throw new BadParametersException( montant +" est inferieur au solde "+this.solde +"ou n'est pas valide dans debiter compte");
 		}else{

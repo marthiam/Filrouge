@@ -110,7 +110,7 @@ public class BettingSoft implements Betting {
 		// Look if a subscriber with the same username already exists
 		Subscriber s = searchSubscriberByUsername(a_username);
 		if (s != null){
-			long result= s.getCompte().getSolde();
+			long result= s.solde();
 			subscribers.remove(s); // remove it
 			return result;
 		}else{
@@ -364,7 +364,7 @@ public class BettingSoft implements Betting {
 			BadParametersException{
 		this.authenticateMngr(managerPwd);
 		Subscriber subs= this.searchSubscriberByUsername(username);
-		subs.getCompte().crediterCompte(numberTokens);
+		subs.crediter(numberTokens);
 	}
 
 	/**
@@ -392,7 +392,7 @@ public class BettingSoft implements Betting {
 			SubscriberException, BadParametersException{
 			this.authenticateMngr(managerPwd);
 			Subscriber subs= this.searchSubscriberByUsername(username);
-			subs.getCompte().debiterCompte(numberTokens);
+			subs.debiter(numberTokens);
 	}
 
 	/**
@@ -542,8 +542,9 @@ public class BettingSoft implements Betting {
 		
 		if (trouve==false)
 			throw new CompetitionException("Ce competiteur ne participe pas à cette competition");
+		PariWinner pari= new PariWinner(numberTokens,s,winner);
 			
-		c.parierSurLeVainqueur(numberTokens, winner, s);
+		c.parierSurLeVainqueur(pari);
 		
 	}
 
@@ -598,8 +599,8 @@ public class BettingSoft implements Betting {
 			
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
-
-		c.parierSurLePodium(numberTokens, winner, second, third, s);
+		PariPodium pari = new PariPodium(numberTokens,s, winner,second,third);
+		c.parierSurLePodium(pari);
 
 	}
 
@@ -695,7 +696,24 @@ public class BettingSoft implements Betting {
 		s.authenticateSubscribe(pwdSubs);
 		if (c==null)
 			throw new ExistingCompetitionException("La compétition "+competition+" n'existe pas");
+<<<<<<< HEAD
 		c.supprimerParisCompetition(s);
+=======
+		if (c.isInThePast())
+			throw new ExistingCompetitionException("La compétition est fermée");
+		for (Pari pari : c.getBetList()){
+			if (pari.getSubscriber().equals(s))
+				numberTokens += pari.getMise();
+		}
+		try {
+			s.crediter(numberTokens);
+		} catch (BadParametersException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+>>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
 	}
 
 	/***********************************************************************
@@ -741,7 +759,7 @@ public class BettingSoft implements Betting {
 		   Competition compet= this.searchCompetitionByName(competition);
 		   if(compet==null) throw new ExistingCompetitionException("la competition "+competition +"n'existe pas");
 		   if(compet.isInThePast()) throw new CompetitionException("la date de fermeture de la competition"+competition+" est passé");
-		    	return compet.getCompetitors();
+		    return compet.getCompetitors();
 	}
 
 	/**

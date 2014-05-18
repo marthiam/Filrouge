@@ -176,6 +176,13 @@ public class Person {
 		checkStringLastName(a_firstname);
 
 	}
+	
+
+	public boolean equals(Person p){
+		return this.toString().equals(p.toString());
+		
+	}
+	
 	@Override
 	public String toString() {
 		return " " + this.getFirstname() + " " + this.getLastname()+" " + this.getBorndate() ;

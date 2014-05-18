@@ -4,6 +4,7 @@
 package fr.uv1.bettingServices;
 
 import fr.uv1.bettingServices.exceptions.BadParametersException;
+import fr.uv1.bettingServices.exceptions.SubscriberException;
 
 
 
@@ -22,10 +23,11 @@ public class PariWinner extends Pari{
 	 * @param mise Le nombre de jetons misé par le joueur
 	 * @param winner Le competiteur sur lequel le joueur a parié
 	 * @throws BadParametersException 
+	 * @throws SubscriberException 
 	 */
-	public PariWinner(long mise, Subscriber subscriber, Competition competition, 
-			Competitor winner) throws BadParametersException {
-		super(mise, subscriber, competition);
+	public PariWinner(long mise, Subscriber subscriber,
+			Competitor winner) throws BadParametersException, SubscriberException {
+		super(mise, subscriber);
 		this.setWinner(winner);
 	}
 
