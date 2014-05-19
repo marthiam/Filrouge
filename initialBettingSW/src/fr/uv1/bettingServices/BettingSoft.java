@@ -609,7 +609,7 @@ public class BettingSoft implements Betting {
 
 		c.parierSurLePodium(pari);
 	} catch (Exception e) {
-		System.out.println(e);
+		//System.out.println(e);
 		throw e;
 	}
 	

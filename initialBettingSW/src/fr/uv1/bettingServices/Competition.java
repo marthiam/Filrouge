@@ -153,16 +153,19 @@ public class Competition {
 			
 			i=0;
 			if (((ArrayList<Competitor>) competitors).get(i) instanceof Team){
+				Team team = (Team) ((ArrayList<Competitor>) competitors).get(i);
 				while (i<competitors.size()){
 					if (!(((ArrayList<Competitor>) competitors).get(i) instanceof Team)){
 						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
 								"meme classe");
-					}
-					else
+					}else{
+						if (team.getMembers()==null ) throw new CompetitionException();
+						this.addCompetitor(((ArrayList<Competitor>) competitors).get(i));
 						i++;
+					}
+						
 				}
-				this.competitors = competitors;
-			 }
+							 }
 			}
 		
 	}
@@ -550,7 +553,11 @@ public class Competition {
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException(" competiteur non instancié");
 		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
-		if (this.competitors!=null) this.competitors.add(newCompetitor);
+		
+		if ( newCompetitor instanceof Team && (((Team) newCompetitor).getMembers()).size()==0l) throw new CompetitionException("  l'equipe  " + newCompetitor.toString() + " n'a pas de membre");
+		if (this.competitors!=null ){
+			this.competitors.add(newCompetitor);
+		}
 
 
 		}

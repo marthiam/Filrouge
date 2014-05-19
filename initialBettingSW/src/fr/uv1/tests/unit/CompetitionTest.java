@@ -84,7 +84,7 @@ public class CompetitionTest extends Thread{
 		competition.addCompetitor((new Individual("Thiam","Mariam", "07-10-200")));
 	}
 	@Test(expected = CompetitionException.class)
-	public void testAddTeamCompetitor() throws BadParametersException, CompetitionException, ExistingCompetitorException{
+	public void testAddTeamCompetitorSansMembre() throws BadParametersException, CompetitionException, ExistingCompetitorException{
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
 		Team t =new Team("barcelon");
 		competition.addCompetitor(t);
