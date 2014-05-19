@@ -10,6 +10,7 @@ import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 import fr.uv1.bettingServices.exceptions.ExistingSubscriberException;
 import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.BettingPasswordsVerifier;
+import fr.uv1.utils.MyCalendar;
 
 /**
  * 
@@ -243,7 +244,13 @@ public class BettingSoft implements Betting {
 		if (c!=null)
 			throw new ExistingCompetitionException("Une compétition avec le même nom existe déjà");
 		
-		
+		try {
+			c = new Competition(competition, (MyCalendar) closingDate, (ArrayList<Competitor>) competitors);
+		} catch (ExistingCompetitorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.competitions.add(c);
 	}
 
 	/**
@@ -847,7 +854,7 @@ public class BettingSoft implements Betting {
 		if (c.isInThePast())
 			throw new CompetitionException("La compétition est fermée");
 		for (Pari pari : c.getBetList()){
-			this.deleteBetsCompetition(c.getNomCompetition(), pari.getSubscriber().getUsername(), pari.getSubscriber().getPassword());
+			c.supprimerParisCompetition(pari.getSubscriber());
 		}
 		this.competitions.remove(competition);	
 	}

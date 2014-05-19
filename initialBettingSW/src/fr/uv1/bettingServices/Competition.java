@@ -19,23 +19,6 @@ import fr.uv1.utils.MyCalendar;
  * @author mcisse
  *
  */
-
-/**
- * @author mcisse
- *
- */
-/**
- * @author mcisse
- *
- */
-/**
- * @author mcisse
- *
- */
-/**
- * @author mcisse
- *
- */
 public class Competition {
 	/** La taille minimum du nom d'une compétition */
 	private static final int LONG_COMPETITION = 4;
@@ -70,8 +53,9 @@ public class Competition {
 	 * @param competitors La liste des compétiteurs
 	 * @throws BadParametersException 
 	 * @throws CompetitionException 
+	 * @throws ExistingCompetitorException 
 	 */
-	public Competition(String nomCompetition, MyCalendar dateCompetition, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException {
+	public Competition(String nomCompetition, MyCalendar dateCompetition, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException, ExistingCompetitorException {
 	
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
@@ -142,8 +126,9 @@ public class Competition {
 	 * @param competitors La nouvelle liste de competiteurs
 	 * @throws CompetitionException 
 	 * @throws BadParametersException 
+	 * @throws ExistingCompetitorException 
 	 */
-	public void setCompetitors(Collection<Competitor> competitors) throws CompetitionException, BadParametersException {
+	public void setCompetitors(Collection<Competitor> competitors) throws CompetitionException, BadParametersException, ExistingCompetitorException {
 		if (competitors==null)
 			throw new BadParametersException("La liste des compétiteurs n'a pas été instancié");
 		
