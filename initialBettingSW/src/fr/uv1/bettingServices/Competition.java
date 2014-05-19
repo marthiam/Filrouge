@@ -74,8 +74,6 @@ public class Competition {
 	 * @param nomCompetition le nouveau nom de la compétition
 	 */
 	public void setNomCompetition(String nomCompetition) throws BadParametersException{
-		if (nomCompetition==null)
-			throw new BadParametersException("Le nom de la compétition n'est pas valide");
 		checkStringNomCompetition(nomCompetition);
 		this.nomCompetition = nomCompetition;
 	}
@@ -92,7 +90,7 @@ public class Competition {
 	 * @throws BadParametersException 
 	 */
 	public void setDateCompetition( MyCalendar newDate) throws BadParametersException {
-		if (newDate.isInThePast())
+		if (newDate.isInThePast() ||newDate==null)
 			throw new BadParametersException("Cette date est passée");
 		this.dateCompetition = newDate;
 	}
@@ -349,6 +347,7 @@ public class Competition {
 			Team team;
 			for (Competitor competitor : this.getCompetitors()){
 				team = (Team) competitor;
+				if (team.getMembers().isEmpty()) throw new BadParametersException(" On peut pas parier sur une equipe sans menbre " );
 				for (Competitor member : team.getMembers()){
 					competiteur=(Person)member;
 					if (paripod.getSubscriber().equals(competiteur)){
@@ -523,17 +522,12 @@ public class Competition {
 
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, ExistingCompetitorException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException(" competiteur non instancié");
-		if ( this.competitors.contains(newCompetitor)) throw new ExistingCompetitorException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
-		if (this.competitors.get(0) instanceof Team){
-			if((!(newCompetitor instanceof Team))) throw new CompetitionException();
-					this.competitors.add(newCompetitor);
-		
-		}else if(this.competitors.get(0) instanceof Individual){
-			if(!(newCompetitor instanceof Individual))throw new CompetitionException();
-				this.competitors.add(newCompetitor);	
+		if ( this.competitors.contains(newCompetitor)) throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
+		this.competitors.add(newCompetitor);
+
 		}
 		
-	}
+
 	
 	/**
 	 * @return 

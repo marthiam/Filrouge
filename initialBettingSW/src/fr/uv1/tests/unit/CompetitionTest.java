@@ -901,6 +901,8 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 			 competition.parierSurLePodium(paripod);
 			 
 		}
+		
+		
 	
 	
 	

@@ -178,7 +178,6 @@ public class BettingSoft implements Betting {
 		if (a_username == null)
 			return null;
 		for (Subscriber s : subscribers) {
-			System.out.println(s.getUsername());
 			if (s.hasUsername(a_username))
 				return s;
 		}
@@ -586,6 +585,7 @@ public class BettingSoft implements Betting {
 			throws AuthenticationException, CompetitionException,
 			ExistingCompetitionException, SubscriberException,
 			BadParametersException{
+	
 		
 		if (numberTokens == 0)
 			throw new BadParametersException("Le montant misé est invalide");
@@ -596,9 +596,19 @@ public class BettingSoft implements Betting {
 		if (s==null)
 			throw new SubscriberException("Il n'existe pas de joueur dont le username est: " + username);
 		s.authenticateSubscribe(pwdSubs);
-			
+		
+		System.out.println("voici le pari");
+		System.out.println(numberTokens+ " "+ competition + winner+ second +third );
+		
+		
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
+		
+		System.out.println("voici les participants à la competition");
+		for (Competitor e : c.getCompetitors() ){
+			System.out.println(e);
+		}
+		
 		PariPodium pari = new PariPodium(numberTokens,s, winner,second,third);
 		c.parierSurLePodium(pari);
 
@@ -793,11 +803,14 @@ public class BettingSoft implements Betting {
 			String managerPwd) throws AuthenticationException,
 			ExistingCompetitionException, CompetitionException,
 			ExistingCompetitorException, BadParametersException{
+		
+			System.out.println("On veut ajouter : "+competitor);
+		  	this.authenticateMngr(managerPwd);
 			Competition c= this.searchCompetitionByName(competition);
 			if(c==null) throw new ExistingCompetitionException("la competition ");
 			if(competitor.hasValidName())throw new BadParametersException("le competiteur n'as pas un nom valide");
 			if(c.isInThePast()) throw new CompetitionException(" la date de la comptition "+ competition+" es dans le passé ");
-			
+			 System.out.println("il a ete ajouter" );
 			c.addCompetitor(competitor);
 		
 		
