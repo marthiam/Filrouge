@@ -707,8 +707,14 @@ public class BettingSoft implements Betting {
 		s.authenticateSubscribe(pwdSubs);
 		if (c==null)
 			throw new ExistingCompetitionException("La compétition "+competition+" n'existe pas");
+<<<<<<< HEAD
 		
 		c.supprimerParisCompetition(s);
+=======
+
+		c.supprimerParisCompetition(s);
+
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 	}
 
 	/***********************************************************************

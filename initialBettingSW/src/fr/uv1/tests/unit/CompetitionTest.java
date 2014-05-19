@@ -93,6 +93,13 @@ public class CompetitionTest extends Thread{
 	@Test
 	public void testParierSurLeVainqueur() throws BadParametersException, CompetitionException, AuthenticationException, ExistingCompetitionException, SubscriberException {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
+<<<<<<< HEAD
+=======
+
+		competiteur=new Individual("Cisse","Sanounou", "05-01-1989");
+		pariwin = new PariWinner(100,sub,competiteur);
+		competition.parierSurLeVainqueur(pariwin);
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		assertTrue(competition.getMontantTotalMise()==100);
 		pariwin =new PariWinner(150,sub,competiteur);
 		competition.parierSurLeVainqueur(pariwin);
@@ -141,7 +148,7 @@ public void testParierSurLeVainqueurBadMise1() throws BadParametersException, Co
 		competition.parierSurLeVainqueur(pariwin);
 		
 	}
-	@Test(expected = SubscriberException.class)
+	@Test(expected = BadParametersException.class)
 	public void testParierSurLeVainqueurByNullSubscriber() throws BadParametersException, CompetitionException, AuthenticationException, ExistingCompetitionException, SubscriberException {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
 		pariwin  = new PariWinner(300,null,competiteur);
@@ -406,7 +413,7 @@ public void testParierSurLeVainqueurBadMise1() throws BadParametersException, Co
 			
 		}
 		
-		@Test(expected = SubscriberException.class)
+		@Test(expected = BadParametersException.class)
 		public void testParierSurLePodiumByNullSubscriber() throws BadParametersException, CompetitionException, AuthenticationException, ExistingCompetitionException, SubscriberException, ExistingCompetitorException {
 			competitors = new ArrayList<Competitor>();
 			 Team t1 =new Team("Telecom");
@@ -600,7 +607,7 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 	}
 	
 	
-	@Test(expected = SubscriberException.class)
+	@Test(expected = BadParametersException.class)
 	public void testParierSurLePodiumByNullSubscriberIndiv() throws BadParametersException, CompetitionException, AuthenticationException, ExistingCompetitionException, SubscriberException, ExistingCompetitorException {
 		competitors = new ArrayList<Competitor>();
 		Competitor c1 =new Individual("Cisse","Mamadou", "28-09-1992");
@@ -811,7 +818,7 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 			
 		}
 		
-		@Test(expected = SubscriberException.class)
+		@Test(expected = BadParametersException.class)
 		public void testParierSurLeVainqueurByNullSubscriberTeam() throws BadParametersException, CompetitionException, AuthenticationException, ExistingCompetitionException, SubscriberException, ExistingCompetitorException {
 			competitors = new ArrayList<Competitor>();
 			 Team t1 =new Team("Telecom");

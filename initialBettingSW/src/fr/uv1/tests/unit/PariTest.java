@@ -34,6 +34,7 @@ public class PariTest {
 		 }
 	
 	@Test
+<<<<<<< HEAD
 	public void TestPari() throws BadParametersException{
 		pari = new Pari(100, sub);
 		assertTrue(pari.getMise()==100);
@@ -42,49 +43,99 @@ public class PariTest {
 	
 	@Test (expected = BadParametersException.class)
 	public void testMontantInvalide() throws BadParametersException{
+=======
+	public void TestPari() throws BadParametersException, SubscriberException{
+		pari = new Pari(100, sub);
+		assertTrue(pari.getMise()==100);
+		assertTrue(pari.getSubscriber().equals(sub));
+		
+	}
+	
+	@Test (expected = BadParametersException.class)
+	public void testMontantInvalide() throws BadParametersException, SubscriberException{
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		new Pari(-100, sub);
 	}
 	
 	@Test (expected = BadParametersException.class)
+<<<<<<< HEAD
 	public void testNullSubscriberPari() throws BadParametersException{
+=======
+	public void testNullSubscriberPari() throws BadParametersException, SubscriberException{
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		new Pari(100, null);
 	}	
 	
 	
 	@Test
+<<<<<<< HEAD
 	public void testGetMise() throws BadParametersException{
+=======
+	public void testGetMise() throws BadParametersException, SubscriberException{
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		pari = new Pari(100, sub);
 		assertTrue(pari.getMise()==100);
 	}
 	
 	@Test
+<<<<<<< HEAD
 	public void testGetSubscriber() throws BadParametersException{
+=======
+	public void testGetSubscriber() throws BadParametersException, SubscriberException{
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		pari = new Pari(100, sub);
 		assertTrue(pari.getSubscriber().equals(sub));
 	}
 	
+<<<<<<< HEAD
 	
 	@Test
 	public void testSetMise() throws BadParametersException{
+=======
+	
+	
+	@Test
+	public void testSetMise() throws BadParametersException, SubscriberException{
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		pari = new Pari(100, sub);
 		pari.setMise(200);
 		assertFalse(pari.getMise()==100);
 	}
 	
 	@Test
+<<<<<<< HEAD
 	public void testSetSubscriber() throws BadParametersException{
+=======
+	public void testSetSubscriber() throws BadParametersException, SubscriberException{
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		pari = new Pari(100, sub);
 		pari.setSubscriber(new Subscriber("Cisse","Nene", "26-03-1996", "ncisse" ));
 		assertFalse(pari.getSubscriber().equals(sub));
 	}
 	
+<<<<<<< HEAD
 	@Test(expected = BadParametersException.class)
 	public void testSetMontantInvalide() throws BadParametersException {
+=======
+	@Test
+	public void testSetCompetition() throws BadParametersException, CompetitionException, SubscriberException{
+		pari = new Pari(100, sub);
+		ArrayList<Competitor> newcompetitors = new ArrayList<Competitor>();
+		newcompetitors.add(new Individual("Cisse","Tenin", "28-09-1987"));
+		newcompetitors.add(new Individual("Cisse","Aminata", "05-01-1991"));
+		newcompetitors.add(new Individual("Cisse","Bintou", "07-10-1993"));
+	}
+		
+	
+	@Test(expected = BadParametersException.class)
+	public void testSetMontantInvalide() throws BadParametersException, SubscriberException {
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		pari = new Pari(100, sub);
 		pari.setMise(-100);
 	}
 	
 	@Test(expected = BadParametersException.class)
+<<<<<<< HEAD
 	public void testSetNullSubscriber() throws BadParametersException {
 		pari = new Pari(100, sub);
 		pari.setSubscriber(null);
@@ -92,3 +143,12 @@ public class PariTest {
 
 }
 	
+=======
+	public void testSetNullSubscriber() throws BadParametersException, SubscriberException {
+		pari = new Pari(100, sub);
+		pari.setSubscriber(null);
+	}
+	
+}
+
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6

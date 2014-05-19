@@ -201,6 +201,10 @@ public class Competition {
 		
 		long numberTokens = 0;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		if (this.isInThePast())
 			throw new CompetitionException("La compétition est fermée");
 		for (Pari pari : this.betList){
@@ -215,6 +219,7 @@ public class Competition {
 		}
 	}
 
+<<<<<<< HEAD
 	
 	
 	
@@ -222,6 +227,8 @@ public class Competition {
 	
 	
 	
+=======
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 	/**
 	 * bet a winner for a competition <br>
 	 * The number of tokens of the subscriber is debited.
@@ -372,7 +379,10 @@ public class Competition {
 		
 		paripod.getSubscriber().debiter(paripod.getMise());
 		// On ajoute le pari à la liste des paris de la compétition
+<<<<<<< HEAD
 
+=======
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		this.betList.add(paripod);
 		this.montantTotalMise += paripod.getMise();
 	}
@@ -445,6 +455,11 @@ public class Competition {
 		}	
 	}
 
+<<<<<<< HEAD
+=======
+		
+
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 
 	/**
 	 * settle bets on podium. <br>
@@ -534,7 +549,10 @@ public class Competition {
 	}
 	
 
+<<<<<<< HEAD
 	
+=======
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, ExistingCompetitorException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException(" competiteur non instancié");
 		if ( this.competitors.contains(newCompetitor)) throw new ExistingCompetitorException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
@@ -548,12 +566,6 @@ public class Competition {
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * @return 
@@ -575,6 +587,10 @@ public class Competition {
 			return false;
 		return this.nomCompetition==((Competition) object).getNomCompetition();
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 	
 	/**
 	 * Cette méthode verifie la validité du nom d'une compétition.

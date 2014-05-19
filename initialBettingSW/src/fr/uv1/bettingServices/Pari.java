@@ -49,14 +49,36 @@ public class Pari {
 	 * @param subscriber Le nouveau joueur
 	 * @throws BadParametersException 
 	 */
+<<<<<<< HEAD
 
+=======
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 	public void setSubscriber(Subscriber subscriber) throws BadParametersException {
 		if (subscriber==null)
 			throw new BadParametersException("Le joueur n'a pas été instancié");
 		this.subscriber = subscriber;
 	}
 
+<<<<<<< HEAD
 
+=======
+	
+/*
+	
+	*//**
+	 * @return La competition sur laquell est fait le pari
+	 *//*
+>>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
+	public Competition getCompetition() {
+		return competition;
+	}
+
+	/*
+	public void setCompetition(Competition competition) {
+>>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
+		this.competition = competition;
+	}*/
+>>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 	
 	
 
