@@ -84,12 +84,15 @@ public  class Team implements Competitor {
 	 */
 	public void addMember(Competitor member) throws ExistingCompetitorException,
 			BadParametersException{
+		System.out.println("on veut ajouter " +member +" à l'équipe "+ this.teamName);
 		if(member==null || !member.hasValidName() || !(member instanceof Individual)) throw new BadParametersException(member +"est pas un parametre valide dans addMenber");
 		if(!members.contains(member)){
 			members.add(member);
+			System.out.println("il a été ajouté ");
 		}else{
 			throw new ExistingCompetitorException(member.toString() +" existe déja "); 
 		}
+		
 		
 	}
 
@@ -170,6 +173,9 @@ public  class Team implements Competitor {
 		if (!(this.teamName.equals(((Team) obj).getTeamName())))
 			return false;
 		
+		if ((this.teamName.equals(((Team) obj).getTeamName())))
+			return true;
+		
 		boolean trouver =false; 
 		if(((Team) obj).getMembers().size()!=this.members.size()) 
 			return false; 
@@ -183,6 +189,18 @@ public  class Team implements Competitor {
 				return false;
 		}
 		return !trouver ;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		String menber = "";
+		for(Competitor i :this.members){
+			menber += " "+ i.toString();
+		}
+		return "Team [teamName=" + teamName + ", members=" + menber+" de taille" +this.members.size()+ " ]";
 	}
 	  
 }

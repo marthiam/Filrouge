@@ -197,10 +197,15 @@ public class BettingSoft implements Betting {
 	private Competition searchCompetitionByName(String competitionName) {
 		if (competitionName == null)
 			return null;
+		int i =0;
+		//System.out.println("taille de la liste"+this.competitions.size());
 		for (Competition c : competitions) {
-			if (c.getNomCompetition().equals(competitionName))
+			if (c.getNomCompetition().equals(competitionName)){
 				return c;
-		}
+			}
+			i++;
+		     }
+		
 		return null;
 	}
 	
@@ -237,16 +242,27 @@ public class BettingSoft implements Betting {
 			Collection<Competitor> competitors, String managerPwd)
 			throws AuthenticationException, ExistingCompetitionException,
 			CompetitionException, BadParametersException{
-		
+	  	//System.out.println("On veut ajouter la competion : "+ competition);
+	   //try{
 		this.authenticateMngr(managerPwd);
+		//if(competitors!=null)
+			//System.out.println("il y a : "+ competitors.size() +"competitors");
 		
-		Competition c = this.searchCompetitionByName(competition);
-		if (c!=null)
+		//System.out.println("closing date"+closingDate);
+		
+		
+		Competition c = new Competition(competition, (MyCalendar)closingDate, (ArrayList<Competitor>) competitors);
+		
+		
+		//System.out.println("on a dépassé la création de la compétition");
+		if (this.competitions.contains(c))
 			throw new ExistingCompetitionException("Une compétition avec le même nom existe déjà");
-		
-		c = new Competition(competition, (MyCalendar) closingDate, (ArrayList<Competitor>) competitors);
-
 		this.competitions.add(c);
+		//System.out.println("elle a été ajoutée");
+	  // }catch(Exception e ){
+		 //  System.out.println(e);
+		//   throw e; 
+	   //}
 	}
 
 	/**
@@ -533,8 +549,8 @@ public class BettingSoft implements Betting {
 		Competition c = searchCompetitionByName(competition);
 		if (s==null)
 			throw new SubscriberException("Il n'existe pas de joueur dont le username est: " + username);
-		
 		s.authenticateSubscribe(pwdSubs);
+		
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
 
@@ -593,23 +609,15 @@ public class BettingSoft implements Betting {
 			throw new SubscriberException("Il n'existe pas de joueur dont le username est: " + username);
 		s.authenticateSubscribe(pwdSubs);
 		
-		System.out.println("voici le pari");
-		System.out.println(numberTokens+ " "+ competition + winner+ second +third );
-		
 		
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
-	
-		System.out.println("voici les participants à la competition");
-		for (Competitor e : c.getCompetitors() ){
-			System.out.println(e);
-		}
 		
 		PariPodium pari = new PariPodium(numberTokens,s, winner,second,third);
 
 		c.parierSurLePodium(pari);
 	} catch (Exception e) {
-		//System.out.println(e);
+		System.out.println(e);
 		throw e;
 	}
 	
@@ -804,13 +812,13 @@ public class BettingSoft implements Betting {
 			ExistingCompetitionException, CompetitionException,
 			ExistingCompetitorException, BadParametersException{
 		
-			System.out.println("On veut ajouter : "+competitor);
+			//System.out.println("On veut ajouter : "+competitor);
 		  	this.authenticateMngr(managerPwd);
 			Competition c= this.searchCompetitionByName(competition);
 			if(c==null) throw new ExistingCompetitionException("la compétition n'existe pas dans la liste ");
 			if(competitor.hasValidName())throw new BadParametersException("le competiteur n'as pas un nom valide");
 			if(c.isInThePast()) throw new CompetitionException(" la date de la comptition "+ competition+" es dans le passé ");
-			 System.out.println("il a ete ajouter" );
+			// System.out.println("il a ete ajouter" );
 			c.addCompetitor(competitor);
 			
 	}
