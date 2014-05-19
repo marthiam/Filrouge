@@ -244,16 +244,7 @@ public class BettingSoft implements Betting {
 		if (c!=null)
 			throw new ExistingCompetitionException("Une compétition avec le même nom existe déjà");
 		
-		if (competitors.size()<2)
-			throw new CompetitionException("Il y a moins de deux compétiteurs dans la compétition");
 		
-		for (int i=0; i<competitors.size(); i++){
-			for(int j=i+1; j<competitors.size(); j++){
-				if (((ArrayList<Competitor>) competitors).get(i).equals(((ArrayList<Competitor>) competitors).get(j)))
-					throw new CompetitionException("Deux ou plusieurs compétiteurs sont les mêmes");
-			}
-		}
-			
 	}
 
 	/**
@@ -438,6 +429,8 @@ public class BettingSoft implements Betting {
 			e.printStackTrace();
 		}
 		
+		if (c.IsEmptybetList())
+			this.competitions.remove(c);
 	}
 
 	/**
@@ -488,6 +481,8 @@ public class BettingSoft implements Betting {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		if (c.IsEmptybetList())
+			this.competitions.remove(c);
 		
 	}
 
@@ -707,14 +702,8 @@ public class BettingSoft implements Betting {
 		s.authenticateSubscribe(pwdSubs);
 		if (c==null)
 			throw new ExistingCompetitionException("La compétition "+competition+" n'existe pas");
-<<<<<<< HEAD
 		
 		c.supprimerParisCompetition(s);
-=======
-
-		c.supprimerParisCompetition(s);
-
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 	}
 
 	/***********************************************************************

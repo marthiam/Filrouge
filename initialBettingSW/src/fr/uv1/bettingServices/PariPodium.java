@@ -21,12 +21,10 @@ public class PariPodium extends Pari{
 	 * @throws BadParametersException 
 	 * @throws SubscriberException 
 	 */
-	public PariPodium(long mise,Subscriber subscriber, 
-<<<<<<< HEAD
-			Competitor winner, Competitor second, Competitor third) throws BadParametersException{
-=======
-			Competitor winner, Competitor second,Competitor third) throws BadParametersException, SubscriberException {
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
+	public PariPodium(long mise,Subscriber subscriber,
+			Competitor winner, Competitor second, Competitor third) 
+					throws BadParametersException{
+
 		super(mise, subscriber);
 		this.setWinner(winner);
 		this.setSecond(second);

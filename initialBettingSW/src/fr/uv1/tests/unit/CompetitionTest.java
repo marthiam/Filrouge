@@ -93,13 +93,9 @@ public class CompetitionTest extends Thread{
 	@Test
 	public void testParierSurLeVainqueur() throws BadParametersException, CompetitionException, AuthenticationException, ExistingCompetitionException, SubscriberException {
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
-<<<<<<< HEAD
-=======
-
 		competiteur=new Individual("Cisse","Sanounou", "05-01-1989");
 		pariwin = new PariWinner(100,sub,competiteur);
 		competition.parierSurLeVainqueur(pariwin);
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		assertTrue(competition.getMontantTotalMise()==100);
 		pariwin =new PariWinner(150,sub,competiteur);
 		competition.parierSurLeVainqueur(pariwin);

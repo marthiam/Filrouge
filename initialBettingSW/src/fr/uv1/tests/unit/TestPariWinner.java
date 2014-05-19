@@ -37,11 +37,7 @@ public class TestPariWinner {
 		 }
 	
 	@Test
-<<<<<<< HEAD
-	public void TestPariWinner() throws BadParametersException{
-=======
 	public void TestPariWinner() throws BadParametersException, SubscriberException{
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		pari = new PariWinner(100, sub, winner);
 		assertTrue(pari.getMise()==100);
 		assertTrue(pari.getSubscriber().equals(sub));
@@ -49,65 +45,40 @@ public class TestPariWinner {
 	}
 	
 	@Test (expected = BadParametersException.class)
-<<<<<<< HEAD
-	public void testMontantInvalide() throws BadParametersException{
-=======
 	public void testMontantInvalide() throws BadParametersException, SubscriberException{
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		new PariWinner(-100, sub, winner);
 	}
 	
 	@Test (expected = BadParametersException.class)
-<<<<<<< HEAD
 	public void testNullSubscriberPari() throws BadParametersException{
 		new PariWinner(100, null, winner);
 	}	
 	
-	
-	@Test (expected = BadParametersException.class)
-	public void testNullWinner() throws BadParametersException{
-=======
-	public void testNullSubscriberPari() throws BadParametersException, SubscriberException{
-		new PariWinner(100, null, winner);
-	}	
-	
 
-	
 	@Test (expected = BadParametersException.class)
 	public void testNullWinner() throws BadParametersException, SubscriberException{
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		new PariWinner(100, sub, null);
 	}
 	
 	@Test
-<<<<<<< HEAD
-	public void testGetWinner() throws BadParametersException{
-=======
 	public void testGetWinner() throws BadParametersException, SubscriberException{
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		pari = new PariWinner(100, sub, winner);
 		assertTrue(pari.getWinner().equals(winner));
 	}
 	
 	@Test
-<<<<<<< HEAD
-	public void testSetWinner() throws BadParametersException{
-=======
 	public void testSetWinner() throws BadParametersException, SubscriberException{
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		pari = new PariWinner(100, sub, winner);
 		pari.setWinner(new Individual("Cisse","Sanounou", "05-01-1989"));
 		assertFalse(pari.getWinner().equals(winner));
 	}
 	
-<<<<<<< HEAD
+
 	@Test(expected = BadParametersException.class)
 	public void testSetNullWinner() throws BadParametersException {
 		pari = new PariWinner(100, sub, winner);
 		pari.setWinner(null);
 	}
-=======
-	
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
+
 	
 }

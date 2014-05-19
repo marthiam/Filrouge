@@ -20,6 +20,22 @@ import fr.uv1.utils.MyCalendar;
  *
  */
 
+/**
+ * @author mcisse
+ *
+ */
+/**
+ * @author mcisse
+ *
+ */
+/**
+ * @author mcisse
+ *
+ */
+/**
+ * @author mcisse
+ *
+ */
 public class Competition {
 	/** La taille minimum du nom d'une compétition */
 	private static final int LONG_COMPETITION = 4;
@@ -92,9 +108,9 @@ public class Competition {
 	 * @param date la nouvelle date de la compétition
 	 * @throws BadParametersException 
 	 */
-	public void setDateCompetition( MyCalendar newDate) throws BadParametersException {
+	public void setDateCompetition( MyCalendar newDate) throws CompetitionException {
 		if (newDate.isInThePast())
-			throw new BadParametersException("Cette date est passée");
+			throw new CompetitionException("Cette date est passée");
 		this.dateCompetition = newDate;
 	}
 
@@ -133,7 +149,8 @@ public class Competition {
 		
 		if (competitors.size()<2){
 			throw new CompetitionException("Une compétition doit avoir au moins deux competiteurs");
-		}else{
+		}
+
 			int i=0;
 			if (((ArrayList<Competitor>) competitors).get(i) instanceof Individual){
 				while (i<competitors.size()){
@@ -141,9 +158,10 @@ public class Competition {
 						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
 								"meme classe");
 					}else
+						this.addCompetitor(((ArrayList<Competitor>) competitors).get(i));
 						i++;
 				}
-				this.competitors = competitors;
+				
 			}else{
 			
 			i=0;
@@ -159,7 +177,7 @@ public class Competition {
 				this.competitors = competitors;
 			 }
 			}
-		}
+		
 	}
 	
 
@@ -201,15 +219,12 @@ public class Competition {
 		
 		long numberTokens = 0;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		if (this.isInThePast())
 			throw new CompetitionException("La compétition est fermée");
 		for (Pari pari : this.betList){
 			if (pari.getSubscriber().equals(subscriber))
 				numberTokens += pari.getMise();
+				this.betList.remove(pari);
 		}
 		try {
 			subscriber.getCompte().crediterCompte(numberTokens);
@@ -219,16 +234,7 @@ public class Competition {
 		}
 	}
 
-<<<<<<< HEAD
-	
-	
-	
-	
-	
-	
-	
-=======
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
+
 	/**
 	 * bet a winner for a competition <br>
 	 * The number of tokens of the subscriber is debited.
@@ -379,10 +385,7 @@ public class Competition {
 		
 		paripod.getSubscriber().debiter(paripod.getMise());
 		// On ajoute le pari à la liste des paris de la compétition
-<<<<<<< HEAD
 
-=======
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 		this.betList.add(paripod);
 		this.montantTotalMise += paripod.getMise();
 	}
@@ -424,13 +427,13 @@ public class Competition {
 		long tokensWonBySubscriber = 0;
 
 		boolean trouve = this.competitors.contains(winner);
+		boolean found = false;
 		
 		if (!trouve)
 			throw new CompetitionException("Ce competiteur ne participe pas à cette competition");
 			
 		if (!(this.isInThePast()))
 			throw new CompetitionException("Cette compétition est toujours ouverte");
-		
 		
 		for (Pari pari : this.betList){
 			if (pari instanceof PariWinner){
@@ -443,6 +446,7 @@ public class Competition {
 		for (Pari pari : this.betList){
 			if (pari instanceof PariWinner){
 				if (((PariWinner) pari).getWinner().equals(winner)){
+					found = true;
 					tokensWonBySubscriber = (pari.getMise()*this.montantTotalMise)/tokensBettedForWinner;
 					try {
 						pari.getSubscriber().crediter(tokensWonBySubscriber);
@@ -452,14 +456,16 @@ public class Competition {
 					}
 				}
 			}
-		}	
+		}
+		if (found==false){
+			for (Pari pari : this.betList){
+				this.supprimerParisCompetition(pari.getSubscriber());
+			}
+		}
+			
 	}
 
-<<<<<<< HEAD
-=======
-		
 
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 
 	/**
 	 * settle bets on podium. <br>
@@ -508,7 +514,7 @@ public class Competition {
 		
 		long tokensBettedForPodium = 0;
 		long tokensWonBySubscriber = 0;
-		
+		boolean found = false;
 		boolean trouveWinner = this.competitors.contains(winner);
 		boolean trouveSecond = this.competitors.contains(second);
 		boolean trouveThird = this.competitors.contains(third);
@@ -535,6 +541,7 @@ public class Competition {
 				if (((PariPodium) pari).getWinner().equals(winner) 
 					&& ((PariPodium) pari).getSecond().equals(second) 
 					&& ((PariPodium) pari).getThird().equals(third)){
+						found = true;
 						tokensWonBySubscriber = (pari.getMise()*this.montantTotalMise)/tokensBettedForPodium;
 					try {
 						pari.getSubscriber().crediter(tokensWonBySubscriber);
@@ -546,13 +553,15 @@ public class Competition {
 			}
 		}
 		
+		if (found==false){
+			for (Pari pari : this.betList){
+				this.supprimerParisCompetition(pari.getSubscriber());
+			}
+		}
+		
 	}
 	
 
-<<<<<<< HEAD
-	
-=======
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, ExistingCompetitorException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException(" competiteur non instancié");
 		if ( this.competitors.contains(newCompetitor)) throw new ExistingCompetitorException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
@@ -587,10 +596,16 @@ public class Competition {
 			return false;
 		return this.nomCompetition==((Competition) object).getNomCompetition();
 	}
-<<<<<<< HEAD
-=======
 
->>>>>>> bff4f9f65972eaf9d74b91a5993557f944945eb6
+	
+	/**
+	 * @return 
+	 * 		Vrai si la liste des paris de la compétition est vide
+	 * 		Faux sinon
+	 */
+	public boolean IsEmptybetList(){
+		return this.betList.isEmpty();
+	}
 	
 	/**
 	 * Cette méthode verifie la validité du nom d'une compétition.
