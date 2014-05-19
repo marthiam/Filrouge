@@ -106,15 +106,11 @@ public class Competition {
 	 * @param date la nouvelle date de la compétition
 	 * @throws BadParametersException 
 	 */
-<<<<<<< HEAD
+
 	public void setDateCompetition( MyCalendar newDate) throws BadParametersException {
 		if (newDate.isInThePast() ||newDate==null)
 			throw new BadParametersException("Cette date est passée");
-=======
-	public void setDateCompetition( MyCalendar newDate) throws CompetitionException {
-		if (newDate.isInThePast())
-			throw new CompetitionException("Cette date est passée");
->>>>>>> FETCH_HEAD
+
 		this.dateCompetition = newDate;
 	}
 
@@ -567,22 +563,12 @@ public class Competition {
 	}
 	
 
-	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, ExistingCompetitorException, BadParametersException{
+	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException(" competiteur non instancié");
-<<<<<<< HEAD
 		if ( this.competitors.contains(newCompetitor)) throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
 		this.competitors.add(newCompetitor);
 
-=======
-		if ( this.competitors.contains(newCompetitor)) throw new ExistingCompetitorException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
-		if (((ArrayList<Competitor>) this.competitors).get(0) instanceof Team){
-			if((!(newCompetitor instanceof Team))) throw new CompetitionException();
-					this.competitors.add(newCompetitor);
-		
-		}else if(((ArrayList<Competitor>) this.competitors).get(0) instanceof Individual){
-			if(!(newCompetitor instanceof Individual))throw new CompetitionException();
-				this.competitors.add(newCompetitor);	
->>>>>>> FETCH_HEAD
+
 		}
 		
 

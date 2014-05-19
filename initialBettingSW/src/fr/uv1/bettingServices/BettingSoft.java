@@ -609,17 +609,13 @@ public class BettingSoft implements Betting {
 		
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
-<<<<<<< HEAD
-		
 		System.out.println("voici les participants à la competition");
 		for (Competitor e : c.getCompetitors() ){
 			System.out.println(e);
 		}
 		
 		PariPodium pari = new PariPodium(numberTokens,s, winner,second,third);
-=======
-		PariPodium pari = new PariPodium(numberTokens, s, winner, second, third);
->>>>>>> FETCH_HEAD
+
 		c.parierSurLePodium(pari);
 	
 	}
