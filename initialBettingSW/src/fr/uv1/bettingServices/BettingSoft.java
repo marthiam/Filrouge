@@ -696,25 +696,9 @@ public class BettingSoft implements Betting {
 		s.authenticateSubscribe(pwdSubs);
 		if (c==null)
 			throw new ExistingCompetitionException("La compétition "+competition+" n'existe pas");
-<<<<<<< HEAD
+
 		c.supprimerParisCompetition(s);
-=======
-		if (c.isInThePast())
-			throw new ExistingCompetitionException("La compétition est fermée");
-		for (Pari pari : c.getBetList()){
-			if (pari.getSubscriber().equals(s))
-				numberTokens += pari.getMise();
-		}
-		
-		try {
-			s.crediter(numberTokens);
-		} catch (BadParametersException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
->>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
+
 	}
 
 	/***********************************************************************

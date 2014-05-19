@@ -196,7 +196,7 @@ public class Competition {
 		
 		long numberTokens = 0;
 
-<<<<<<< HEAD
+
 		if (this.isInThePast())
 			throw new CompetitionException("La compétition est fermée");
 		for (Pari pari : this.betList){
@@ -211,19 +211,6 @@ public class Competition {
 		}
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-=======
-	
-	
-
->>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
 	/**
 	 * bet a winner for a competition <br>
 	 * The number of tokens of the subscriber is debited.
@@ -374,9 +361,8 @@ public class Competition {
 		
 		paripod.getSubscriber().debiter(paripod.getMise());
 		// On ajoute le pari à la liste des paris de la compétition
-<<<<<<< HEAD
-		this.betList.add(pari);
-		this.montantTotalMise += pari.getMise();
+		this.betList.add(paripod);
+		this.montantTotalMise += paripod.getMise();
 	}
 	
 	/**
@@ -446,11 +432,9 @@ public class Competition {
 			}
 		}	
 	}
-	
-=======
-		betList.add(paripod);
-		this.montantTotalMise += paripod.getMise();
->>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
+
+		
+
 
 	/**
 	 * settle bets on podium. <br>
@@ -536,33 +520,7 @@ public class Competition {
 		
 	}
 	
-<<<<<<< HEAD
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public void addCompetitor(Competitor newCompetitor) throws CompetitionException{
-		if (this.competitors.get(0) instanceof Team){
-			if((newCompetitor instanceof Team)){
-			this.competitors.add(newCompetitor);
-			}{
-				throw new CompetitionException();
-				
-			}
-		}else if(this.competitors.get(0) instanceof Individual){
-			if((newCompetitor instanceof Individual)){
-				this.competitors.add(newCompetitor);
-				}{
-					throw new CompetitionException();
-				}
-=======
+
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, ExistingCompetitorException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException(" competiteur non instancié");
 		if ( this.competitors.contains(newCompetitor)) throw new ExistingCompetitorException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
@@ -573,16 +531,9 @@ public class Competition {
 		}else if(this.competitors.get(0) instanceof Individual){
 			if(!(newCompetitor instanceof Individual))throw new CompetitionException();
 				this.competitors.add(newCompetitor);	
->>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * @return 
@@ -594,7 +545,7 @@ public class Competition {
 	}
 	
 	
-<<<<<<< HEAD
+
 	public boolean equals(Object object){
 		if (object == null)
 			return false;
@@ -604,13 +555,7 @@ public class Competition {
 			return false;
 		return this.nomCompetition==((Competition) object).getNomCompetition();
 	}
-=======
-	
-	
-	
-	
-	
->>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
+
 	
 	/**
 	 * Cette méthode verifie la validité du nom d'une compétition.

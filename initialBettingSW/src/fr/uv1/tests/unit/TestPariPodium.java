@@ -16,6 +16,7 @@ import fr.uv1.bettingServices.PariWinner;
 import fr.uv1.bettingServices.Subscriber;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.CompetitionException;
+import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.MyCalendar;
 
 public class TestPariPodium {
@@ -41,100 +42,96 @@ public class TestPariPodium {
 		 }
 	
 	@Test
-	public void TestPariPodium() throws BadParametersException{
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void TestPariPodium() throws BadParametersException, SubscriberException{
+		pari = new PariPodium(100, sub, winner, second, third);
 		assertTrue(pari.getMise()==100);
 		assertTrue(pari.getSubscriber().equals(sub));
-		assertTrue(pari.getCompetition().equals(competition));
 		assertTrue(pari.getWinner().equals(winner));
 		assertTrue(pari.getSecond().equals(second));
 		assertTrue(pari.getThird().equals(third));
 	}
 	
 	@Test (expected = BadParametersException.class)
-	public void testMontantInvalide() throws BadParametersException{
-		new PariPodium(-100, sub, competition, winner, second, third);
+	public void testMontantInvalide() throws BadParametersException, SubscriberException{
+		new PariPodium(-100, sub, winner, second, third);
 	}
 	
 	@Test (expected = BadParametersException.class)
-	public void testNullSubscriberPari() throws BadParametersException{
-		new PariPodium(100, null, competition, winner, second, third);
+	public void testNullSubscriberPari() throws BadParametersException, SubscriberException{
+		new PariPodium(100, null, winner, second, third);
 	}	
 	
+	
+	
 	@Test (expected = BadParametersException.class)
-	public void testNullSubscriber() throws BadParametersException{
-		new PariPodium(100, sub, null, winner, second, third);
+	public void testNullWinner() throws BadParametersException, SubscriberException{
+		new PariPodium(100, sub, null, second, third);
 	}
 	
 	@Test (expected = BadParametersException.class)
-	public void testNullWinner() throws BadParametersException{
-		new PariPodium(100, sub, competition, null, second, third);
+	public void testNullSecond() throws BadParametersException, SubscriberException{
+		new PariPodium(100, sub, winner, null, third);
 	}
 	
 	@Test (expected = BadParametersException.class)
-	public void testNullSecond() throws BadParametersException{
-		new PariPodium(100, sub, competition, winner, null, third);
-	}
-	
-	@Test (expected = BadParametersException.class)
-	public void testNullThird() throws BadParametersException{
-		new PariPodium(100, sub, competition, winner, second, null);
+	public void testNullThird() throws BadParametersException, SubscriberException{
+		new PariPodium(100, sub, winner, second, null);
 	}
 	
 	@Test
-	public void testGetWinner() throws BadParametersException{
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void testGetWinner() throws BadParametersException, SubscriberException{
+		pari = new PariPodium(100, sub, winner, second, third);
 		assertTrue(pari.getWinner().equals(winner));
 	}
 	
 	@Test
-	public void testGetSecond() throws BadParametersException{
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void testGetSecond() throws BadParametersException, SubscriberException{
+		pari = new PariPodium(100, sub, winner, second, third);
 		assertTrue(pari.getSecond().equals(second));
 	}
 	
 	@Test
-	public void testGetThird() throws BadParametersException{
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void testGetThird() throws BadParametersException, SubscriberException{
+		pari = new PariPodium(100, sub, winner, second, third);
 		assertTrue(pari.getThird().equals(third));
 	}
 	
 	@Test
-	public void testSetWinner() throws BadParametersException{
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void testSetWinner() throws BadParametersException, SubscriberException{
+		pari = new PariPodium(100, sub, winner, second, third);
 		pari.setWinner(new Individual("Cisse","Pinda", "07-10-1990"));
 		assertFalse(pari.getWinner().equals(winner));
 	}
 	
 	@Test
-	public void testSetSecond() throws BadParametersException{
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void testSetSecond() throws BadParametersException, SubscriberException{
+		pari = new PariPodium(100, sub, winner, second, third);
 		pari.setSecond(new Individual("Cisse","Mamadou", "28-09-1992"));
 		assertFalse(pari.getSecond().equals(second));
 	}
 	
 	@Test
-	public void testSetThird() throws BadParametersException{
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void testSetThird() throws BadParametersException, SubscriberException{
+		pari = new PariPodium(100, sub, winner, second, third);
 		pari.setThird(new Individual("Cisse","Sanounou", "05-01-1989"));
 		assertFalse(pari.getThird().equals(third));
 	}
 	
 	@Test(expected = BadParametersException.class)
-	public void testSetNullWinner() throws BadParametersException {
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void testSetNullWinner() throws BadParametersException, SubscriberException {
+		pari = new PariPodium(100, sub, winner, second, third);
 		pari.setWinner(null);
 	}
 	
 	@Test(expected = BadParametersException.class)
-	public void testSetNullSecond() throws BadParametersException {
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void testSetNullSecond() throws BadParametersException, SubscriberException {
+		pari = new PariPodium(100, sub, winner, second, third);
 		pari.setSecond(null);
 	}
 	
 	@Test(expected = BadParametersException.class)
-	public void testSetNullThird() throws BadParametersException {
-		pari = new PariPodium(100, sub, competition, winner, second, third);
+	public void testSetNullThird() throws BadParametersException, SubscriberException {
+		pari = new PariPodium(100, sub, winner, second, third);
 		pari.setThird(null);
 	}
 	
