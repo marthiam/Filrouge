@@ -244,12 +244,8 @@ public class BettingSoft implements Betting {
 		if (c!=null)
 			throw new ExistingCompetitionException("Une compétition avec le même nom existe déjà");
 		
-		try {
-			c = new Competition(competition, (MyCalendar) closingDate, (ArrayList<Competitor>) competitors);
-		} catch (ExistingCompetitorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		c = new Competition(competition, (MyCalendar) closingDate, (ArrayList<Competitor>) competitors);
+
 		this.competitions.add(c);
 	}
 

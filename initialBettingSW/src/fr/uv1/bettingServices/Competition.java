@@ -55,7 +55,7 @@ public class Competition {
 	 * @throws CompetitionException 
 	 * @throws ExistingCompetitorException 
 	 */
-	public Competition(String nomCompetition, MyCalendar dateCompetition, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException, ExistingCompetitorException {
+	public Competition(String nomCompetition, MyCalendar dateCompetition, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException{
 	
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
@@ -128,7 +128,7 @@ public class Competition {
 	 * @throws BadParametersException 
 	 * @throws ExistingCompetitorException 
 	 */
-	public void setCompetitors(Collection<Competitor> competitors) throws CompetitionException, BadParametersException, ExistingCompetitorException {
+	public void setCompetitors(Collection<Competitor> competitors) throws CompetitionException, BadParametersException {
 		if (competitors==null)
 			throw new BadParametersException("La liste des compétiteurs n'a pas été instancié");
 		
