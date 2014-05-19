@@ -422,10 +422,8 @@ public class Competition {
 			throw new CompetitionException("Cette compétition est toujours ouverte");
 		
 		for (Pari pari : this.betList){
-			if (pari instanceof PariWinner){
-				if (((PariWinner) pari).getWinner().equals(winner)){
+			if (pari instanceof PariWinner && ((PariWinner) pari).getWinner().equals(winner)){
 					tokensBettedForWinner += pari.getMise();
-				}
 			}
 		}
 		
@@ -437,13 +435,12 @@ public class Competition {
 					try {
 						pari.getSubscriber().crediter(tokensWonBySubscriber);
 					} catch (BadParametersException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("bug");
 					}
 				}
 			}
 		}
-		if (found==false){
+		if (!found){
 			for (Pari pari : this.betList){
 				this.supprimerParisCompetition(pari.getSubscriber());
 			}

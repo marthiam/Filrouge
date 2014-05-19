@@ -23,7 +23,6 @@ public  class Individual extends Person implements Competitor {
 	public Individual(String lastname, String firstname ,String borndate)
 			throws BadParametersException {
 		super(lastname, firstname,borndate);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)

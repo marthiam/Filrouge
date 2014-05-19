@@ -431,7 +431,6 @@ public class BettingSoft implements Betting {
 		try {
 			c.solderPariWinner(winner);
 		} catch (BadParametersException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -536,9 +535,6 @@ public class BettingSoft implements Betting {
 		
 		Subscriber s = searchSubscriberByUsername(username);
 		Competition c = searchCompetitionByName(competition);
-		
-		
-		boolean trouve = false;
 		if (s==null)
 			throw new SubscriberException("Il n'existe pas de joueur dont le username est: " + username);
 		
@@ -546,16 +542,7 @@ public class BettingSoft implements Betting {
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
 
-		for (Competitor competitor : c.getCompetitors()){
-			if (competitor.equals(winner))
-				trouve = true;
-				break;
-		}
-		
-		if (trouve==false)
-			throw new CompetitionException("Ce competiteur ne participe pas à cette competition");
 		PariWinner pari= new PariWinner(numberTokens,s,winner);
-			
 		c.parierSurLeVainqueur(pari);
 		
 	}
@@ -599,7 +586,7 @@ public class BettingSoft implements Betting {
 			ExistingCompetitionException, SubscriberException,
 			BadParametersException{
 	
-		
+	try {	
 		if (numberTokens == 0)
 			throw new BadParametersException("Le montant misé est invalide");
 		
@@ -616,6 +603,7 @@ public class BettingSoft implements Betting {
 		
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
+	
 		System.out.println("voici les participants à la competition");
 		for (Competitor e : c.getCompetitors() ){
 			System.out.println(e);
@@ -624,6 +612,10 @@ public class BettingSoft implements Betting {
 		PariPodium pari = new PariPodium(numberTokens,s, winner,second,third);
 
 		c.parierSurLePodium(pari);
+	} catch (Exception e) {
+		System.out.println(e);
+		throw e;
+	}
 	
 	}
 
