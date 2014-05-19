@@ -14,6 +14,7 @@ import fr.uv1.bettingServices.Pari;
 import fr.uv1.bettingServices.Subscriber;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.CompetitionException;
+import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.MyCalendar;
 
 public class PariTest {
@@ -34,87 +35,60 @@ public class PariTest {
 	
 	@Test
 	public void TestPari() throws BadParametersException{
-		pari = new Pari(100, sub, competition);
+		pari = new Pari(100, sub);
 		assertTrue(pari.getMise()==100);
 		assertTrue(pari.getSubscriber().equals(sub));
-		assertTrue(pari.getCompetition().equals(competition));
 	}
 	
 	@Test (expected = BadParametersException.class)
 	public void testMontantInvalide() throws BadParametersException{
-		new Pari(-100, sub, competition);
+		new Pari(-100, sub);
 	}
 	
 	@Test (expected = BadParametersException.class)
 	public void testNullSubscriberPari() throws BadParametersException{
-		new Pari(100, null, competition);
+		new Pari(100, null);
 	}	
 	
-	@Test (expected = BadParametersException.class)
-	public void testNullSubscriber() throws BadParametersException{
-		new Pari(100, sub, null);
-	}
 	
 	@Test
 	public void testGetMise() throws BadParametersException{
-		pari = new Pari(100, sub, competition);
+		pari = new Pari(100, sub);
 		assertTrue(pari.getMise()==100);
 	}
 	
 	@Test
 	public void testGetSubscriber() throws BadParametersException{
-		pari = new Pari(100, sub, competition);
+		pari = new Pari(100, sub);
 		assertTrue(pari.getSubscriber().equals(sub));
 	}
 	
-	@Test
-	public void testGetCompetition() throws BadParametersException{
-		pari = new Pari(100, sub, competition);
-		assertTrue(pari.getCompetition().equals(competition));
-	}
 	
 	@Test
 	public void testSetMise() throws BadParametersException{
-		pari = new Pari(100, sub, competition);
+		pari = new Pari(100, sub);
 		pari.setMise(200);
 		assertFalse(pari.getMise()==100);
 	}
 	
 	@Test
 	public void testSetSubscriber() throws BadParametersException{
-		pari = new Pari(100, sub, competition);
+		pari = new Pari(100, sub);
 		pari.setSubscriber(new Subscriber("Cisse","Nene", "26-03-1996", "ncisse" ));
 		assertFalse(pari.getSubscriber().equals(sub));
 	}
 	
-	@Test
-	public void testSetCompetition() throws BadParametersException, CompetitionException{
-		pari = new Pari(100, sub, competition);
-		
-		ArrayList<Competitor> newcompetitors = new ArrayList<Competitor>();
-		newcompetitors.add(new Individual("Cisse","Tenin", "28-09-1987"));
-		newcompetitors.add(new Individual("Cisse","Aminata", "05-01-1991"));
-		newcompetitors.add(new Individual("Cisse","Bintou", "07-10-1993"));
-		
-		pari.setCompetition(new Competition(new String("Course"),new MyCalendar(2014,12,15), newcompetitors));
-		assertFalse(pari.getCompetition().equals(competition));
-	}
-	
 	@Test(expected = BadParametersException.class)
 	public void testSetMontantInvalide() throws BadParametersException {
-		pari = new Pari(100, sub, competition);
+		pari = new Pari(100, sub);
 		pari.setMise(-100);
 	}
 	
 	@Test(expected = BadParametersException.class)
 	public void testSetNullSubscriber() throws BadParametersException {
-		pari = new Pari(100, sub, competition);
+		pari = new Pari(100, sub);
 		pari.setSubscriber(null);
 	}
-	
-	@Test(expected = BadParametersException.class)
-	public void testSetNullCompetition() throws BadParametersException {
-		pari = new Pari(100, sub, competition);
-		pari.setCompetition(null);
-	}
+
 }
+	

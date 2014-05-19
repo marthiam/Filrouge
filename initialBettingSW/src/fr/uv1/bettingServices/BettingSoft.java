@@ -247,12 +247,13 @@ public class BettingSoft implements Betting {
 		if (competitors.size()<2)
 			throw new CompetitionException("Il y a moins de deux compétiteurs dans la compétition");
 		
-		for (int i=0; i<competitors.size(); i++)
+		for (int i=0; i<competitors.size(); i++){
 			for(int j=i+1; j<competitors.size(); j++){
-				
+				if (((ArrayList<Competitor>) competitors).get(i).equals(((ArrayList<Competitor>) competitors).get(j)))
+					throw new CompetitionException("Deux ou plusieurs compétiteurs sont les mêmes");
 			}
-		
-		
+		}
+			
 	}
 
 	/**
@@ -430,7 +431,12 @@ public class BettingSoft implements Betting {
 		if (c == null)
 			throw new ExistingCompetitionException("Cette competition n'existe pas");
 		
-		c.solderPariWinner(winner);
+		try {
+			c.solderPariWinner(winner);
+		} catch (BadParametersException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -476,7 +482,12 @@ public class BettingSoft implements Betting {
 		Competition c = this.searchCompetitionByName(competition);
 		if (c == null)
 			throw new ExistingCompetitionException("Cette competition n'existe pas");
-		c.solderPariPodium(winner, second, third);
+		try {
+			c.solderPariPodium(winner, second, third);
+		} catch (BadParametersException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -599,9 +610,9 @@ public class BettingSoft implements Betting {
 			
 		if (c==null)
 			throw new ExistingCompetitionException("La competition "+ competition +"n'existe pas");
-		PariPodium pari = new PariPodium(numberTokens,s, winner,second,third);
+		PariPodium pari = new PariPodium(numberTokens, s, winner, second, third);
 		c.parierSurLePodium(pari);
-
+	
 	}
 
 	/**
@@ -696,24 +707,8 @@ public class BettingSoft implements Betting {
 		s.authenticateSubscribe(pwdSubs);
 		if (c==null)
 			throw new ExistingCompetitionException("La compétition "+competition+" n'existe pas");
-<<<<<<< HEAD
+		
 		c.supprimerParisCompetition(s);
-=======
-		if (c.isInThePast())
-			throw new ExistingCompetitionException("La compétition est fermée");
-		for (Pari pari : c.getBetList()){
-			if (pari.getSubscriber().equals(s))
-				numberTokens += pari.getMise();
-		}
-		try {
-			s.crediter(numberTokens);
-		} catch (BadParametersException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
->>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
 	}
 
 	/***********************************************************************
@@ -809,13 +804,12 @@ public class BettingSoft implements Betting {
 			ExistingCompetitionException, CompetitionException,
 			ExistingCompetitorException, BadParametersException{
 			Competition c= this.searchCompetitionByName(competition);
-			if(c==null) throw new ExistingCompetitionException("la competition ");
+			if(c==null) throw new ExistingCompetitionException("la compétition n'existe pas dans la liste ");
 			if(competitor.hasValidName())throw new BadParametersException("le competiteur n'as pas un nom valide");
 			if(c.isInThePast()) throw new CompetitionException(" la date de la comptition "+ competition+" es dans le passé ");
 			
 			c.addCompetitor(competitor);
-		
-		
+			
 	}
 	/**
 	 * cancel a competition.
