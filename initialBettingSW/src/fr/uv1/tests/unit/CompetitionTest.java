@@ -977,7 +977,7 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 			 competitors.add(c1);
 			 competitors.add(c2);
 			 competitors.add(c3);
-			 competition = new Competition(new String("Course"),new MyCalendar(2014,5,18), competitors);
+			 competition = new Competition(new String("Course"),new MyCalendar(2014,5,20), competitors);
 			 Subscriber sub1 = new Subscriber("Cisse","Soumaila", "07-10-1982", "soumailacisse" );
 			 sub1.crediter(100);
 			 Subscriber sub2 = new Subscriber("Cisse","Hadji", "07-10-1990", "hadjicisse" );
@@ -986,6 +986,9 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 			 PariWinner pariwin2 = new PariWinner(60, sub2, c2);
 			 competition.parierSurLeVainqueur(pariwin);
 			 competition.parierSurLeVainqueur(pariwin2);
+			 
+			 MyCalendar.setDate(2014, 12, 1);
+			 
 			 competition.solderPariWinner(c1);
 			 assertTrue(sub2.solde()==40);
 			 assertTrue(sub1.solde()==(100*160)/100);
