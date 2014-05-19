@@ -21,8 +21,10 @@ public class PariPodium extends Pari{
 	 * @throws BadParametersException 
 	 * @throws SubscriberException 
 	 */
-	public PariPodium(long mise,Subscriber subscriber, 
-			Competitor winner, Competitor second,Competitor third) throws BadParametersException, SubscriberException {
+	public PariPodium(long mise,Subscriber subscriber,
+			Competitor winner, Competitor second, Competitor third) 
+					throws BadParametersException{
+
 		super(mise, subscriber);
 		this.setWinner(winner);
 		this.setSecond(second);
@@ -34,7 +36,7 @@ public class PariPodium extends Pari{
 	 * @return Le vainqueur de la competition
 	 */
 	public Competitor getWinner() {
-		return this.winner;
+		return winner;
 	}
 
 
@@ -53,7 +55,7 @@ public class PariPodium extends Pari{
 	 * @return Le deuxième de la compétition
 	 */
 	public Competitor getSecond() {
-		return this.second;
+		return second;
 	}
 
 
@@ -72,7 +74,7 @@ public class PariPodium extends Pari{
 	 * @return Le troisième de la compétition 
 	 */
 	public Competitor getThird() {
-		return this.third;
+		return third;
 	}
 
 

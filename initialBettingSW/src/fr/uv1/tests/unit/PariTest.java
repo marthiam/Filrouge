@@ -34,19 +34,21 @@ public class PariTest {
 		 }
 	
 	@Test
-	public void TestPari() throws BadParametersException, SubscriberException{
+	public void TestPari() throws BadParametersException{
 		pari = new Pari(100, sub);
 		assertTrue(pari.getMise()==100);
 		assertTrue(pari.getSubscriber().equals(sub));
-		
 	}
+	
+
 	
 	@Test (expected = BadParametersException.class)
 	public void testMontantInvalide() throws BadParametersException, SubscriberException{
 		new Pari(-100, sub);
 	}
 	
-	@Test (expected = BadParametersException.class)
+	
+	@Test(expected = BadParametersException.class)
 	public void testNullSubscriberPari() throws BadParametersException, SubscriberException{
 		new Pari(100, null);
 	}	
@@ -64,8 +66,7 @@ public class PariTest {
 		assertTrue(pari.getSubscriber().equals(sub));
 	}
 	
-	
-	
+
 	@Test
 	public void testSetMise() throws BadParametersException, SubscriberException{
 		pari = new Pari(100, sub);
@@ -80,6 +81,7 @@ public class PariTest {
 		assertFalse(pari.getSubscriber().equals(sub));
 	}
 	
+
 	@Test
 	public void testSetCompetition() throws BadParametersException, CompetitionException, SubscriberException{
 		pari = new Pari(100, sub);
@@ -97,10 +99,9 @@ public class PariTest {
 	}
 	
 	@Test(expected = BadParametersException.class)
-	public void testSetNullSubscriber() throws BadParametersException, SubscriberException {
+	public void testSetNullSubscriber() throws BadParametersException {
 		pari = new Pari(100, sub);
 		pari.setSubscriber(null);
 	}
-	
-}
 
+}

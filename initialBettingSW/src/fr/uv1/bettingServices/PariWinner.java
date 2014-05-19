@@ -26,7 +26,7 @@ public class PariWinner extends Pari{
 	 * @throws SubscriberException 
 	 */
 	public PariWinner(long mise, Subscriber subscriber,
-			Competitor winner) throws BadParametersException, SubscriberException {
+			Competitor winner) throws BadParametersException{
 		super(mise, subscriber);
 		this.setWinner(winner);
 	}

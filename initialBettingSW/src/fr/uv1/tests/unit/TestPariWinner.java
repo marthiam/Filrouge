@@ -50,12 +50,11 @@ public class TestPariWinner {
 	}
 	
 	@Test (expected = BadParametersException.class)
-	public void testNullSubscriberPari() throws BadParametersException, SubscriberException{
+	public void testNullSubscriberPari() throws BadParametersException{
 		new PariWinner(100, null, winner);
 	}	
 	
 
-	
 	@Test (expected = BadParametersException.class)
 	public void testNullWinner() throws BadParametersException, SubscriberException{
 		new PariWinner(100, sub, null);
@@ -74,6 +73,12 @@ public class TestPariWinner {
 		assertFalse(pari.getWinner().equals(winner));
 	}
 	
-	
+
+	@Test(expected = BadParametersException.class)
+	public void testSetNullWinner() throws BadParametersException {
+		pari = new PariWinner(100, sub, winner);
+		pari.setWinner(null);
+	}
+
 	
 }

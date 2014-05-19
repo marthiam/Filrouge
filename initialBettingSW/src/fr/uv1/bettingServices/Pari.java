@@ -14,7 +14,7 @@ public class Pari {
 	 * @throws BadParametersException 
 	 * @throws SubscriberException 
 	 */
-	public Pari(long mise, Subscriber subscriber) throws BadParametersException, SubscriberException {
+	public Pari(long mise, Subscriber subscriber) throws BadParametersException{
 		super();
 		this.setMise(mise);
 		this.setSubscriber(subscriber);
@@ -55,23 +55,6 @@ public class Pari {
 		this.subscriber = subscriber;
 	}
 
-	
-/*
-	
-	*//**
-	 * @return La competition sur laquell est fait le pari
-	 *//*
->>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
-	public Competition getCompetition() {
-		return competition;
-	}
 
-	/*
-	public void setCompetition(Competition competition) {
->>>>>>> 9c2186010aaa271256aec8bf09b309ecd02a771a
-		this.competition = competition;
-	}*/
-	
-	
 
 }

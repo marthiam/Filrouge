@@ -157,16 +157,31 @@ public  class Team implements Competitor {
 	}	
 	
 	
-	public boolean equals(Team t){
-		boolean trouver =false; 
-		if(t==null || t.getMembers().size()!=this.members.size()) return false; 
-		Iterator e = this.members.iterator();
-		Iterator e1 = t.getMembers().iterator();
-		while (e.hasNext() && !trouver ){
-			trouver= !t.getMembers().contains(e.next());
-			if(trouver) return false;
-		}
+	public boolean equals(Object obj){
+		if (obj==null)
+			return false;
 		
+		if (!(obj instanceof Team))
+			return false;
+		
+		if (((Team) obj).getTeamName()==null)
+			return false;
+		
+		if (!(this.teamName.equals(((Team) obj).getTeamName())))
+			return false;
+		
+		boolean trouver =false; 
+		if(((Team) obj).getMembers().size()!=this.members.size()) 
+			return false; 
+		
+		Iterator e = this.members.iterator();
+		Iterator e1 = ((Team) obj).getMembers().iterator();
+		
+		while (e.hasNext() && !trouver ){
+			trouver= !((Team) obj).getMembers().contains(e.next());
+			if(trouver) 
+				return false;
+		}
 		return !trouver ;
 	}
 	  

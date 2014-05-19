@@ -57,10 +57,9 @@ public class TestPariPodium {
 	}
 	
 	@Test (expected = BadParametersException.class)
-	public void testNullSubscriberPari() throws BadParametersException, SubscriberException{
+	public void testNullSubscriberPari() throws BadParametersException{
 		new PariPodium(100, null, winner, second, third);
 	}	
-	
 	
 	
 	@Test (expected = BadParametersException.class)
@@ -69,6 +68,7 @@ public class TestPariPodium {
 	}
 	
 	@Test (expected = BadParametersException.class)
+
 	public void testNullSecond() throws BadParametersException, SubscriberException{
 		new PariPodium(100, sub, winner, null, third);
 	}
@@ -85,6 +85,7 @@ public class TestPariPodium {
 	}
 	
 	@Test
+
 	public void testGetSecond() throws BadParametersException, SubscriberException{
 		pari = new PariPodium(100, sub, winner, second, third);
 		assertTrue(pari.getSecond().equals(second));
