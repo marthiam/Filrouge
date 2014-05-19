@@ -73,8 +73,8 @@ public class CompetitionTest extends Thread{
 		competition.addCompetitor(null);
 	}
 	
-	@Test(expected = ExistingCompetitorException.class)
-	public void testAddExistingCompetitor() throws BadParametersException, CompetitionException, ExistingCompetitorException, ExistingCompetitionException{
+	@Test(expected = CompetitionException.class)
+	public void testAddExistingCompetitor() throws BadParametersException, CompetitionException, ExistingCompetitionException{
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);	
 		int oldsize =competition.getCompetitors().size();
 		competition.addCompetitor(new Individual("Cisse","Pinda", "07-10-1990"));
@@ -183,7 +183,7 @@ public void testParierSurLeVainqueurBadMise1() throws BadParametersException, Co
 	}
 	
 	
-	@Test(expected=ExistingCompetitorException.class)
+	@Test(expected=CompetitionException.class)
 	public void testAddExistingTeam() throws BadParametersException, CompetitionException, ExistingCompetitorException{
 		 competitors = new ArrayList<Competitor>();
 		 Team t1 =new Team("Telecom");
@@ -977,7 +977,7 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 			 competitors.add(c1);
 			 competitors.add(c2);
 			 competitors.add(c3);
-			 competition = new Competition(new String("Course"),new MyCalendar(2014,5,18), competitors);
+			 competition = new Competition(new String("Course"),new MyCalendar(2014,12,18), competitors);
 			 Subscriber sub1 = new Subscriber("Cisse","Soumaila", "07-10-1982", "soumailacisse" );
 			 sub1.crediter(100);
 			 Subscriber sub2 = new Subscriber("Cisse","Hadji", "07-10-1990", "hadjicisse" );

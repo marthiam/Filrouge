@@ -60,6 +60,7 @@ public class Competition {
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
 		this.montantTotalMise=0;
+		this.competitors= new ArrayList<Competitor>();
 		this.setCompetitors(competitors);
 		this.betList = new ArrayList<Pari>();
 	}
@@ -142,9 +143,10 @@ public class Competition {
 					if (!(((ArrayList<Competitor>) competitors).get(i) instanceof Individual)){
 						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
 								"meme classe");
-					}else
+					}else{
 						this.addCompetitor(((ArrayList<Competitor>) competitors).get(i));
 						i++;
+					}
 				}
 				
 			}else{
@@ -547,8 +549,8 @@ public class Competition {
 
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException(" competiteur non instancié");
-		if ( this.competitors.contains(newCompetitor)) throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
-		this.competitors.add(newCompetitor);
+		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
+		if (this.competitors!=null) this.competitors.add(newCompetitor);
 
 
 		}
