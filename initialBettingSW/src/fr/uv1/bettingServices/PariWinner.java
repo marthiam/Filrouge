@@ -20,10 +20,11 @@ public class PariWinner extends Pari{
 	
 	
 	/**
-	 * @param mise Le nombre de jetons misé par le joueur
-	 * @param winner Le competiteur sur lequel le joueur a parié
-	 * @throws BadParametersException 
-	 * @throws SubscriberException 
+	 * Construicteur 
+	 * 		@param mise Le nombre de jetons misé par le joueur
+	 * 		@param winner Le competiteur sur lequel le joueur a parié
+	 * 		@throws BadParametersException 
+	 * 		@throws SubscriberException 
 	 */
 	public PariWinner(long mise, Subscriber subscriber,
 			Competitor winner) throws BadParametersException{

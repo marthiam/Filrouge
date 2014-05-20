@@ -14,17 +14,17 @@ public class PariPodium extends Pari{
 	
 	
 	/**
-	 * @param mise Le nombre de jetons misé par le joueur
-	 * @param winner Le vainqueur de la competition
-	 * @param second Le deuxième de la compétition
-	 * @param third Le troisième de la compétition
-	 * @throws BadParametersException 
-	 * @throws SubscriberException 
+	 * Commenttaire 
+	 * 		@param mise Le nombre de jetons misé par le joueur
+	 * 		@param winner Le vainqueur de la competition
+	 *		@param second Le deuxième de la compétition
+	 * 		@param third Le troisième de la compétition
+	 * 		@throws BadParametersException 
+	 * 		@throws SubscriberException 
 	 */
 	public PariPodium(long mise,Subscriber subscriber,
 			Competitor winner, Competitor second, Competitor third) 
 					throws BadParametersException{
-
 		super(mise, subscriber);
 		this.setWinner(winner);
 		this.setSecond(second);

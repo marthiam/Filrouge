@@ -4,9 +4,7 @@
 package fr.uv1.bettingServices;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
@@ -16,12 +14,31 @@ import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.MyCalendar;
 
+import org.hibernate.Session;
+import org.hibernate.annotations.Entity;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Table;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+
 
 /**
  * @author mcisse
  *
  */
+@Entity
+@Table(appliesTo = "competition")
+@NamedQuery(name = "findAllDept", query = "select d from Dept d")
 public class Competition {
+	
 	/** La taille minimum du nom d'une compétition */
 	private static final int LONG_COMPETITION = 4;
 	
@@ -30,17 +47,25 @@ public class Competition {
 	
 	
 	/**Le nom de la compétition*/
+	@Column(name = "nomcompetition")
 	private String nomCompetition;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id_competion")
+	private Long idcompetiteur;
+	
 	/**La date de la compétition*/
+	@Temporal(TemporalType.DATE)
+	@Column(name = "closingdate")
 	private MyCalendar dateCompetition;	
 	
 	/**Le montant total misé sur la compétition*/
+	@Column(name = "montanttotalmise")
 	private long montantTotalMise;
 	
 	
 	/**La liste des compétiteurs */
-	//ce serait mieux d'utiliser des  Hashset à la place des ArrayList c'est dit dans les consigne cela nous aidera pour la base de donnée
 	private Collection<Competitor> competitors;
 	
 	/** La liste des paris */

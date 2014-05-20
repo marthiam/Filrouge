@@ -9,9 +9,9 @@ public  class Individual extends Person implements Competitor {
 	
 	/**
 	 * La taille minimum du nom d'une equipe
-	 * 
 	 */
 	private static final int LONG_INDIV = 4;
+	
 	
 	/**
 	 * La contrainte que le nom de l'equipe doit verifier
@@ -20,6 +20,12 @@ public  class Individual extends Person implements Competitor {
 	private static final String REGEX_DATE= new String("(\\d{2})/(\\d{2})/(\\d{4})");
 	
 
+	/**
+	 * @param lastname
+	 * @param firstname
+	 * @param borndate
+	 * @throws BadParametersException
+	 */
 	public Individual(String lastname, String firstname ,String borndate)
 			throws BadParametersException {
 		super(lastname, firstname,borndate);
@@ -93,26 +99,15 @@ public  class Individual extends Person implements Competitor {
 	
 	
 	/**
-	 * add a member to a team competitor.
-	 * 
-	 * @throws ExistingCompetitorException
-	 *             raised if the member is already registered for the team.
-	 * @throws BadParametersException
-	 *             raised if the member is not instantiated.
+	 * From Interface Competitor
 	 */
 	public void addMember(Competitor member) throws ExistingCompetitorException,
-			BadParametersException{
+			BadParametersException{ 
 		
 	}
 
 	/**
-	 * delete a member from a team competitor.
-	 * 
-	 * @return true if the competitor has been deleted from the team.
-	 * @throws BadParametersException
-	 *             raised if the member is not instantiated.
-	 * @throws ExistingCompetitorException
-	 *             raised if the member is not registered for the team.
+	 * From interface Competitor
 	 */
 	public void deleteMember(Competitor member) throws BadParametersException,
 			ExistingCompetitorException{
