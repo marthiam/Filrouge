@@ -21,6 +21,7 @@ public class SubscriberTest {
 	public void testSubscriber() throws BadParametersException {
 		subs = new Subscriber(new String("Duran"), new String("Miguel"),new String("02-11-1992"),
 				new String("worldChamp"));
+		
 		assertTrue(subs.getUsername().equals("worldChamp"));
 		assertTrue(subs.getPassword() != null);
 	}

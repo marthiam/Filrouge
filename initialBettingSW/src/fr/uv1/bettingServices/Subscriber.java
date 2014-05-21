@@ -43,6 +43,13 @@ public class Subscriber extends Person implements Serializable {
 	private static final String REGEX_USERNAME = new String("[a-zA-Z0-9]*");
 
 
+	
+
+	/** 
+	 *  identifiant du subscriber
+	 */
+	private long id_subscribe;
+	
 	/** 
 	 * @uml.property name="username"
 	 */
@@ -82,7 +89,19 @@ public class Subscriber extends Person implements Serializable {
 	public long getNumberToken() {
 		return compte.getSolde();
 	}
+	/**
+	 * @return the id_subscribe
+	 */
+	public long getId_subscribe() {
+		return id_subscribe;
+	}
 
+	/**
+	 * @param id_subscribe the id_subscribe to set
+	 */
+	public void setId_subscribe(long id_subscribe) {
+		this.id_subscribe = id_subscribe;
+	}
 
 	/*
 	 * the constructor calculates a password for the subscriber. No test on the

@@ -1,9 +1,12 @@
 package fr.uv1.bd;
+import fr.uv1.utils.DataBaseConnection;
 
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 import fr.uv1.bettingServices.*;
+import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.tests.unit.*;;
 
 /**
@@ -40,36 +43,40 @@ public class SubscribersManager
     //       of the id, a request is done to get this value by
     //       requesting the sequence (subscribers_id_seq) in the
     //       database.
-    Connection c = DatabaseConnection.getConnection();
+    Connection c = DataBaseConnection.getConnection();
+    Statement stmt = null;
     try
     {
       c.setAutoCommit(false);
-      PreparedStatement psPersist = c.prepareStatement("insert into person(prenom,nom,borndate,type,username,password,solde)  values (?, ?,?,?,?,?)");
+      PreparedStatement psPersist = c.prepareStatement("insert into personne(prenom,nom,borndate,type,username,password,solde)  values (?,?,?,?,?,?,?)"
+    		  									,PreparedStatement.RETURN_GENERATED_KEYS);
 
       psPersist.setString(1, subscriber.getFirstname());
       psPersist.setString(2, subscriber.getLastname());
-      psPersist.setString(3, subscriber.getBorndate());
+      String [] s = subscriber.getBorndate().split("-");
+	  int jour = new Integer(s[0]);
+	  int mois = new Integer(s[1]);
+	  int annee = new Integer(s[2]);
+      psPersist.setDate(3, new Date(jour,mois,annee));
       psPersist.setString(4, "Joueur");
       psPersist.setString(5, subscriber.getUsername());
-      psPersist.setString(3, subscriber.getPassword());
-      psPersist.setLong(3, subscriber.solde());
+      psPersist.setString(6, subscriber.getPassword());
+      psPersist.setLong(7, subscriber.solde());
       psPersist.executeUpdate();
-      
-      psPersist.close();
-      
-      // Retrieving the value of the id with a request on the
-      // sequence (subscribers_id_seq).
-      PreparedStatement psIdValue = c.prepareStatement("select currval('id_personne') as value_id");
+      PreparedStatement psIdValue = c.prepareStatement("select currval('personne_id_seq') as value_id");
       ResultSet resultSet = psIdValue.executeQuery();
       Integer id  = null;
       while(resultSet.next())
       {
         id = resultSet.getInt("value_id");
       }
-      resultSet.close();
-      psIdValue.close();
-      c.commit();
-      subscriber.setId(id);
+
+      
+      
+      psPersist.close();
+	  c.commit();
+	  subscriber.setId_subscribe(id);
+      
     }
     catch (SQLException e)
     {
@@ -85,6 +92,8 @@ public class SubscribersManager
       throw e;
     }
     
+  
+ 		
     c.setAutoCommit(true);
     c.close();
     
@@ -97,15 +106,16 @@ public class SubscribersManager
    * @param id the id of the subscriber to retrieve.
    * @return the subscriber or null if the id does not exist in the database.
    * @throws SQLException
+ * @throws BadParametersException 
    */
-  public static Subscriber findById(Integer id) throws SQLException
+  public static Subscriber findById(Integer id) throws SQLException, BadParametersException
   {
     // 1 - Get a database connection from the class 'DatabaseConnection' 
-    Connection c = DatabaseConnection.getConnection();
+    Connection c = DataBaseConnection.getConnection();
 
     // 2 - Creating a Prepared Statement with the SQL instruction.
     //     The parameters are represented by question marks. 
-    PreparedStatement psSelect = c.prepareStatement("select * from subscribers where id=?");
+    PreparedStatement psSelect = c.prepareStatement("select * from personne where type id_personne=?");
     
     // 3 - Supplying values for the prepared statement parameters (question marks).
     psSelect.setInt(1, id);
@@ -118,9 +128,13 @@ public class SubscribersManager
     Subscriber subscriber = null;
     while(resultSet.next())
     {
-      subscriber = new Subscriber(resultSet.getInt("id_personne"),
-                                  resultSet.getString("prenom"), 
-                                  resultSet.getString("n"));
+      String [] s = resultSet.getString("borndate").split("-");
+      int annee = new Integer(s[0]);
+   	  int mois = new Integer(s[1]);
+   	  int jour = new Integer(s[2]);
+      subscriber = new Subscriber(resultSet.getString("prenom"), 
+                                  resultSet.getString("nom"),jour+"-"+mois+"-"+annee,resultSet.getString("username"));
+      subscriber.setCompte(new Compte(resultSet.getInt("solde")));
     }
     
     // 6 - Closing the Result Set
@@ -140,18 +154,24 @@ public class SubscribersManager
    * 
    * @return
    * @throws SQLException
+ * @throws BadParametersException 
    */
-  public static List<Subscriber> findAll() throws SQLException
+  public static List<Subscriber> findAll() throws SQLException, BadParametersException
   {
-    Connection c = DatabaseConnection.getConnection();
-    PreparedStatement psSelect = c.prepareStatement("select * from subscribers order by id");
+    Connection c = DataBaseConnection.getConnection();
+    PreparedStatement psSelect = c.prepareStatement("select * from personne order by id_personne");
     ResultSet resultSet = psSelect.executeQuery();
     List<Subscriber> subscribers = new ArrayList<Subscriber>();
+    Subscriber subscriber = null;
     while(resultSet.next())
     {
-      subscribers.add(new Subscriber(resultSet.getInt("id"),
-                                     resultSet.getString("firstname"),
-                                     resultSet.getString("lastname")));
+    	String [] s = resultSet.getString("borndate").split("-");
+        int annee = new Integer(s[0]);
+     	  int mois = new Integer(s[1]);
+     	  int jour = new Integer(s[2]);
+    	subscriber=new Subscriber(resultSet.getString("prenom"),resultSet.getString("nom"),jour+"-"+mois+"-"+annee,resultSet.getString("username"));
+    	subscriber.setCompte(new Compte(resultSet.getInt("solde")));
+        subscribers.add(subscriber);
     }
     resultSet.close();
     psSelect.close();
@@ -169,17 +189,21 @@ public class SubscribersManager
   public static void update(Subscriber subscriber) throws SQLException
   {
     // 1 - Get a database connection from the class 'DatabaseConnection' 
-    Connection c = DatabaseConnection.getConnection();
+    Connection c = DataBaseConnection.getConnection();
 
     // 2 - Creating a Prepared Statement with the SQL instruction.
     //     The parameters are represented by question marks. 
-    PreparedStatement psUpdate = c.prepareStatement("update subscribers set firstname=?, lastname=? where id=?");
+    PreparedStatement psUpdate = c.prepareStatement("update personne set prenom=?, nom=?,borndate=?,type=?,username=?,password=?,solde=?  where id=?");
 
     // 3 - Supplying values for the prepared statement parameters (question marks).
     psUpdate.setString(1, subscriber.getFirstname());
     psUpdate.setString(2, subscriber.getLastname());
-    psUpdate.setInt(3, subscriber.getId());
-
+    psUpdate.setString(3, subscriber.getBorndate());
+    psUpdate.setString(4, "Joueur");
+    psUpdate.setString(5, subscriber.getUsername());
+    psUpdate.setString(6, subscriber.getPassword());
+    psUpdate.setLong(7, subscriber.solde());
+    
     // Executing the prepared statement object among the database.
     // If needed, a return value (int) can be obtained. It contains
     // how many rows of a table were updated.
@@ -203,9 +227,11 @@ public class SubscribersManager
    */
   public static void delete(Subscriber subscriber) throws SQLException
   {
-    Connection c = DatabaseConnection.getConnection();
-    PreparedStatement psUpdate = c.prepareStatement("delete from subscribers where id=?");
-    psUpdate.setInt(1, subscriber.getId());
+    Connection c = DataBaseConnection.getConnection();
+    PreparedStatement psUpdate = c.prepareStatement("delete from personne where nom=? and prenom=? and borndate=?");
+    psUpdate.setString(1, subscriber.getFirstname());
+    psUpdate.setString(1, subscriber.getLastname());
+    psUpdate.setString(1, subscriber.getBorndate());
     psUpdate.executeUpdate();
     psUpdate.close();
     c.close();
