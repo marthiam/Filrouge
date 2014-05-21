@@ -7,6 +7,14 @@ import java.util.Iterator;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 
+/**
+ * @author Mariam
+ *
+ */
+/**
+ * @author Mariam
+ *
+ */
 public  class Team implements Competitor {
 	
 	private String teamName;
@@ -159,7 +167,10 @@ public  class Team implements Competitor {
 		this.members = members;
 	}	
 	
-	
+	/**
+	 *  return true si le 2 equipes on le même nom 
+	 */
+
 	public boolean equals(Object obj){
 		if (obj==null)
 			return false;
@@ -170,25 +181,8 @@ public  class Team implements Competitor {
 		if (((Team) obj).getTeamName()==null)
 			return false;
 		
-		if (!(this.teamName.equals(((Team) obj).getTeamName())))
-			return false;
 		
-		if ((this.teamName.equals(((Team) obj).getTeamName())))
-			return true;
-		
-		boolean trouver =false; 
-		if(((Team) obj).getMembers().size()!=this.members.size()) 
-			return false; 
-		
-		Iterator e = this.members.iterator();
-		Iterator e1 = ((Team) obj).getMembers().iterator();
-		
-		while (e.hasNext() && !trouver ){
-			trouver= !((Team) obj).getMembers().contains(e.next());
-			if(trouver) 
-				return false;
-		}
-		return !trouver ;
+		return this.teamName.equals(((Team) obj).getTeamName());
 	}
 
 	/* (non-Javadoc)

@@ -6,6 +6,13 @@ package fr.uv1.bettingServices;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.CompetitionException;
@@ -14,17 +21,24 @@ import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.MyCalendar;
 
+<<<<<<< HEAD
 
 import java.util.Date;
 
 
 
+=======
+>>>>>>> b9dcb64c7708573dba57233d63208feb5e26a31b
 
 
 /**
  * @author mcisse
  *
  */
+<<<<<<< HEAD
+=======
+
+>>>>>>> b9dcb64c7708573dba57233d63208feb5e26a31b
 public class Competition {
 	
 	/** La taille minimum du nom d'une compétition */
@@ -35,17 +49,31 @@ public class Competition {
 	
 	
 	/**Le nom de la compétition*/
+<<<<<<< HEAD
 	private String nomCompetition;
 
+=======
+	
+	private String nomCompetition;
+	
+	
+	private Long idcompetiteur;
+>>>>>>> b9dcb64c7708573dba57233d63208feb5e26a31b
 	
 	/**La date de la compétition*/
 	private MyCalendar dateCompetition;	
 	
 	/**Le montant total misé sur la compétition*/
+<<<<<<< HEAD
+=======
+
+>>>>>>> b9dcb64c7708573dba57233d63208feb5e26a31b
 	private long montantTotalMise;
 	
 	
 	/**La liste des compétiteurs */
+	
+	
 	private Collection<Competitor> competitors;
 	
 	/** La liste des paris */
@@ -362,10 +390,12 @@ public class Competition {
 			BadParametersException{
 		
 		if (paripod==null) throw new BadParametersException("pari avec un pariPodium non instancié");
-		
+	
+		System.out.println("Voici le pari "+ paripod.getMise() +" sur "+ paripod.getWinner() +" "+paripod.getSecond()+" "+paripod.getThird() ) ;
 		boolean trouveWinner = this.getCompetitors().contains(paripod.getWinner());
 		boolean trouveSecond = this.getCompetitors().contains(paripod.getSecond());
 		boolean trouveThird = this.getCompetitors().contains(paripod.getThird());
+		
 		System.out.println(" la lise de competiteur de la competition"+this.nomCompetition +" est"); 
 		
 		for ( Competitor cp : this.competitors){
@@ -732,6 +762,8 @@ public class Competition {
 		}
 		return true;
 	}
+	
+	
 
 	
 	/**
