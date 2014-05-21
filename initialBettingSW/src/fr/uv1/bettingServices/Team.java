@@ -92,11 +92,11 @@ public  class Team implements Competitor {
 	 */
 	public void addMember(Competitor member) throws ExistingCompetitorException,
 			BadParametersException{
-		System.out.println("on veut ajouter " +member +" à l'équipe "+ this.teamName);
+		//System.out.println("on veut ajouter " +member +" à l'équipe "+ this.teamName);
 		if(member==null || !member.hasValidName() || !(member instanceof Individual)) throw new BadParametersException(member +"est pas un parametre valide dans addMenber");
 		if(!members.contains(member)){
 			members.add(member);
-			System.out.println("il a été ajouté ");
+			//System.out.println("il a été ajouté ");
 		}else{
 			throw new ExistingCompetitorException(member.toString() +" existe déja "); 
 		}

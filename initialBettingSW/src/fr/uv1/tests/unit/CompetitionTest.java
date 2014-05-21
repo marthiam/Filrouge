@@ -43,6 +43,7 @@ public class CompetitionTest extends Thread{
 		 competiteur=new Individual("Cisse","Pinda", "07-10-1990");
 		 sub = new Subscriber("Cisse","Kadi", "07-10-1990", "mcisse" );
 		 sub.crediter(300);
+		 MyCalendar.setDate();
 		
 	}
 	
@@ -83,12 +84,7 @@ public class CompetitionTest extends Thread{
 	public void testAddBadCompetitor() throws BadParametersException, CompetitionException, ExistingCompetitorException{
 		competition.addCompetitor((new Individual("Thiam","Mariam", "07-10-200")));
 	}
-	@Test(expected = CompetitionException.class)
-	public void testAddTeamCompetitorSansMembre() throws BadParametersException, CompetitionException, ExistingCompetitorException{
-		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
-		Team t =new Team("barcelon");
-		competition.addCompetitor(t);
-	}
+	
 	
 	@Test
 	public void testParierSurLeVainqueur() throws BadParametersException, CompetitionException, AuthenticationException, ExistingCompetitionException, SubscriberException {
@@ -873,7 +869,7 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 			 Team t2 =new Team("Ensta");
 			 t2.addMember(new Individual("Thiam","Pierre", "07-10-1991"));
 			 t2.addMember(new Individual("Thiam","Sami", "05-01-1983"));
-			 Team t3 =new Team("Ensta");
+			 Team t3 =new Team("Enstae");
 			 t3.addMember(new Individual("Toure","Paul", "07-10-1991"));
 			 t3.addMember(new Individual("Tour","Sali", "05-01-1983"));
 			 competitors.add(t1);
@@ -967,7 +963,7 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 			 competition.solderPariWinner(c1);
 			 
 		}
-	
+		
 		@Test
 		public void testSolderPariWinner() throws BadParametersException, CompetitionException, AuthenticationException, ExistingCompetitionException, SubscriberException{
 			competitors = new ArrayList<Competitor>();
@@ -977,7 +973,7 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 			 competitors.add(c1);
 			 competitors.add(c2);
 			 competitors.add(c3);
-			 competition = new Competition(new String("Course"),new MyCalendar(2014,5,30), competitors);
+			 competition = new Competition(new String("Course"),new MyCalendar(2014,12,18), competitors);
 			 Subscriber sub1 = new Subscriber("Cisse","Soumaila", "07-10-1982", "soumailacisse" );
 			 sub1.crediter(100);
 			 Subscriber sub2 = new Subscriber("Cisse","Hadji", "07-10-1990", "hadjicisse" );
@@ -986,13 +982,11 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 			 PariWinner pariwin2 = new PariWinner(60, sub2, c2);
 			 competition.parierSurLeVainqueur(pariwin);
 			 competition.parierSurLeVainqueur(pariwin2);
-			 
-			 MyCalendar.setDate(2014, 12, 1);
-			 
+			 MyCalendar.setDate(2014, 12, 20);
 			 competition.solderPariWinner(c1);
-			 assertTrue(sub1.solde()==160);
 			 assertTrue(sub2.solde()==40);
-
+			 assertTrue(""+sub1.solde(),sub1.solde()==160);
+			 MyCalendar.setDate();
 		}
 		
 		@Test(expected = BadParametersException.class)
@@ -1188,32 +1182,34 @@ public void testParierSurLePodiumBadMise1Indiv() throws BadParametersException, 
 		public void testSolderPariPodium() throws BadParametersException, CompetitionException, AuthenticationException, ExistingCompetitionException, SubscriberException, ExistingCompetitorException{
 			competitors = new ArrayList<Competitor>();
 			 Team t1 =new Team("Telecom");
-			 t1.addMember(new Individual("Cisse","Amadou", "28-09-1992"));
-			 t1.addMember(new Individual("Cisse","ousmane", "05-01-1989"));
+			 t1.addMember(new Individual("Cisse","Mamadou", "28-09-1992"));
+			 t1.addMember(new Individual("Cisse","Sanounou", "05-01-1989"));
 			 Team t2 =new Team("AixMarseille");
-			 t2.addMember(new Individual("Thiam","Anna", "07-10-1991"));
-			 t2.addMember(new Individual("Thiam","Salimata", "05-01-1983"));
+			 t2.addMember(new Individual("Thiam","Pierre", "07-10-1991"));
+			 t2.addMember(new Individual("Thiam","Sami", "05-01-1983"));
 			 Team t3 =new Team("Ensta");
-			 t3.addMember(new Individual("Toure","Aminata", "07-10-1991"));
-			 t3.addMember(new Individual("Toure","Salimata", "05-01-1983"));
+			 t3.addMember(new Individual("Toure","Paul", "07-10-1991"));
+			 t3.addMember(new Individual("Tour","Sali", "05-01-1983"));
+			 Team t4 =new Team("Enib");
+			 t4.addMember(new Individual("Toure","Paul", "07-10-1991"));
+			 t4.addMember(new Individual("Tour","Sali", "05-01-1983"));
 			 competitors.add(t1);
 			 competitors.add(t2);
 			 competitors.add(t3);
-			 competition = new Competition(new String("volleyball"),new MyCalendar(2014,5,30), competitors);
-			 Subscriber sub1 = new Subscriber("Cisse","Ali", "07-10-1990", "acisse" );
-			 sub1.crediter(100);
-			 Subscriber sub2 = new Subscriber("Cisse","Biram", "07-10-1990", "bcisse" );
+			 competition = new Competition(new String("Course"),new MyCalendar(2014,12,1), competitors);
+			 sub = new Subscriber("Cisse","Kadi", "07-10-1990", "mcisse" );
+			 sub.crediter(100);
+			 Subscriber sub2 = new Subscriber("Cisse","Oumou", "07-10-1990", "ocisse" );
 			 sub2.crediter(100);
-			 paripod = new PariPodium(100,sub1,t1,t2,t3);
+			 paripod = new PariPodium(100,sub,t1,t2,t3);
 			 PariPodium paripod2 = new PariPodium(60,sub2,t3,t2,t1);
 			 competition.parierSurLePodium(paripod);
 			 competition.parierSurLePodium(paripod2);
-			 
-			 MyCalendar.setDate(2014, 12, 1);
+			 MyCalendar.setDate(2014,12,15);
 			 competition.solderPariPodium(t1, t2, t3);
-			 
-			 assertTrue(sub1.solde()==160);
 			 assertTrue(sub2.solde()==40);
+			 assertTrue(sub.solde()==(100*160)/100);
+			 MyCalendar.setDate();
 		}
 		
 		

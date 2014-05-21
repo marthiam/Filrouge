@@ -21,24 +21,14 @@ import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.MyCalendar;
 
-<<<<<<< HEAD
 
-import java.util.Date;
-
-
-
-=======
->>>>>>> b9dcb64c7708573dba57233d63208feb5e26a31b
 
 
 /**
  * @author mcisse
  *
  */
-<<<<<<< HEAD
-=======
 
->>>>>>> b9dcb64c7708573dba57233d63208feb5e26a31b
 public class Competition {
 	
 	/** La taille minimum du nom d'une compétition */
@@ -49,25 +39,18 @@ public class Competition {
 	
 	
 	/**Le nom de la compétition*/
-<<<<<<< HEAD
-	private String nomCompetition;
 
-=======
 	
 	private String nomCompetition;
 	
 	
-	private Long idcompetiteur;
->>>>>>> b9dcb64c7708573dba57233d63208feb5e26a31b
+
 	
 	/**La date de la compétition*/
 	private MyCalendar dateCompetition;	
 	
 	/**Le montant total misé sur la compétition*/
-<<<<<<< HEAD
-=======
 
->>>>>>> b9dcb64c7708573dba57233d63208feb5e26a31b
 	private long montantTotalMise;
 	
 	
@@ -391,16 +374,16 @@ public class Competition {
 		
 		if (paripod==null) throw new BadParametersException("pari avec un pariPodium non instancié");
 	
-		System.out.println("Voici le pari "+ paripod.getMise() +" sur "+ paripod.getWinner() +" "+paripod.getSecond()+" "+paripod.getThird() ) ;
+		//System.out.println("Voici le pari "+ paripod.getMise() +" sur "+ paripod.getWinner() +" "+paripod.getSecond()+" "+paripod.getThird() ) ;
 		boolean trouveWinner = this.getCompetitors().contains(paripod.getWinner());
 		boolean trouveSecond = this.getCompetitors().contains(paripod.getSecond());
 		boolean trouveThird = this.getCompetitors().contains(paripod.getThird());
 		
-		System.out.println(" la lise de competiteur de la competition"+this.nomCompetition +" est"); 
+		/*System.out.println(" la lise de competiteur de la competition"+this.nomCompetition +" est"); 
 		
 		for ( Competitor cp : this.competitors){
 			System.out.println("l'element a la position i est "+cp.toString()); 
-		}
+		}*/
 		if (!trouveWinner /*|| !trouveSecond || !trouveThird*/)
 			throw new CompetitionException("Un 1 ou plusieurs de ces trois competiteurs ne participe pas " +
 					"à cette compétition");
@@ -680,30 +663,10 @@ public class Competition {
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException("competiteur non instancié");
 
-		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) 
+		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) {
 			throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
-		
-		if (this.competitors!=null) 
-			this.competitors.add(newCompetitor);
-
-	
-
-		boolean trouve = false;
-		System.out.println("Le competiteur quon veut ajouter est "+newCompetitor.hashCode() );
-	//	if (this.competitors!=null){
-			//System.out.println("voici la liste des competiteurs");
-			//for (Competitor cp : this.competitors){
-				//System.out.println("competiteur a la position "+cp.toString());
-				///if(cp.equals(newCompetitor))System.out.println("Il est egale a  "+ newCompetitor.toString());
-
-			//}
-		//}
-		
-		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) 
-			throw new CompetitionException(" le competiteur 2 " + newCompetitor + " a deja été ajouter");
-		
-				
-		if (this.competitors==null)
+		} 
+		if (this.competitors==null) 
 			throw new CompetitionException(" bug");
 		
 		this.competitors.add(newCompetitor);

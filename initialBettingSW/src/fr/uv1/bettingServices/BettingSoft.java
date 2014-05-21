@@ -245,8 +245,8 @@ public class BettingSoft implements Betting {
 			Collection<Competitor> competitors, String managerPwd)
 			throws AuthenticationException, ExistingCompetitionException,
 			CompetitionException, BadParametersException{
-		System.out.println("on veut ajouter  "+ competition );
-		try{
+		//System.out.println("on veut ajouter  "+ competition );
+		//try{
 	  	//System.out.println("On veut ajouter la competion : "+ competition);
 	   //try{
 		this.authenticateMngr(managerPwd);
@@ -263,18 +263,14 @@ public class BettingSoft implements Betting {
 		if (this.competitions.contains(c))
 			throw new ExistingCompetitionException("Une compétition avec le même nom existe déjà");
 		this.competitions.add(c);
-		System.out.println("il a été ajouté");
-		}catch(Exception e ){
-			System.out.println(e);
-			throw e;
+		//System.out.println("il a été ajouté");
+		//}catch(Exception e ){
+		//	System.out.println(e);
+		//	throw e;
 			
-		}
+		//}
 
-		//System.out.println("elle a été ajoutée");
-	  // }catch(Exception e ){
-		 //  System.out.println(e);
-		//   throw e; 
-	   //}
+		
 
 	}
 
