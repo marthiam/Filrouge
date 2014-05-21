@@ -15,20 +15,28 @@ import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.MyCalendar;
 
 
+import java.util.Date;
+
+
+
+
+
 /**
  * @author mcisse
  *
  */
 public class Competition {
+	
 	/** La taille minimum du nom d'une compétition */
 	private static final int LONG_COMPETITION = 4;
 	
 	/**La contrainte que le nom de la compétition doit verifier */
-	private static final String REGEX_COMPETITION = new String("[a-zA-Z0-9]*");
+	private static final String REGEX_COMPETITION = new String("[a-zA-Z0-9\\-\\_]*");
 	
 	
 	/**Le nom de la compétition*/
 	private String nomCompetition;
+
 	
 	/**La date de la compétition*/
 	private MyCalendar dateCompetition;	
@@ -38,7 +46,6 @@ public class Competition {
 	
 	
 	/**La liste des compétiteurs */
-	//ce serait mieux d'utiliser des  Hashset à la place des ArrayList c'est dit dans les consigne cela nous aidera pour la base de donnée
 	private Collection<Competitor> competitors;
 	
 	/** La liste des paris */
@@ -57,12 +64,14 @@ public class Competition {
 	 */
 	public Competition(String nomCompetition, MyCalendar dateCompetition, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException{
 	
+		
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
-		this.montantTotalMise=0;
+		this.montantTotalMise=0;		
 		this.competitors= new ArrayList<Competitor>();
 		this.setCompetitors(competitors);
 		this.betList = new ArrayList<Pari>();
+		
 	}
 
 	/**
@@ -137,18 +146,19 @@ public class Competition {
 	 * @throws BadParametersException 
 	 * @throws ExistingCompetitorException 
 	 */
-	public void setCompetitors(Collection<Competitor> competitors) throws CompetitionException, BadParametersException {
-		if (competitors==null)
-			throw new BadParametersException("La liste des compétiteurs n'a pas été instancié");
+	public void setCompetitors(ArrayList<Competitor> competitors) throws CompetitionException, BadParametersException {
 		
+		//try {
+		if (competitors==null || competitors.size()==0)
+			throw new BadParametersException("La liste des compétiteurs n'a pas été instancié");
 		if (competitors.size()<2){
 			throw new CompetitionException("Une compétition doit avoir au moins deux competiteurs");
 		}
-
 			int i=0;
-			if (((ArrayList<Competitor>) competitors).get(i) instanceof Individual){
+
+			if (competitors.get(i) instanceof Individual){
 				while (i<competitors.size()){
-					if (!(((ArrayList<Competitor>) competitors).get(i) instanceof Individual)){
+					if (!( competitors.get(i) instanceof Individual)){
 						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
 								"meme classe");
 					}else{
@@ -160,18 +170,26 @@ public class Competition {
 			}else{
 			
 			i=0;
-			if (((ArrayList<Competitor>) competitors).get(i) instanceof Team){
+			if (competitors.get(i) instanceof Team){
+				Team team = (Team) ((ArrayList<Competitor>) competitors).get(i);
 				while (i<competitors.size()){
-					if (!(((ArrayList<Competitor>) competitors).get(i) instanceof Team)){
+					if (!( competitors.get(i) instanceof Team)){
+						
 						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
 								"meme classe");
-					}
-					else
+					}else{
+						if (team.getMembers()==null ) throw new CompetitionException();
+						this.addCompetitor(((ArrayList<Competitor>) competitors).get(i));
 						i++;
+					}
+						
 				}
-				this.competitors = competitors;
-			 }
+							 }
 			}
+		//}catch(Exception e){
+		//	System.out.println(e);
+		//	throw e; 
+		//}
 		
 	}
 	
@@ -344,12 +362,23 @@ public class Competition {
 			BadParametersException{
 		
 		if (paripod==null) throw new BadParametersException("pari avec un pariPodium non instancié");
+		
 		boolean trouveWinner = this.getCompetitors().contains(paripod.getWinner());
 		boolean trouveSecond = this.getCompetitors().contains(paripod.getSecond());
 		boolean trouveThird = this.getCompetitors().contains(paripod.getThird());
+		System.out.println(" la lise de competiteur de la competition"+this.nomCompetition +" est"); 
 		
-		if (!trouveWinner || !trouveSecond || !trouveThird)
-			throw new CompetitionException("Un ou plusieurs de ces trois competiteurs ne participe pas " +
+		for ( Competitor cp : this.competitors){
+			System.out.println("l'element a la position i est "+cp.toString()); 
+		}
+		if (!trouveWinner /*|| !trouveSecond || !trouveThird*/)
+			throw new CompetitionException("Un 1 ou plusieurs de ces trois competiteurs ne participe pas " +
+					"à cette compétition");
+		if (!trouveSecond /*|| !trouveSecond || !trouveThird*/)
+			throw new CompetitionException("Un 2 ou plusieurs de ces trois competiteurs ne participe pas " +
+					"à cette compétition");
+		if (!trouveThird /*|| !trouveSecond || !trouveThird*/)
+			throw new CompetitionException("Un 3 ou plusieurs de ces trois competiteurs ne participe pas " +
 					"à cette compétition");
 		
 		if (this.isInThePast())
@@ -368,7 +397,10 @@ public class Competition {
 			Team team;
 			for (Competitor competitor : this.getCompetitors()){
 				team = (Team) competitor;
-				if (team.getMembers().isEmpty()) throw new BadParametersException(" On peut pas parier sur une equipe sans menbre " );
+				if( team !=null){
+				}
+				
+			
 				for (Competitor member : team.getMembers()){
 					competiteur=(Person)member;
 					if (paripod.getSubscriber().equals(competiteur)){
@@ -616,11 +648,40 @@ public class Competition {
 	
 
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, BadParametersException{
-		if (newCompetitor==null)throw new BadParametersException(" competiteur non instancié");
-		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
-		if (this.competitors!=null) this.competitors.add(newCompetitor);
+		if (newCompetitor==null)throw new BadParametersException("competiteur non instancié");
 
-	}
+		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) 
+			throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
+		
+		if (this.competitors!=null) 
+			this.competitors.add(newCompetitor);
+
+	
+
+		boolean trouve = false;
+		System.out.println("Le competiteur quon veut ajouter est "+newCompetitor.hashCode() );
+	//	if (this.competitors!=null){
+			//System.out.println("voici la liste des competiteurs");
+			//for (Competitor cp : this.competitors){
+				//System.out.println("competiteur a la position "+cp.toString());
+				///if(cp.equals(newCompetitor))System.out.println("Il est egale a  "+ newCompetitor.toString());
+
+			//}
+		//}
+		
+		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) 
+			throw new CompetitionException(" le competiteur 2 " + newCompetitor + " a deja été ajouter");
+		
+				
+		if (this.competitors==null)
+			throw new CompetitionException(" bug");
+		
+		this.competitors.add(newCompetitor);
+		
+		
+
+		}
+
 		
 
 	
@@ -635,14 +696,41 @@ public class Competition {
 	
 	
 
-	public boolean equals(Object object){
-		if (object == null)
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((nomCompetition == null) ? 0 : nomCompetition.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
 			return false;
-		if (!(object instanceof Competition))
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		if (((Competition) object).getNomCompetition()==null)
+		}
+		Competition other = (Competition) obj;
+		if (nomCompetition == null) {
+			if (other.nomCompetition != null) {
+				return false;
+			}
+		} else if (!nomCompetition.equals(other.nomCompetition)) {
 			return false;
-		return this.nomCompetition==((Competition) object).getNomCompetition();
+		}
+		return true;
 	}
 
 	

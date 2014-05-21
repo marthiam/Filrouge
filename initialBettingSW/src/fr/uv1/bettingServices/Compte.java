@@ -27,7 +27,7 @@ public class Compte {
 	}
 
 	/**
-	 * Construit un compte avec un solde egal ‡ 0
+	 * Construit un compte avec un solde egal à 0
 	 * 
 	 */
 	public Compte() {
@@ -75,7 +75,8 @@ public class Compte {
 	 * Ajoute un  montant  au  solde du compe 
 	 * 		@param montant la somme a ajouté.
 	 * 		@throws BadParametersException
-	 */
+	 * 				est levée si le montant a credité es <0
+	 */				
 	public void crediterCompte(long montant) throws BadParametersException{
 		if (montant>=0){
 			this.solde = solde+montant; 

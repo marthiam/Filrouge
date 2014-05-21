@@ -49,8 +49,8 @@ public class CompetitionTest extends Thread{
 	
 	@Test
 	public void testCompetition() throws BadParametersException, CompetitionException{
-		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);	
-		assertTrue(competition.getNomCompetition().equalsIgnoreCase(new String("Tennis")));
+		competition = new Competition(new String("1-Tennis_2"),new MyCalendar(2014,12,1), competitors);	
+		assertTrue(competition.getNomCompetition().equalsIgnoreCase(new String("1-Tennis_2")));
 		assertTrue(competition.getMontantTotalMise()==0);
 		assertTrue(competition.getCompetitors().contains(new Individual("Cisse","Mamadou", "28-09-1992")));
 		assertTrue(competition.getCompetitors().contains(new Individual("Cisse","Sanounou", "05-01-1989")));
@@ -84,7 +84,7 @@ public class CompetitionTest extends Thread{
 		competition.addCompetitor((new Individual("Thiam","Mariam", "07-10-200")));
 	}
 	@Test(expected = CompetitionException.class)
-	public void testAddTeamCompetitor() throws BadParametersException, CompetitionException, ExistingCompetitorException{
+	public void testAddTeamCompetitorSansMembre() throws BadParametersException, CompetitionException, ExistingCompetitorException{
 		competition = new Competition(new String("Tennis"),new MyCalendar(2014,12,1), competitors);
 		Team t =new Team("barcelon");
 		competition.addCompetitor(t);

@@ -10,9 +10,12 @@ public class Pari {
 
 
 	/**
+	 * Constructeur 
 	 * @param mise
+	 * 			le montant a misé 
 	 * @throws BadParametersException 
-	 * @throws SubscriberException 
+	 * 			est levée la mise est <=0 ou si le subscriber est null 
+	 *
 	 */
 	public Pari(long mise, Subscriber subscriber) throws BadParametersException{
 		super();
@@ -29,8 +32,9 @@ public class Pari {
 	}
 
 	/**
-	 * @param mise Le nouveau nombre de jetons
-	 * @throws BadParametersException 
+	 * Met à jour la mise 
+	 * 			@param mise Le nouveau nombre de jetons
+	 * 			@throws BadParametersException 
 	 */
 	public void setMise(long mise) throws BadParametersException {
 		if (mise<=0)
@@ -39,6 +43,7 @@ public class Pari {
 	}
 
 	/**
+	 * 
 	 * @return Le joueur
 	 */
 	public Subscriber getSubscriber() {

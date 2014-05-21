@@ -19,6 +19,7 @@ public class Person {
 	
 	
 	/**
+	 * 
 	 * @return the firstname
 	 */
 	public String getFirstname() {
@@ -120,6 +121,9 @@ public class Person {
 			throw new BadParametersException("the name " + a_lastname
 					+ " does not verify constraints ");
 	}
+	
+	
+	
 	public static int getYears(int y,int m,int d)
 	{
 	  MyCalendar curr =  MyCalendar.getDate();
@@ -150,8 +154,7 @@ public class Person {
 	 * 			String to check
 	 * @throws BadParametersException
 	 */
-	private static void checkStringBorndate(String borndate)
-			throws BadParametersException {
+	private static void checkStringBorndate(String borndate) throws BadParametersException {
 		if (borndate == null)
 			throw new BadParametersException("date not instantiated");
 		if (!borndate.matches(REGEX_DATE) || !validDate(borndate) )
@@ -160,7 +163,7 @@ public class Person {
 	}
 
 	/**
-	 * check the validity of a string for a subscriber firstname, letters,
+	 * check the validity of a string for a person  firstname, letters,
 	 * dashes and spaces are allowed. First character should be a letter.
 	 * firstname length should at least be 1 character
 	 * 
@@ -180,12 +183,13 @@ public class Person {
 
 	public boolean equals(Person p){
 		return this.toString().equals(p.toString());
-		
 	}
+	
+	
 	
 	@Override
 	public String toString() {
 		return " " + this.getFirstname() + " " + this.getLastname()+" " + this.getBorndate() ;
-}
+	}
 
 }

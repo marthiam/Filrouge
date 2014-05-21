@@ -5,5 +5,18 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/postgresql-9.2-1003.jdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/validationTestsWithoutPersistence.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate3.5.0-final.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jspsmart.jar"/>
+	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-nop-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="lib/entities-1.2.0-m1.jar"/>
+	<classpathentry kind="lib" path="lib/derbyclient-10.10.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/ejb3-persistence-3/ejb3-persistence-3.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
