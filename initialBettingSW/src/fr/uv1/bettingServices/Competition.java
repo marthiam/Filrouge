@@ -6,6 +6,13 @@ package fr.uv1.bettingServices;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.CompetitionException;
@@ -14,29 +21,13 @@ import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.MyCalendar;
 
-import org.hibernate.Session;
-import org.hibernate.annotations.Entity;
-import org.hibernate.annotations.NamedQuery;
-import org.hibernate.annotations.Table;
-
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 
 
 /**
  * @author mcisse
  *
  */
-@Entity
-@Table(appliesTo = "competition")
-@NamedQuery(name = "findAllDept", query = "select d from Dept d")
+
 public class Competition {
 	
 	/** La taille minimum du nom d'une compétition */
@@ -47,25 +38,23 @@ public class Competition {
 	
 	
 	/**Le nom de la compétition*/
-	@Column(name = "nomcompetition")
+	
 	private String nomCompetition;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_competion")
+	
 	private Long idcompetiteur;
 	
 	/**La date de la compétition*/
-	@Temporal(TemporalType.DATE)
-	@Column(name = "closingdate")
 	private MyCalendar dateCompetition;	
 	
 	/**Le montant total misé sur la compétition*/
-	@Column(name = "montanttotalmise")
+
 	private long montantTotalMise;
 	
 	
 	/**La liste des compétiteurs */
+	
+	
 	private Collection<Competitor> competitors;
 	
 	/** La liste des paris */
@@ -376,10 +365,12 @@ public class Competition {
 			BadParametersException{
 		
 		if (paripod==null) throw new BadParametersException("pari avec un pariPodium non instancié");
-		
+	
+		System.out.println("Voici le pari "+ paripod.getMise() +" sur "+ paripod.getWinner() +" "+paripod.getSecond()+" "+paripod.getThird() ) ;
 		boolean trouveWinner = this.getCompetitors().contains(paripod.getWinner());
 		boolean trouveSecond = this.getCompetitors().contains(paripod.getSecond());
 		boolean trouveThird = this.getCompetitors().contains(paripod.getThird());
+		
 		System.out.println(" la lise de competiteur de la competition"+this.nomCompetition +" est"); 
 		
 		for ( Competitor cp : this.competitors){
@@ -680,6 +671,8 @@ public class Competition {
 		}
 		return true;
 	}
+	
+	
 
 	
 	/**
