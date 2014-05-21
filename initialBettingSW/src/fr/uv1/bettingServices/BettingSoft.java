@@ -42,10 +42,13 @@ public class BettingSoft implements Betting {
 	 * @uml.property name="subscribers"
 	 * @uml.associationEnd multiplicity="(0 -1)" inverse="bettingSoft:fr.uv1.bettingServices.Subscriber"
 	 */
-	private Collection<Subscriber> subscribers;
+	
+	
 	/*
 	 * Subscribers of the betting software
 	 */
+	private Collection<Subscriber> subscribers;
+
 	private Collection<Competition> competitions;
 	
 	
@@ -237,7 +240,8 @@ public class BettingSoft implements Betting {
 			Collection<Competitor> competitors, String managerPwd)
 			throws AuthenticationException, ExistingCompetitionException,
 			CompetitionException, BadParametersException{
-		
+		System.out.println("on veut ajouter  "+ competition );
+		try{
 		this.authenticateMngr(managerPwd);
 		
 		Competition c = this.searchCompetitionByName(competition);
@@ -247,6 +251,12 @@ public class BettingSoft implements Betting {
 		c = new Competition(competition, (MyCalendar) closingDate, (ArrayList<Competitor>) competitors);
 
 		this.competitions.add(c);
+		}catch(Exception e ){
+			System.out.println(e);
+			throw e;
+			
+		}
+		System.out.println("il a été ajouté");
 	}
 
 	/**
@@ -474,8 +484,9 @@ public class BettingSoft implements Betting {
 		
 		this.authenticateMngr(managerPwd);
 		Competition c = this.searchCompetitionByName(competition);
-		if (c == null)
-			throw new ExistingCompetitionException("Cette competition n'existe pas");
+		if (c == null){
+			throw new ExistingCompetitionException("la competition  "+ competition +" n'existe pas");
+		}
 		try {
 			c.solderPariPodium(winner, second, third);
 		} catch (BadParametersException e) {
@@ -484,7 +495,6 @@ public class BettingSoft implements Betting {
 		}
 		if (c.IsEmptybetList())
 			this.competitions.remove(c);
-		
 	}
 
 	/***********************************************************************
@@ -771,7 +781,11 @@ public class BettingSoft implements Betting {
 	@Override
 	public ArrayList<String> consultBetsCompetition(String competition)
 			throws ExistingCompetitionException{
-		return null;
+		
+		Competition c = this.searchCompetitionByName(competition);
+		if (c==null)
+			throw new ExistingCompetitionException("Cette compétition n'existe pas");
+		return c.consulterParis();
 	}
 	/**
 	 * add a competitor to a competition.

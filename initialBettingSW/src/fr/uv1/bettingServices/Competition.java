@@ -60,6 +60,7 @@ public class Competition {
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
 		this.montantTotalMise=0;
+		this.competitors= new ArrayList<Competitor>();
 		this.setCompetitors(competitors);
 		this.betList = new ArrayList<Pari>();
 	}
@@ -91,11 +92,19 @@ public class Competition {
 	 * @throws BadParametersException 
 	 */
 
-	public void setDateCompetition( MyCalendar newDate) throws BadParametersException {
-		if (newDate.isInThePast() ||newDate==null)
-			throw new BadParametersException("Cette date est passée");
+	public void setDateCompetition( MyCalendar newDate) throws CompetitionException {
+		if (newDate.isInThePast() || newDate==null)
+			throw new CompetitionException("Cette date est passée");
 
 		this.dateCompetition = newDate;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Competition [nomCompetition=" + nomCompetition + "]";
 	}
 
 	/**
@@ -142,9 +151,10 @@ public class Competition {
 					if (!(((ArrayList<Competitor>) competitors).get(i) instanceof Individual)){
 						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
 								"meme classe");
-					}else
+					}else{
 						this.addCompetitor(((ArrayList<Competitor>) competitors).get(i));
 						i++;
+					}
 				}
 				
 			}else{
@@ -212,7 +222,7 @@ public class Competition {
 				this.betList.remove(pari);
 		}
 		try {
-			subscriber.getCompte().crediterCompte(numberTokens);
+			subscriber.crediter(numberTokens);
 		} catch (BadParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -442,7 +452,8 @@ public class Competition {
 		}
 		if (!found){
 			for (Pari pari : this.betList){
-				this.supprimerParisCompetition(pari.getSubscriber());
+				pari.getSubscriber().crediter(pari.getMise());
+				this.betList.remove(pari);
 			}
 		}
 			
@@ -520,12 +531,12 @@ public class Competition {
 		}
 		
 		for (Pari pari : this.betList){
-			if (pari instanceof PariWinner){
+			if (pari instanceof PariPodium){
 				if (((PariPodium) pari).getWinner().equals(winner) 
 					&& ((PariPodium) pari).getSecond().equals(second) 
 					&& ((PariPodium) pari).getThird().equals(third)){
-						found = true;
-						tokensWonBySubscriber = (pari.getMise()*this.montantTotalMise)/tokensBettedForPodium;
+					found = true;
+					tokensWonBySubscriber = (pari.getMise()*this.montantTotalMise)/tokensBettedForPodium;
 					try {
 						pari.getSubscriber().crediter(tokensWonBySubscriber);
 					} catch (BadParametersException e) {
@@ -536,22 +547,80 @@ public class Competition {
 			}
 		}
 		
-		if (found==false){
+		if (!found){
 			for (Pari pari : this.betList){
-				this.supprimerParisCompetition(pari.getSubscriber());
+				pari.getSubscriber().crediter(pari.getMise());
+				this.betList.remove(pari);
 			}
 		}
 		
 	}
 	
+	/**
+	 * consult bets on a competition.
+	 * @return a list of String containing the bets for the competition.
+	 */
+
+	public ArrayList<String> consulterParis(){
+		
+		String infoPariSubscriber;
+		ArrayList<String> infoPari = new ArrayList<String>();
+		if (((ArrayList<Competitor>) this.competitors).get(0) instanceof Individual){
+			for (Pari pari : this.betList){
+				infoPariSubscriber = "";
+				if (pari instanceof PariWinner)
+					infoPariSubscriber+= pari.getSubscriber().getUsername()+" "
+							+((Person)((PariWinner)pari).getWinner()).getFirstname()+" "
+							+((Person)((PariWinner)pari).getWinner()).getLastname()+" "
+							+pari.getMise();
+					infoPari.add(infoPariSubscriber);
+				if (pari instanceof PariPodium)
+					infoPariSubscriber+= pari.getSubscriber().getUsername()+" "
+							+((Person)((PariPodium)pari).getWinner()).getFirstname()+" "
+							+((Person)((PariPodium)pari).getWinner()).getLastname()+" "
+							+((Person)((PariPodium)pari).getSecond()).getFirstname()+" "
+							+((Person)((PariPodium)pari).getSecond()).getLastname()+" "
+							+((Person)((PariPodium)pari).getThird()).getFirstname()+" "
+							+((Person)((PariPodium)pari).getThird()).getLastname()+" "
+							+pari.getMise();
+					infoPari.add(infoPariSubscriber);
+			}
+		}
+		
+		if (((ArrayList<Competitor>) this.competitors).get(0) instanceof Team){
+			for (Pari pari : this.betList){
+				infoPariSubscriber = "";
+				if (pari instanceof PariWinner)
+					infoPariSubscriber+= pari.getSubscriber().getUsername()+" "
+							+((Team)((PariWinner)pari).getWinner()).getTeamName()+" "
+							+pari.getMise();
+					infoPari.add(infoPariSubscriber);
+				if (pari instanceof PariPodium)
+					infoPariSubscriber+= pari.getSubscriber().getUsername()+" "
+							+((Team)((PariPodium)pari).getWinner()).getTeamName()+" "
+							+((Team)((PariPodium)pari).getSecond()).getTeamName()+" "
+							+((Team)((PariPodium)pari).getThird()).getTeamName()+" "
+							+pari.getMise();
+					infoPari.add(infoPariSubscriber);
+			}
+		}
+		return infoPari;
+		
+		
+	}
+	
+	
+	
+	
+	
+	
 
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException(" competiteur non instancié");
-		if ( this.competitors.contains(newCompetitor)) throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
-		this.competitors.add(newCompetitor);
+		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
+		if (this.competitors!=null) this.competitors.add(newCompetitor);
 
-
-		}
+	}
 		
 
 	
