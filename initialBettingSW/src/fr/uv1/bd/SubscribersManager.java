@@ -53,11 +53,10 @@ public class SubscribersManager
 
       psPersist.setString(1, subscriber.getFirstname());
       psPersist.setString(2, subscriber.getLastname());
-      String [] s = subscriber.getBorndate().split("-");
-	  int jour = new Integer(s[0]);
-	  int mois = new Integer(s[1]);
-	  int annee = new Integer(s[2]);
-      psPersist.setDate(3, new Date(jour,mois,annee));
+	
+	  Date date = Date.valueOf(subscriber.getBorndateDate());
+	  System.out.println( "voici la date"+ date);
+      psPersist.setDate(3,date);
       psPersist.setString(4, "Joueur");
       psPersist.setString(5, subscriber.getUsername());
       psPersist.setString(6, subscriber.getPassword());
@@ -70,9 +69,6 @@ public class SubscribersManager
       {
         id = resultSet.getInt("value_id");
       }
-
-      
-      
       psPersist.close();
 	  c.commit();
 	  subscriber.setId_subscribe(id);
@@ -115,7 +111,7 @@ public class SubscribersManager
 
     // 2 - Creating a Prepared Statement with the SQL instruction.
     //     The parameters are represented by question marks. 
-    PreparedStatement psSelect = c.prepareStatement("select * from personne where type id_personne=?");
+    PreparedStatement psSelect = c.prepareStatement("select * from personne where  id_personne=?");
     
     // 3 - Supplying values for the prepared statement parameters (question marks).
     psSelect.setInt(1, id);
@@ -133,8 +129,9 @@ public class SubscribersManager
    	  int mois = new Integer(s[1]);
    	  int jour = new Integer(s[2]);
       subscriber = new Subscriber(resultSet.getString("prenom"), 
-                                  resultSet.getString("nom"),jour+"-"+mois+"-"+annee,resultSet.getString("username"));
+                                  resultSet.getString("nom"),jour+ "-"+mois+"-"+annee,resultSet.getString("username"));
       subscriber.setCompte(new Compte(resultSet.getInt("solde")));
+      subscriber.setId_subscribe(id);
     }
     
     // 6 - Closing the Result Set
@@ -166,7 +163,7 @@ public class SubscribersManager
     while(resultSet.next())
     {
     	String [] s = resultSet.getString("borndate").split("-");
-        int annee = new Integer(s[0]);
+          int annee = new Integer(s[0]);
      	  int mois = new Integer(s[1]);
      	  int jour = new Integer(s[2]);
     	subscriber=new Subscriber(resultSet.getString("prenom"),resultSet.getString("nom"),jour+"-"+mois+"-"+annee,resultSet.getString("username"));
@@ -193,17 +190,19 @@ public class SubscribersManager
 
     // 2 - Creating a Prepared Statement with the SQL instruction.
     //     The parameters are represented by question marks. 
-    PreparedStatement psUpdate = c.prepareStatement("update personne set prenom=?, nom=?,borndate=?,type=?,username=?,password=?,solde=?  where id=?");
+    PreparedStatement psUpdate = c.prepareStatement("update personne set prenom=?, nom=?,borndate=?,type=?,username=?,password=?,solde=?  where id_personne=?");
 
     // 3 - Supplying values for the prepared statement parameters (question marks).
     psUpdate.setString(1, subscriber.getFirstname());
     psUpdate.setString(2, subscriber.getLastname());
-    psUpdate.setString(3, subscriber.getBorndate());
+    Date date = Date.valueOf(subscriber.getBorndateDate());
+    psUpdate.setDate(3,date );
     psUpdate.setString(4, "Joueur");
     psUpdate.setString(5, subscriber.getUsername());
     psUpdate.setString(6, subscriber.getPassword());
     psUpdate.setLong(7, subscriber.solde());
-    
+    psUpdate.setLong(8, subscriber.getId_subscribe());
+    System.out.println(subscriber.getId_subscribe());
     // Executing the prepared statement object among the database.
     // If needed, a return value (int) can be obtained. It contains
     // how many rows of a table were updated.
@@ -228,10 +227,8 @@ public class SubscribersManager
   public static void delete(Subscriber subscriber) throws SQLException
   {
     Connection c = DataBaseConnection.getConnection();
-    PreparedStatement psUpdate = c.prepareStatement("delete from personne where nom=? and prenom=? and borndate=?");
-    psUpdate.setString(1, subscriber.getFirstname());
-    psUpdate.setString(1, subscriber.getLastname());
-    psUpdate.setString(1, subscriber.getBorndate());
+    PreparedStatement psUpdate = c.prepareStatement("delete from personne where id_personne=?");
+    psUpdate.setLong(1, subscriber.getId_subscribe());
     psUpdate.executeUpdate();
     psUpdate.close();
     c.close();

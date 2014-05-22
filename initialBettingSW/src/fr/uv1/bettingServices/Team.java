@@ -30,7 +30,10 @@ public  class Team implements Competitor {
 	 */
 	private static final String REGEX_TEAMNAME = new String("[a-zA-Z][a-zA-Z0-9\\-\\ ]*");
 	
-	
+	/** 
+	 *  identifiant du subscriber
+	 */
+	private long id_team;
 	
 
 	/**
@@ -134,6 +137,20 @@ public  class Team implements Competitor {
 		if (!nomTeam.matches(REGEX_TEAMNAME))
 			throw new BadParametersException("le nom " + nomTeam
 					+ " ne verifie pas les contraintes ");
+	}
+
+	/**
+	 * @return the id_team
+	 */
+	public long getId_team() {
+		return id_team;
+	}
+
+	/**
+	 * @param id_team the id_team to set
+	 */
+	public void setId_team(long id_team) {
+		this.id_team = id_team;
 	}
 
 	/**

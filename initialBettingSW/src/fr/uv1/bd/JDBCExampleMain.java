@@ -19,12 +19,12 @@ public class JDBCExampleMain {
 		System.out.println("All the subscribers");
 		displayAllSubscribers();
 
-	//	System.out.println("Subscriber #3: " + SubscribersManager.findById(3));
+		System.out.println("Subscriber #4: " + SubscribersManager.findById(4));
 		System.out.println("after");
 
 		System.out.println("Creating a new subscriber");
-		Subscriber newSubscriber = new Subscriber(new String("Duran"), new String("Miguel"),new String("02-11-1995"),
-				new String("worldChamp"));
+		Subscriber newSubscriber = new Subscriber(new String("Cisse"), new String("Mamadou"),new String("13-8-1993"),
+				new String("mamadou"));
 		newSubscriber = SubscribersManager.persist(newSubscriber);
 		System.out.println("newSubscriber = " + newSubscriber);
 		System.out.println();
@@ -33,8 +33,8 @@ public class JDBCExampleMain {
 		displayAllSubscribers();
 
 		System.out.println("Updating the new subscriber");
-		newSubscriber.setFirstname("_Marcel");
-		newSubscriber.setLastname("_DUPONT");
+		newSubscriber.setFirstname("Marcel");
+		newSubscriber.setLastname("DUPONT");
 		SubscribersManager.update(newSubscriber);
 
 		System.out.println("All the subscribers after updating");

@@ -19,6 +19,11 @@ public  class Individual extends Person implements Competitor {
 	private static final String REGEX_INDIV = new String("[a-zA-Z][a-zA-Z\\-\\ ]*");
 	private static final String REGEX_DATE= new String("(\\d{2})/(\\d{2})/(\\d{4})");
 	
+	/** 
+	 *  identifiant du subscriber
+	 */
+	private long id_individual;
+	
 
 	/**
 	 * @param lastname
@@ -84,6 +89,21 @@ public  class Individual extends Person implements Competitor {
 			return false;
 		}
 		return true;
+	}
+	
+
+	/**
+	 * @return the id_individual
+	 */
+	public long getId_individual() {
+		return id_individual;
+	}
+
+	/**
+	 * @param id_individual the id_individual to set
+	 */
+	public void setId_individual(long id_individual) {
+		this.id_individual = id_individual;
 	}
 
 	/**

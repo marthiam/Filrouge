@@ -18,10 +18,10 @@ public class PersonTest {
 
 	@Test
 	public void testPerson() throws BadParametersException {
-		person = new Person(new String("Dupont"), new String("Jean"),new String("02-11-1992"));
+		person = new Person(new String("Dupont"), new String("Jean"),new String("02-1-1992"));
 		assertTrue(person.getFirstname().equals("Jean"));
 		assertTrue(person.getLastname().equals("Dupont"));
-		assertTrue(person.getBorndate().equals("02-11-1992"));
+		assertTrue(person.getBorndate().equals("02-1-1992"));
 	}
 
 	@Test(expected = BadParametersException.class)

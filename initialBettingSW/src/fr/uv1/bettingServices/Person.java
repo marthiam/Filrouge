@@ -2,7 +2,7 @@ package fr.uv1.bettingServices;
 
 
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.utils.MyCalendar;
@@ -11,7 +11,7 @@ public class Person {
 	
 
 	private static final String REGEX_NAME = new String("[a-zA-Z][a-zA-Z\\-\\ ]*");
-	private static final String REGEX_DATE= new String("(\\d{2})-(\\d{2})-(\\d{4})");
+	private static final String REGEX_DATE= new String("(\\d{1,2})-(\\d{1,2})-(\\d{4})");
 	private String firstname;
 	private String lastname;
 	private String borndate;
@@ -39,6 +39,14 @@ public class Person {
 		return borndate;
 	}
 
+	public String getBorndateDate() {
+		String [] s = this.borndate.split("-");
+		String annee = s[2];
+	 	String  mois = s[1];
+	 	String jour =s[0];
+		return annee+"-"+mois+"-"+jour;
+	}
+	
 	/**
 	 * @param borndate the borndate to set
 	 * @throws BadParametersException 
