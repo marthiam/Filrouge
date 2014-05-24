@@ -7,7 +7,7 @@ import java.util.*;
 
 import fr.uv1.bettingServices.*;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
-import fr.uv1.tests.unit.*;;
+import fr.uv1.tests.unit.*;
 
 /**
  * DAO class (<i>Data Access Object</i>) for the {@link Subscriber} class.

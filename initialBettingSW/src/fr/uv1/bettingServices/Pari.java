@@ -4,8 +4,14 @@ import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.SubscriberException;
 
 public class Pari {
+	
+	/** L'identifiant du pari */
+	private int pari_id;
+	
 	/** Le nombre de jetons misé par le joueur */
 	private long mise;
+	
+	/** Le joueur qui fait ce pari */
 	private Subscriber subscriber;
 
 
@@ -24,6 +30,29 @@ public class Pari {
 		
 	}
 	
+	
+	
+	
+	/**
+	 * @return l'identifiant du pari
+	 */
+	public int getPari_id() {
+		return this.pari_id;
+	}
+
+
+
+
+	/**
+	 * @param pari_id le nouvel identifiant du pari
+	 */
+	public void setPari_id(int pari_id) {
+		this.pari_id = pari_id;
+	}
+
+
+
+
 	/**
 	 * @return Le nombre de jetons misé par le joueur
 	 */

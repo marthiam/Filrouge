@@ -11,7 +11,7 @@ public class DataBaseConnection {
 	 //-----------------------------------------------------------------------------
 	  // Connection parameters
 	  private static String username        = "postgres";
-	  private static String password        = "filrouge";
+	  private static String password        = "556557";
 	  private static String host            = "localhost";
 	  private static String numPort         = "5432";
 	  private static String base            = "filrouge";

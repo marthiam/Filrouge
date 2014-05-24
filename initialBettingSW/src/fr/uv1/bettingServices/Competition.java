@@ -4,7 +4,9 @@
 package fr.uv1.bettingServices;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
 
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
@@ -31,6 +33,8 @@ public class Competition {
 	/**La contrainte que le nom de la compétition doit verifier */
 	private static final String REGEX_COMPETITION = new String("[a-zA-Z0-9\\-\\_]*");
 	
+	/** L'identifiant de la compétition */
+	private int id_competition;
 	
 	/**Le nom de la compétition*/
 
@@ -78,6 +82,29 @@ public class Competition {
 		this.betList = new ArrayList<Pari>();
 		
 	}
+
+	
+	
+	
+	/**
+	 * @return the id_compétition
+	 */
+	public int getId_competition() {
+		return id_competition;
+	}
+
+
+
+
+	/**
+	 * @param id_compétition the id_compétition to set
+	 */
+	public void setId_competition(int id_competition) {
+		this.id_competition = id_competition;
+	}
+
+
+
 
 	/**
 	 * @return le nom de la compétition
@@ -756,5 +783,20 @@ public class Competition {
 			throw new BadParametersException("la competition " + nomCompetition
 					+ " ne verifie pas les contraintes ");
 	}	
+	
+	public String getClosingdate() {
+		return this.getDateCompetition().get(Calendar.YEAR)+"-"+this.getDateCompetition().get(Calendar.MONTH)+
+				"-"+this.getDateCompetition().get(Calendar.DATE);
+	}
+	
+	public static void main(String[] args){
+		MyCalendar closingdate = new MyCalendar(2014,05,01);
+		System.out.println(closingdate);
+		System.out.println(closingdate.get(Calendar.YEAR)+"-"+closingdate.get(Calendar.MONTH)+
+				"-"+closingdate.get(Calendar.DATE));
+		
+		Date date = new Date(2014,12,1);
+		System.out.println(date.getMonth());
+	}
 	
 }
