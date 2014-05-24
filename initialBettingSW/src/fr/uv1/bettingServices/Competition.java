@@ -6,7 +6,6 @@ package fr.uv1.bettingServices;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 
 
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
@@ -180,8 +179,7 @@ public class Competition {
 	 */
 	public void setCompetitors(ArrayList<Competitor> competitors) throws CompetitionException, BadParametersException {
 		
-		//try {
-		if (competitors==null || competitors.size()==0)
+	if (competitors==null || competitors.size()==0)
 			throw new BadParametersException("La liste des compétiteurs n'a pas été instancié");
 		if (competitors.size()<2){
 			throw new CompetitionException("Une compétition doit avoir au moins deux competiteurs");
@@ -218,10 +216,6 @@ public class Competition {
 				}
 							 }
 			}
-		//}catch(Exception e){
-		//	System.out.println(e);
-		//	throw e; 
-		//}
 		
 	}
 	
@@ -395,24 +389,14 @@ public class Competition {
 		
 		if (paripod==null) throw new BadParametersException("pari avec un pariPodium non instancié");
 	
-		//System.out.println("Voici le pari "+ paripod.getMise() +" sur "+ paripod.getWinner() +" "+paripod.getSecond()+" "+paripod.getThird() ) ;
+		
 		boolean trouveWinner = this.getCompetitors().contains(paripod.getWinner());
 		boolean trouveSecond = this.getCompetitors().contains(paripod.getSecond());
 		boolean trouveThird = this.getCompetitors().contains(paripod.getThird());
 		
-		/*System.out.println(" la lise de competiteur de la competition"+this.nomCompetition +" est"); 
 		
-		for ( Competitor cp : this.competitors){
-			System.out.println("l'element a la position i est "+cp.toString()); 
-		}*/
-		if (!trouveWinner /*|| !trouveSecond || !trouveThird*/)
+		if (!trouveWinner || !trouveSecond || !trouveThird)
 			throw new CompetitionException("Un 1 ou plusieurs de ces trois competiteurs ne participe pas " +
-					"à cette compétition");
-		if (!trouveSecond /*|| !trouveSecond || !trouveThird*/)
-			throw new CompetitionException("Un 2 ou plusieurs de ces trois competiteurs ne participe pas " +
-					"à cette compétition");
-		if (!trouveThird /*|| !trouveSecond || !trouveThird*/)
-			throw new CompetitionException("Un 3 ou plusieurs de ces trois competiteurs ne participe pas " +
 					"à cette compétition");
 		
 		if (this.isInThePast())
@@ -789,14 +773,5 @@ public class Competition {
 				"-"+this.getDateCompetition().get(Calendar.DATE);
 	}
 	
-	public static void main(String[] args){
-		MyCalendar closingdate = new MyCalendar(2014,05,01);
-		System.out.println(closingdate);
-		System.out.println(closingdate.get(Calendar.YEAR)+"-"+closingdate.get(Calendar.MONTH)+
-				"-"+closingdate.get(Calendar.DATE));
-		
-		Date date = new Date(2014,12,1);
-		System.out.println(date.getMonth());
-	}
 	
 }

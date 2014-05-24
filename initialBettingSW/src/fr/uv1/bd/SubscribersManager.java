@@ -7,7 +7,7 @@ import java.util.*;
 
 import fr.uv1.bettingServices.*;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
-import fr.uv1.tests.unit.*;
+
 
 /**
  * DAO class (<i>Data Access Object</i>) for the {@link Subscriber} class.
@@ -44,7 +44,7 @@ public class SubscribersManager
     //       requesting the sequence (subscribers_id_seq) in the
     //       database.
     Connection c = DataBaseConnection.getConnection();
-    Statement stmt = null;
+
     try
     {
       c.setAutoCommit(false);

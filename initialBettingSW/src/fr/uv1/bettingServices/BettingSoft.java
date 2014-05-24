@@ -200,13 +200,12 @@ public class BettingSoft implements Betting {
 	private Competition searchCompetitionByName(String competitionName) {
 		if (competitionName == null)
 			return null;
-		int i =0;
-		//System.out.println("taille de la liste"+this.competitions.size());
+
+		
 		for (Competition c : competitions) {
 			if (c.getNomCompetition().equals(competitionName)){
 				return c;
 			}
-			i++;
 		     }
 		
 		return null;
@@ -245,30 +244,18 @@ public class BettingSoft implements Betting {
 			Collection<Competitor> competitors, String managerPwd)
 			throws AuthenticationException, ExistingCompetitionException,
 			CompetitionException, BadParametersException{
-		//System.out.println("on veut ajouter  "+ competition );
-		//try{
-	  	//System.out.println("On veut ajouter la competion : "+ competition);
-	   //try{
+
 		this.authenticateMngr(managerPwd);
-		//if(competitors!=null)
-			//System.out.println("il y a : "+ competitors.size() +"competitors");
-		
-		//System.out.println("closing date"+closingDate);
-		
+
 		
 		Competition c = new Competition(competition, (MyCalendar)closingDate, (ArrayList<Competitor>) competitors);
 		
 		
-		//System.out.println("on a dépassé la création de la compétition");
+		
 		if (this.competitions.contains(c))
 			throw new ExistingCompetitionException("Une compétition avec le même nom existe déjà");
 		this.competitions.add(c);
-		//System.out.println("il a été ajouté");
-		//}catch(Exception e ){
-		//	System.out.println(e);
-		//	throw e;
-			
-		//}
+		
 
 		
 
@@ -505,7 +492,6 @@ public class BettingSoft implements Betting {
 		try {
 			c.solderPariPodium(winner, second, third);
 		} catch (BadParametersException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (c.IsEmptybetList())
@@ -824,13 +810,12 @@ public class BettingSoft implements Betting {
 			ExistingCompetitionException, CompetitionException,
 			ExistingCompetitorException, BadParametersException{
 		
-			//System.out.println("On veut ajouter : "+competitor);
 		  	this.authenticateMngr(managerPwd);
 			Competition c= this.searchCompetitionByName(competition);
 			if(c==null) throw new ExistingCompetitionException("la compétition n'existe pas dans la liste ");
 			if(competitor.hasValidName())throw new BadParametersException("le competiteur n'as pas un nom valide");
 			if(c.isInThePast()) throw new CompetitionException(" la date de la comptition "+ competition+" es dans le passé ");
-			// System.out.println("il a ete ajouter" );
+
 			c.addCompetitor(competitor);
 			
 	}

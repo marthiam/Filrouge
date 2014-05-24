@@ -3,10 +3,9 @@ package fr.uv1.bd;
 import java.sql.SQLException;
 import java.util.List;
 
-import fr.uv1.bd.*;
+
 import fr.uv1.bettingServices.Competitor;
 import fr.uv1.bettingServices.Individual;
-import fr.uv1.bettingServices.Subscriber;
 import fr.uv1.bettingServices.Team;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;

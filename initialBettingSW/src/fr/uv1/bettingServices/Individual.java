@@ -1,6 +1,6 @@
 package fr.uv1.bettingServices;
 
-import java.util.Collection;
+
 
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
@@ -17,7 +17,6 @@ public  class Individual extends Person implements Competitor {
 	 * La contrainte que le nom de l'equipe doit verifier
 	 */
 	private static final String REGEX_INDIV = new String("[a-zA-Z][a-zA-Z\\-\\ ]*");
-	private static final String REGEX_DATE= new String("(\\d{2})/(\\d{2})/(\\d{4})");
 	
 	/** 
 	 *  identifiant du subscriber
