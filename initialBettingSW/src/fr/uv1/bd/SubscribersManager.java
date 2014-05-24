@@ -111,10 +111,11 @@ public class SubscribersManager
 
     // 2 - Creating a Prepared Statement with the SQL instruction.
     //     The parameters are represented by question marks. 
-    PreparedStatement psSelect = c.prepareStatement("select * from personne where  id_personne=?");
+    PreparedStatement psSelect = c.prepareStatement("select * from personne where  id_personne=? and  type =?");
     
     // 3 - Supplying values for the prepared statement parameters (question marks).
     psSelect.setInt(1, id);
+    psSelect.setString(2, "Joueur");
 
     // 4 - Executing Prepared Statement object among the database.
     //     The return value is a Result Set containing the data.
@@ -156,7 +157,8 @@ public class SubscribersManager
   public static List<Subscriber> findAll() throws SQLException, BadParametersException
   {
     Connection c = DataBaseConnection.getConnection();
-    PreparedStatement psSelect = c.prepareStatement("select * from personne order by id_personne");
+    PreparedStatement psSelect = c.prepareStatement("select * from personne where type=? order by id_personne");
+    psSelect.setString(1, "Joueur");
     ResultSet resultSet = psSelect.executeQuery();
     List<Subscriber> subscribers = new ArrayList<Subscriber>();
     Subscriber subscriber = null;

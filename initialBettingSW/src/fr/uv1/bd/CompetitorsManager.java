@@ -10,13 +10,13 @@ import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.tests.unit.*;;
 
 /**
- * DAO class (<i>Data Access Object</i>) for the {@link Subscriber} class.
+ * DAO class (<i>Data Access Object</i>) for the {@link Competitor} interface.
  * This class provides the CRUD functionalities :<br>
  * <ul>
  *   <li><b>C</b>: create a new competitor in the database.
- *   <li><b>R</b>: retrieve (or read) a (list of)subscriber(s) in the database.
- *   <li><b>U</b>: update the values stored in the database for a subscriber.
- *   <li><b>D</b>: delete a subscriber in the database.
+ *   <li><b>R</b>: retrieve (or read) a (list of)competitor(s) in the database.
+ *   <li><b>U</b>: update the values stored in the database for a competitor.
+ *   <li><b>D</b>: delete a competitor in the database.
  * </ul>
  * 
  * @author THIAM Mariam
@@ -25,13 +25,13 @@ public class CompetitorsManager
 {
   //-----------------------------------------------------------------------------
   /**
-   * Store a subscriber in the database. This subscriber is not stored
+   * Store a competitor in the database. This competitor is not stored
    * yet, so his <code>id</code> value is <code>NULL</code>. Once the
-   * subscriber is stored, the method returns the subscriber with the
+   * competitor is stored, the method returns the competitor with the
    * <code>id</code> value setted.
    * 
    * @param competitor the competitor to be stored.
-   * @return the subscriber with the updated value for the id.
+   * @return the competitor with the updated value for the id.
    * @throws SQLException
  * @throws BadParametersException 
    */
@@ -101,24 +101,24 @@ public class CompetitorsManager
 			//persist Team members 
 			Collection<Competitor> members = competiteur.getMembers();
 			for(Competitor member : members){
+				System.out.println("membre de l'equipe "+competiteur.getTeamName()+" :"+member);
 				Individual indiv = (Individual) member;
-				if ( findById(indiv.getId_individual())==null){
+				Competitor result =(Individual) findById(indiv.getId_individual());
+				if ( result==null){
 					indiv= (Individual) CompetitorsManager.persist(indiv);
-				}
+				}	
 				
-			PreparedStatement psPersistMember = c.prepareStatement("insert into estMembreDe(membre_id,team_id)  values (?,?)"
-						,PreparedStatement.RETURN_GENERATED_KEYS);
-			
+			PreparedStatement psPersistMember = c.prepareStatement("insert into estMembreDe(member_id,team_id)  values (?,?)");
 			psPersistMember.setLong(1,indiv.getId_individual());
-			psPersistMember.setLong(2, competiteur.getId_team());	
-			
-		    c.setAutoCommit(true);
-		    c.close();
-		    
-		    return competiteur;
+			psPersistMember.setLong(2, competiteur.getId_team());
+			psPersistMember.executeUpdate();
+			psPersistMember.close();
 			
 			}
-	
+			
+			  c.setAutoCommit(true);
+			  c.close();
+			 return competiteur;
       }
     }
     catch (SQLException e)
@@ -142,22 +142,25 @@ public class CompetitorsManager
   /**
    * Find a competitor by his id.
    * 
-   * @param id the id of the subscriber to retrieve.
+   * @param id the id of the competitor to retrieve.
    * @return the subscriber or null if the id does not exist in the database.
    * @throws SQLException
  * @throws BadParametersException 
    */
   public static Competitor findById(long id) throws SQLException, BadParametersException
   {
+	
     // 1 - Get a database connection from the class 'DatabaseConnection' 
     Connection c = DataBaseConnection.getConnection();
 
     // 2 - Creating a Prepared Statement with the SQL instruction.
     //     The parameters are represented by question marks. 
-    PreparedStatement psSelect = c.prepareStatement("select * from personne where type id_personne=?");
+    PreparedStatement psSelect = c.prepareStatement("select * from personne where id_personne=? and (type=? or type=?)");
     
     // 3 - Supplying values for the prepared statement parameters (question marks).
     psSelect.setLong(1, id);
+    psSelect.setString(2, "CompetiteurIndiv");
+    psSelect.setString(3, "CompetiteurTeam");
 
     // 4 - Executing Prepared Statement object among the database.
     //     The return value is a Result Set containing the data.
@@ -165,92 +168,128 @@ public class CompetitorsManager
     
     // 5 - Retrieving values from the Result Set.
     Competitor competitor = null;
+    Individual indiv =null;
+    Team team=null;
     while(resultSet.next())
     {
+    	
 	    if(resultSet.getString("type").equals("CompetiteurIndiv")){
 		     String [] s = resultSet.getString("borndate").split("-");
 		     int annee = new Integer(s[0]);
 		   	 int mois = new Integer(s[1]);
 		   	 int jour = new Integer(s[2]);
-		     competitor = new Individual(resultSet.getString("prenom"), 
+		   	 indiv = new Individual(resultSet.getString("prenom"), 
 		                                  resultSet.getString("nom"),jour+ "-"+mois+"-"+annee);
-		      (Individual)competitor.;
+		      indiv.setId_individual(id);
+		      // 6 - Closing the Result Set
+		      resultSet.close();
+		      
+		      // 7 - Closing the Prepared Statement.
+		      psSelect.close();
+		      
+		      // 8 - Closing the database connection.
+		      c.close();
+		      return indiv;
+		      
     	}else{
     		
-    		competitor = new Team(resultSet.getString("nom"));
+    		team = new Team(resultSet.getString("nom"));
+    		team.setId_team(id);
+    		 // 6 - Closing the Result Set
+    	    resultSet.close();
+    	    
+    	    // 7 - Closing the Prepared Statement.
+    	    psSelect.close();
+
+    	   
+    		PreparedStatement psSelectMembers = c.prepareStatement("select * from personne P inner join estmembrede E on  P.id_personne= E.member_id where E.team_id=?");
+    		psSelectMembers.setLong(1,team.getId_team());
+    	    ResultSet resultSetMembers = psSelectMembers.executeQuery();
+    	    Collection<Competitor> competitors = new HashSet<Competitor>();
+    	    Individual member = null;
+    	    while(resultSetMembers.next())
+    	    {
+    	    	String [] s = resultSetMembers.getString("borndate").split("-");
+    	          int annee = new Integer(s[0]);
+    	     	  int mois = new Integer(s[1]);
+    	     	  int jour = new Integer(s[2]);
+    	    	  member=new Individual(resultSetMembers.getString("prenom"),resultSetMembers.getString("nom"),jour+"-"+mois+"-"+annee);
+    	    	  member.setId_individual(resultSetMembers.getLong("id_personne"));
+    	          competitors.add(member);
+    	          System.out.println("membre "+member);
+    	    }
+    	    
+    	    resultSetMembers.close();
+    	    psSelectMembers.close();
+    	    
+    	    team.setMembers(competitors);
+    	    c.close();
+    	    
+    	    return team;
     		
     	}
     }
     
-    // 6 - Closing the Result Set
-    resultSet.close();
+  
+   
+
     
-    // 7 - Closing the Prepared Statement.
-    psSelect.close();
-    
-    // 8 - Closing the database connection.
-    c.close();
-    
-    return subscriber;
+	return competitor;
+  
   }
   //-----------------------------------------------------------------------------
   /**
    * Find all the subscribers in the database.
    * 
-   * @return
+   * @return the list of competitors
    * @throws SQLException
  * @throws BadParametersException 
    */
-  public static List<Subscriber> findAll() throws SQLException, BadParametersException
+  public static List<Competitor> findAll() throws SQLException, BadParametersException
   {
     Connection c = DataBaseConnection.getConnection();
-    PreparedStatement psSelect = c.prepareStatement("select * from personne order by id_personne");
+    PreparedStatement psSelect = c.prepareStatement("select * from personne where (type=? or type=? ) order by id_personne");
+    psSelect.setString(1, "CompetiteurTeam");
+    psSelect.setString(2, "CompetiteurIndiv");
     ResultSet resultSet = psSelect.executeQuery();
-    List<Subscriber> subscribers = new ArrayList<Subscriber>();
-    Subscriber subscriber = null;
+    List<Competitor> competitors = new ArrayList<Competitor>();
+    Competitor competitor = null;
+    
     while(resultSet.next())
     {
-    	String [] s = resultSet.getString("borndate").split("-");
-          int annee = new Integer(s[0]);
-     	  int mois = new Integer(s[1]);
-     	  int jour = new Integer(s[2]);
-    	subscriber=new Subscriber(resultSet.getString("prenom"),resultSet.getString("nom"),jour+"-"+mois+"-"+annee,resultSet.getString("username"));
-    	subscriber.setCompte(new Compte(resultSet.getInt("solde")));
-        subscribers.add(subscriber);
+    	long id=resultSet.getLong("id_personne");
+    	competitor=CompetitorsManager.findById(id);
+        competitors.add(competitor);
     }
     resultSet.close();
     psSelect.close();
     c.close();
     
-    return subscribers;
+    return competitors;
   }
   //-----------------------------------------------------------------------------
   /**
-   * Update on the database the values from a subscriber.
+   * Update on the database the values from a competitor.
    * 
-   * @param subscriber the subscriber to be updated.
+   * @param competitor the competitor to be updated.
    * @throws SQLException
    */
-  public static void update(Subscriber subscriber) throws SQLException
+  public static void update(Competitor competitor) throws SQLException
   {
     // 1 - Get a database connection from the class 'DatabaseConnection' 
     Connection c = DataBaseConnection.getConnection();
 
     // 2 - Creating a Prepared Statement with the SQL instruction.
     //     The parameters are represented by question marks. 
-    PreparedStatement psUpdate = c.prepareStatement("update personne set prenom=?, nom=?,borndate=?,type=?,username=?,password=?,solde=?  where id_personne=?");
+   if(competitor instanceof Individual){
+    PreparedStatement psUpdate = c.prepareStatement("update personne set prenom=?, nom=?,borndate=? where id_personne=?");
 
     // 3 - Supplying values for the prepared statement parameters (question marks).
-    psUpdate.setString(1, subscriber.getFirstname());
-    psUpdate.setString(2, subscriber.getLastname());
-    Date date = Date.valueOf(subscriber.getBorndateDate());
+    psUpdate.setString(1, ((Individual) competitor).getFirstname());
+    psUpdate.setString(2, ((Individual) competitor).getLastname());
+    Date date = Date.valueOf(((Individual)competitor).getBorndateDate());
     psUpdate.setDate(3,date );
-    psUpdate.setString(4, "Joueur");
-    psUpdate.setString(5, subscriber.getUsername());
-    psUpdate.setString(6, subscriber.getPassword());
-    psUpdate.setLong(7, subscriber.solde());
-    psUpdate.setLong(8, subscriber.getId_subscribe());
-    System.out.println(subscriber.getId_subscribe());
+    psUpdate.setLong(4, ((Individual) competitor).getId_individual());
     // Executing the prepared statement object among the database.
     // If needed, a return value (int) can be obtained. It contains
     // how many rows of a table were updated.
@@ -262,21 +301,46 @@ public class CompetitorsManager
 
     // 7 - Closing the database connection.
     c.close();
+    
+    }else{
+    	PreparedStatement psUpdate = c.prepareStatement("update personne set  nom=? where id_personne=?");
+    	psUpdate.setString(1,((Team)competitor).getTeamName());
+    	psUpdate.setLong(2,((Team)competitor).getId_team());
+    	Collection<Competitor> members= ((Team)competitor).getMembers();
+    	for(Competitor member:members){
+    		CompetitorsManager.update(member);
+    	}
+    	
+        psUpdate.executeUpdate();
+        
+        // 6 - Closing the Prepared Statement.
+        psUpdate.close();
+
+        // 7 - Closing the database connection.
+        c.close();
+        
+    }
   }
   //-----------------------------------------------------------------------------
   /**
-   * Delete from the database a specific subscriber.<br>
-   * <i>Be careful: the delete functionality does not operate a delete
-   * cascade on bets belonging to the subscriber.</i>
+   * Delete from the database a specific competitor.<br>
    * 
-   * @param subscriber the subscriber to be deleted.
+   * 
+   * @param competitor the competitor to be deleted.
    * @throws SQLException
    */
-  public static void delete(Subscriber subscriber) throws SQLException
+  public static void delete(Competitor competitor) throws SQLException
   {
     Connection c = DataBaseConnection.getConnection();
-    PreparedStatement psUpdate = c.prepareStatement("delete from personne where id_personne=?");
-    psUpdate.setLong(1, subscriber.getId_subscribe());
+    PreparedStatement psUpdate ; 
+    if (competitor instanceof Individual){
+    	psUpdate= c.prepareStatement("delete from personne P where P.id_personne=? and P.id_personne not in (select member_id from estmembrede where true)");
+    	psUpdate.setLong(1, ((Individual)competitor).getId_individual());
+    }else{
+    	psUpdate= c.prepareStatement("delete from personne where id_personne=? ");
+    	psUpdate.setLong(1,((Team)competitor).getId_team());	
+    	
+    }
     psUpdate.executeUpdate();
     psUpdate.close();
     c.close();
