@@ -88,7 +88,7 @@ public class CompetitionManager {
 		MyCalendar dateCompetition = new MyCalendar(closingDate.getYear(),
 				closingDate.getMonth(), closingDate.getDate());
 		
-		
+		/*
 		
 		
 		while (resultSet.next()) {
@@ -99,16 +99,27 @@ public class CompetitionManager {
 		resultSet.close();
 		psSelect.close();
 		c.close();
-
-		return bet;
+	*/
+		return null;
+	}
+	
+	
+	
+	public static void delete(Competition competition) throws SQLException {
+		Connection c = DataBaseConnection.getConnection();
+		PreparedStatement psUpdate = c
+				.prepareStatement("delete from competition where id_competition=?");
+		psUpdate.setInt(1, competition.getId_competition());
+		psUpdate.executeUpdate();
+		psUpdate.close();
+		c.close();
 	}
 	
 	
 	
 	
-	
-	
 	public static void main(String[] args) throws SQLException{
+		
 		try {
 			ArrayList<Competitor> competitors = new ArrayList<Competitor>();;
 			competitors.add(new Individual("Cisse","Mamadou", "28-09-1992"));
@@ -118,10 +129,11 @@ public class CompetitionManager {
 			competitors.add(new Individual("Cisse","Pinda", "07-10-1990"));
 			Competition competition = new Competition("Course", new MyCalendar(2014,12,1) , competitors);
 			competition.setId_competition(1);
-			persist(competition);
+			delete(competition);
 		} catch (BadParametersException | CompetitionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 }
