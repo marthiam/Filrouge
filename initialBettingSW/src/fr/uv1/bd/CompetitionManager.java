@@ -60,7 +60,7 @@ public class CompetitionManager {
 					}
 				
 				} catch (BadParametersException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -131,7 +131,7 @@ public class CompetitionManager {
 					Competitor competiteur = CompetitorsManager.findById(resultSet2.getLong("competiteur_id"));
 					competitors.add(competiteur);
 				} catch (BadParametersException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -152,7 +152,6 @@ public class CompetitionManager {
 				competition.setMontantTotalMise(montantTotalMise);
 				competition.setBetList(betList);
 			} catch (BadParametersException | CompetitionException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -209,8 +208,7 @@ public class CompetitionManager {
 			competition.setId_competition(1);
 			persist(competition);
 		} catch (BadParametersException | CompetitionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+						e.printStackTrace();
 		}
 		
 	}

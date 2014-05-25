@@ -24,6 +24,10 @@ import fr.uv1.utils.MyCalendar;
  *
  */
 
+/**
+ * @author Mariam
+ *
+ */
 public class Competition {
 	
 	/** La taille minimum du nom d'une compétition */
@@ -272,6 +276,8 @@ public class Competition {
 			e.printStackTrace();
 		}
 	}
+
+	
 
 
 	/**
@@ -743,6 +749,21 @@ public class Competition {
 		return this.betList.isEmpty();
 	}
 	
+	/**
+	 * delete a competitor for a competition.
+	 * 
+	 *@throws ExistingCompetitorException
+	 *             raised if the competitor is not registered for the
+	 *             competition. 
+	 * */
+	public void removeCompetitor(Competitor competitor ) throws ExistingCompetitorException{
+		if(!(this.competitors.contains(competitor))){
+			throw new ExistingCompetitorException("le competiteur "+ competitor +" ne participe à la compeetition "+this.nomCompetition );
+		}
+		this.competitors.remove(competitor);
+		
+		
+	}
 	/**
 	 * Cette méthode verifie la validité du nom d'une compétition.
 	 * Seuls les lettres, les chiffres, les tirets et underscore sont autorisés.
