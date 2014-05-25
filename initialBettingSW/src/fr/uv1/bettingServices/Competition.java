@@ -671,28 +671,33 @@ public class Competition {
 	
 	
 
+	/**
+	 * Ajoute un  competiteur à la compétition <br>
+	 * @param newCompetitor le nouveau competiteur 
+	 * @throws CompetitionException 
+	 * 		 est levée si le competiteur a dejà été ajouté .
+	 * @throws BadParametersException
+	 * 		est levée si le competiteur n'est pas instancié .
+	 */
 	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, BadParametersException{
 		if (newCompetitor==null)throw new BadParametersException("competiteur non instancié");
 
 		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) {
 			throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
 		} 
-		if (this.competitors==null) 
-			throw new CompetitionException(" bug");
 		
-		this.competitors.add(newCompetitor);
-		
-		
-
+		this.competitors.add(newCompetitor);// ajoute un nouveau competiteur 
 		}
 
 		
 
 	
 	/**
+	 * Dit si la competition à une date passée 
 	 * @return 
 	 * 		Vrai si le closing date de la compétition est dans le passé
 	 * 		Faux sinon
+	 * 
 	 */
 	public boolean isInThePast(){
 		return this.getDateCompetition().isInThePast();
@@ -750,11 +755,10 @@ public class Competition {
 	}
 	
 	/**
-	 * delete a competitor for a competition.
+	 * supprime un competiteur  de la  competition.
 	 * 
 	 *@throws ExistingCompetitorException
-	 *             raised if the competitor is not registered for the
-	 *             competition. 
+	 *             est levée si le competiteur ne participe pas à la competition
 	 * */
 	public void removeCompetitor(Competitor competitor ) throws ExistingCompetitorException{
 		if(!(this.competitors.contains(competitor))){
@@ -773,7 +777,7 @@ public class Competition {
 	 *            Le nom de la compétition à verifier
 	 * 
 	 * @throws BadParametersException
-	 *             exception levé si le nom de la compétition est invalide
+	 *             est levé si le nom de la compétition est invalide
 	 */
 	private static void checkStringNomCompetition(String nomCompetition)
 			throws BadParametersException {
@@ -789,6 +793,10 @@ public class Competition {
 					+ " ne verifie pas les contraintes ");
 	}	
 	
+	/** 
+	 * Renvoie la date de fermeture de la competition sous forme de chaine de caractère
+	 * @return la chaine de caractère correspondant 
+	 */
 	public String getClosingdate() {
 		return this.getDateCompetition().get(Calendar.YEAR)+"-"+this.getDateCompetition().get(Calendar.MONTH)+
 				"-"+this.getDateCompetition().get(Calendar.DATE);

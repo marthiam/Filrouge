@@ -162,6 +162,25 @@ public class CompetitionManager {
 	
 		return competition;
 	}
+	public static long findByName(Competition competition) throws SQLException {
+		Connection c = DataBaseConnection.getConnection();
+		PreparedStatement psSelect = c
+				.prepareStatement("select id_competition from competition where nomcompetition=?");
+		psSelect.setString(1, competition.getNomCompetition());
+		ResultSet resultSet = psSelect.executeQuery();
+		
+		long id =0 ; 
+		while (resultSet.next()) {
+			 id = resultSet.getLong("id_competion");
+			
+		}
+		
+		resultSet.close();
+		psSelect.close();
+		c.close();
+	
+		return id;
+	}
 	
 	public static List<Competition> findAll() throws SQLException {
 		Connection c = DataBaseConnection.getConnection();

@@ -13,6 +13,12 @@ public class Pari {
 	
 	/** Le joueur qui fait ce pari */
 	private Subscriber subscriber;
+	
+	/** La  competition du  pari */
+	private Competition competition;
+	
+
+
 
 	/** L'identifiant de la compétition sur laquelle est fait le pari */
 	private int competition_id;
@@ -54,23 +60,19 @@ public class Pari {
 	}
 
 
-	
-
 	/**
-	 * @return l'identifiant de la compétition sur laquelle est fait le pari 
+	 * @return the competition
 	 */
-	public int getCompetition_id() {
-		return competition_id;
+	public Competition getCompetition() {
+		return competition;
 	}
 
 
-
-
 	/**
-	 * @param competition_id l'identifiant de la nouvelle compétition 
+	 * @param competition the competition to set
 	 */
-	public void setCompetition_id(int competition_id) {
-		this.competition_id = competition_id;
+	public void setCompetition(Competition competition) {
+		this.competition = competition;
 	}
 
 
