@@ -139,13 +139,6 @@ public class Competition {
 		this.dateCompetition = newDate;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Competition [nomCompetition=" + nomCompetition + "]";
-	}
 
 	/**
 	 * @return Le montant total misé sur la compétition
@@ -769,9 +762,12 @@ public class Competition {
 	}	
 	
 	public String getClosingdate() {
-		return this.getDateCompetition().get(Calendar.YEAR)+"-"+this.getDateCompetition().get(Calendar.MONTH)+
+		return this.getDateCompetition().get(Calendar.YEAR)+"-"+(this.getDateCompetition().get(Calendar.MONTH)+1)+
 				"-"+this.getDateCompetition().get(Calendar.DATE);
 	}
 	
-	
+	@Override
+	public String toString(){
+		return this.nomCompetition + " " + this.getClosingdate(); 
+	}
 }

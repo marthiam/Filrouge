@@ -3,6 +3,7 @@ package fr.uv1.bd;
 import java.sql.*;
 import java.util.*;
 
+import fr.uv1.bettingServices.Competition;
 import fr.uv1.bettingServices.Competitor;
 import fr.uv1.bettingServices.Individual;
 import fr.uv1.bettingServices.Pari;
@@ -11,7 +12,9 @@ import fr.uv1.bettingServices.PariPodium;
 import fr.uv1.bettingServices.Subscriber;
 import fr.uv1.bettingServices.Team;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
+import fr.uv1.bettingServices.exceptions.CompetitionException;
 import fr.uv1.utils.DataBaseConnection;
+import fr.uv1.utils.MyCalendar;
 
 /**
  * DAO class (<i>Data Access Object</i>) for the {@link Bet} class. This class
@@ -51,20 +54,18 @@ public class PariManager {
 			c.setAutoCommit(false);
 			if (pari instanceof PariWinner){
 				PreparedStatement psPersist = c
-					.prepareStatement("insert into pari(id_pari, id_joueur, mise, " +
-							"competiteurpremiereID, type, id_competition) " +
-							"values (?, ?, ?, ?, ?, ?)");
+					.prepareStatement("insert into pari(id_joueur, mise, " +
+							"competiteurpremiere_id, type, id_competition)" +
+							" values (?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			
-			
-			psPersist.setInt(1, pari.getPari_id());
-			psPersist.setLong(2, pari.getSubscriber().getId_subscribe());
-			psPersist.setLong(3, pari.getMise());
+			psPersist.setLong(1, pari.getSubscriber().getId_subscribe());
+			psPersist.setLong(2, pari.getMise());
 			if (((PariWinner) pari).getWinner() instanceof Individual)
-				psPersist.setLong(4, ((Individual) ((PariWinner) pari).getWinner()).getId_individual());
+				psPersist.setLong(3, ((Individual) ((PariWinner) pari).getWinner()).getId_individual());
 			else
-				psPersist.setLong(4, ((Team) ((PariWinner) pari).getWinner()).getId_team());
-			psPersist.setString(5, "pariWinner");
-			psPersist.setInt(6, pari.getCompetition_id());
+				psPersist.setLong(3, ((Team) ((PariWinner) pari).getWinner()).getId_team());
+			psPersist.setString(4, "pariWinner");
+			psPersist.setInt(5, pari.getCompetition_id());
 			psPersist.executeUpdate();
 
 			psPersist.close();
@@ -72,7 +73,7 @@ public class PariManager {
 			// Retrieving the value of the id with a request on the
 			// sequence (subscribers_id_seq).
 			PreparedStatement psIdValue = c
-					.prepareStatement("select currval('bets_id_seq') as value_id");
+					.prepareStatement("select currval('pari_id_seq') as value_id");
 			ResultSet resultSet = psIdValue.executeQuery();
 			Integer id = null;
 			while (resultSet.next()) {
@@ -90,8 +91,8 @@ public class PariManager {
 			else{
 				PreparedStatement psPersist = c
 						.prepareStatement("insert into pari(id_pari, id_joueur, mise, " +
-								"competiteurpremiereID, competiteurdeuxiemeID, " +
-								"competiteurtroisiemeID, type, id_competition) " +
+								"competiteurpremiere_id, competiteurdeuxieme_id, " +
+								"competiteurtroisieme_id, type, id_competition) " +
 								"values (?, ?, ?, ?, ?, ?)");
 				
 				
@@ -167,7 +168,7 @@ public class PariManager {
 				Long mise = resultSet.getLong("mise");
 				if (resultSet.getString("type").equals("pariWinner")){
 					Competitor winner;
-					winner = CompetitorsManager.findById(resultSet.getInt("competiteurpremiereID"));
+					winner = CompetitorsManager.findById(resultSet.getInt("competiteurpremiere_id"));
 					
 					int competition_id = resultSet.getInt("id_competition");
 					pari = new PariWinner(mise, subscriber, winner);
@@ -178,13 +179,13 @@ public class PariManager {
 				
 				else{
 					Competitor winner;
-					winner = CompetitorsManager.findById(resultSet.getInt("competiteurpremiereID"));
+					winner = CompetitorsManager.findById(resultSet.getInt("competiteurpremiere_id"));
 	
 					Competitor second;
-					second = CompetitorsManager.findById(resultSet.getInt("competiteurdeuxiemeID"));
+					second = CompetitorsManager.findById(resultSet.getInt("competiteurdeuxieme_id"));
 	
 					Competitor third;
-					third = CompetitorsManager.findById(resultSet.getInt("competiteurtroisiemeID"));
+					third = CompetitorsManager.findById(resultSet.getInt("competiteurtroisieme_id"));
 	
 					int competition_id = resultSet.getInt("id_competition");
 					pari = new PariPodium(mise, subscriber, winner, second, third);
@@ -268,7 +269,7 @@ public class PariManager {
 		
 		if (pari instanceof PariWinner){
 			PreparedStatement psUpdate = c
-					.prepareStatement("update pari set id_joueur=?, mise=?, competiteurpremiereID=?, type=?, id_competition=? where id_pari=?");
+					.prepareStatement("update pari set id_joueur=?, mise=?, competiteurpremiere_id=?, type=?, id_competition=? where id_pari=?");
 			psUpdate.setLong(1, pari.getSubscriber().getId_subscribe());
 			psUpdate.setLong(2, pari.getMise());
 			if (((PariWinner) pari).getWinner() instanceof Individual){
@@ -286,7 +287,7 @@ public class PariManager {
 		
 		else{
 			PreparedStatement psUpdate = c
-					.prepareStatement("update pari set id_joueur=?, mise=?, competiteurpremiereID=?, competiteurdeuxiemeID=?, competiteurtroisiemeID=?, type=?, id_competition=? where id_pari=?");
+					.prepareStatement("update pari set id_joueur=?, mise=?, competiteurpremiere_id=?, competiteurdeuxieme_id=?, competiteurtroisieme_id=?, type=?, id_competition=? where id_pari=?");
 			psUpdate.setLong(1, pari.getSubscriber().getId_subscribe());
 			psUpdate.setLong(2, pari.getMise());
 			if (((PariPodium) pari).getWinner() instanceof Individual){
@@ -326,4 +327,23 @@ public class PariManager {
 		c.close();
 	}
 	// -----------------------------------------------------------------------------
+
+	public static void main(String[] args) throws SQLException{
+		Subscriber sub;
+		try {
+			sub = new Subscriber("Cisse","Kadi", "07-10-1990", "mcisse" );
+			SubscribersManager.persist(sub);
+			Individual winner = new Individual("Cisse","Mamadou", "28-09-1992");
+			winner.setId_individual(22);
+			Pari pari = new PariWinner(100, sub, winner);
+			pari.setCompetition_id(4);
+			
+			PariManager.persist(pari);
+		} catch (BadParametersException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
 }

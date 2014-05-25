@@ -25,33 +25,56 @@ public class CompetitionManager {
 		Connection c = DataBaseConnection.getConnection();
 		try {
 			c.setAutoCommit(false);
-			
-			
-			
-			PreparedStatement psPersist = c
-					.prepareStatement("insert into competition(id_competition, nomcompetion," +
-							"closingdate, montanttotalmise)" +
-							"values (?, ?, ?, ?)");
-			
-			psPersist.setInt(1, competition.getId_competition());
-			psPersist.setString(2, competition.getNomCompetition());
-			Date date = Date.valueOf(competition.getClosingdate());
-			psPersist.setDate(3, date);
-			psPersist.setLong(4, competition.getMontantTotalMise());
 
+			PreparedStatement psPersist = c
+					.prepareStatement("insert into competition(nomcompetion," +
+							"closingdate, montanttotalmise)" +
+							" values (?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+			
+			psPersist.setString(1, competition.getNomCompetition());
+			Date date = Date.valueOf(competition.getClosingdate());
+			System.out.println("la date after valueof "+ date) ;  
+			psPersist.setDate(2, date);
+			psPersist.setLong(3, competition.getMontantTotalMise());
+			
+			psPersist.executeUpdate();
+
+			
+			// Retrieving the value of the id with a request on the
+			// sequence (competition_id_seq).
+			PreparedStatement psIdValue = c
+					.prepareStatement("select currval('competition_id_seq') as value_id");
+			ResultSet resultSet = psIdValue.executeQuery();
+			Integer id = null;
+			while (resultSet.next()) {
+				id = resultSet.getInt("value_id");
+			}
+			psPersist.close();
+			resultSet.close();
+			psIdValue.close();
+			c.commit();
+			competition.setId_competition(id);
+			
 			for (Competitor competiteur : competition.getCompetitors()){
 				try {
 					if (competiteur instanceof Individual){
 						if (CompetitorsManager.findById(((Individual) competiteur).getId_individual()) == null){
 							CompetitorsManager.persist(competiteur);
 						}
+						PreparedStatement psPersistIndividual = c
+								.prepareStatement("insert into estcompetiteurde(competiteur_id, competition_id)" +
+										" values (?, ?)");
+						psPersistIndividual.setLong(1, ((Individual) competiteur).getId_individual());
+						psPersistIndividual.setInt(2, competition.getId_competition());
+						psPersistIndividual.executeUpdate();
+						psPersistIndividual.close();
 					}
 					if (competiteur instanceof Team){
 						if (CompetitorsManager.findById(((Team) competiteur).getId_team()) == null){
 							CompetitorsManager.persist(competiteur);
 						}
 						PreparedStatement psPersistTeam = c
-								.prepareStatement("insert into estcompetiteurde(competiteurID, competitionID" +
+								.prepareStatement("insert into estcompetiteurde(competiteur_id, competition_id" +
 										"values (?, ?)");
 						psPersistTeam.setLong(1, ((Team) competiteur).getId_team());
 						psPersistTeam.setInt(2, competition.getId_competition());
@@ -65,24 +88,7 @@ public class CompetitionManager {
 				}
 			}
 
-			
-			psPersist.executeUpdate();
 
-			psPersist.close();
-
-			// Retrieving the value of the id with a request on the
-			// sequence (competition_id_seq).
-			PreparedStatement psIdValue = c
-					.prepareStatement("select currval('competition_id_seq') as value_id");
-			ResultSet resultSet = psIdValue.executeQuery();
-			Integer id = null;
-			while (resultSet.next()) {
-				id = resultSet.getInt("value_id");
-			}
-			resultSet.close();
-			psIdValue.close();
-			c.commit();
-			competition.setId_competition(id);
 		} catch (SQLException e) {
 			try {
 				c.rollback();
@@ -115,9 +121,13 @@ public class CompetitionManager {
 		while (resultSet.next()) {
 			String nomCompetition = resultSet.getString("nomcompetion");
 			Long montantTotalMise = resultSet.getLong("montanttotalmise");
-			Date closingDate = resultSet.getDate("closingdate");
-			MyCalendar dateCompetition = new MyCalendar(closingDate.getYear(),
-					closingDate.getMonth(), closingDate.getDate());
+			
+			String closingDate = resultSet.getString("closingdate");
+			
+			String[] date = closingDate.split("-");
+
+			MyCalendar dateCompetition = new MyCalendar(new Integer(date[0]),
+					new Integer(date[1]), new Integer(date[2]));
 			
 			ArrayList<Competitor> competitors = new ArrayList<Competitor>();
 			
@@ -151,6 +161,7 @@ public class CompetitionManager {
 				competition = new Competition(nomCompetition, dateCompetition, competitors);
 				competition.setMontantTotalMise(montantTotalMise);
 				competition.setBetList(betList);
+				competition.setId_competition(id);
 			} catch (BadParametersException | CompetitionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -187,6 +198,7 @@ public class CompetitionManager {
 		PreparedStatement psUpdate = c
 				.prepareStatement("delete from competition where id_competition=?");
 		psUpdate.setInt(1, competition.getId_competition());
+		
 		psUpdate.executeUpdate();
 		psUpdate.close();
 		c.close();
@@ -196,22 +208,6 @@ public class CompetitionManager {
 	
 	
 	public static void main(String[] args) throws SQLException{
-		
-		try {
-			ArrayList<Competitor> competitors = new ArrayList<Competitor>();
-			Competitor c1 = new Individual("Cisse","Mamadou", "28-09-1992");
-			Competitor c2 = new Individual("Cisse","Sanounou", "05-01-1989");
-			((Individual) c1).setId_individual(1);
-			((Individual) c2).setId_individual(2);
-			competitors.add(c1);
-			competitors.add(c2);
-			Competition competition = new Competition("Course", new MyCalendar(2014,12,1) , competitors);
-			competition.setId_competition(1);
-			persist(competition);
-		} catch (BadParametersException | CompetitionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 }
