@@ -265,7 +265,6 @@ public class Competition {
 		try {
 			subscriber.crediter(numberTokens);
 		} catch (BadParametersException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -396,7 +395,7 @@ public class Competition {
 		
 		if (!trouveWinner || !trouveSecond || !trouveThird)
 			throw new CompetitionException("Un 1 ou plusieurs de ces trois competiteurs ne participe pas " +
-					"à cette compétition");
+					"à cette competition");
 		
 		if (this.isInThePast())
 			throw new CompetitionException("La date de la competition est passée");
@@ -589,7 +588,6 @@ public class Competition {
 					try {
 						pari.getSubscriber().crediter(tokensWonBySubscriber);
 					} catch (BadParametersException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
