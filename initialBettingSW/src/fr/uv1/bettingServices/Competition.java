@@ -428,7 +428,7 @@ public class Competition {
 				for (Competitor member : team.getMembers()){
 					competiteur=(Person)member;
 					if (paripod.getSubscriber().equals(competiteur)){
-						throw new CompetitionException("Le joueur fait partie d'une équipe de la compétition");
+						throw new CompetitionException("Le joueur fait partie d'une equipe de la competition");
 					}
 				}
 			}

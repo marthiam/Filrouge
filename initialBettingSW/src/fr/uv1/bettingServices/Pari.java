@@ -25,9 +25,11 @@ public class Pari {
 	
 	
 	/**
-	 * Constructeur 
+	 * Constructeur  
 	 * @param mise
 	 * 			le montant a misé 
+	 *  @param subscriber 
+	 *  		le joueur qui pari 
 	 * @throws BadParametersException 
 	 * 			est levée la mise est <=0 ou si le subscriber est null 
 	 *
@@ -43,7 +45,8 @@ public class Pari {
 	
 	
 	/**
-	 * @return l'identifiant du pari
+	 * Renvoie l'identifiant du pari
+	 *		 @return l'identifiant du pari
 	 */
 	public int getPari_id() {
 		return this.pari_id;
@@ -53,7 +56,8 @@ public class Pari {
 
 
 	/**
-	 * @param pari_id le nouvel identifiant du pari
+	 * Met à jour l'identifiant du pari 
+	 * 		@param pari_id le nouvel identifiant du pari
 	 */
 	public void setPari_id(int pari_id) {
 		this.pari_id = pari_id;
@@ -61,7 +65,8 @@ public class Pari {
 
 
 	/**
-	 * @return the competition
+	 * Renvoie la competition du pari
+	 *		 @return la competition du pari 
 	 */
 	public Competition getCompetition() {
 		return competition;
@@ -69,7 +74,8 @@ public class Pari {
 
 
 	/**
-	 * @param competition the competition to set
+	 * La competition du pari 
+	 * 			@param competition la nouvelle competition 
 	 */
 	public void setCompetition(Competition competition) {
 		this.competition = competition;
@@ -79,7 +85,8 @@ public class Pari {
 
 
 	/**
-	 * @return Le nombre de jetons misé par le joueur
+	 * Renvoie la mise du pari 
+	 * 			@return Le nombre de jetons misé par le joueur
 	 */
 	public long getMise() {
 		return mise;
@@ -97,16 +104,18 @@ public class Pari {
 	}
 
 	/**
-	 * 
-	 * @return Le joueur
+	 * Renvoie le parieur 
+	 * 			@return Le joueur
 	 */
 	public Subscriber getSubscriber() {
 		return subscriber;
 	}
 
 	/**
-	 * @param subscriber Le nouveau joueur
-	 * @throws BadParametersException 
+	 * Met à jour le joueur ayant parié 
+	 * 			@param subscriber Le nouveau joueur
+	 * 			@throws BadParametersException 
+	 * 			est levée si le joueur est non instancié .
 	 */
 	public void setSubscriber(Subscriber subscriber) throws BadParametersException {
 		if (subscriber==null)
