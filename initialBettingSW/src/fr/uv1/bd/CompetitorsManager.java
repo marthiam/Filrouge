@@ -103,8 +103,8 @@ public class CompetitorsManager
 			for(Competitor member : members){
 				System.out.println("membre de l'equipe "+competiteur.getTeamName()+" :"+member);
 				Individual indiv = (Individual) member;
-				Competitor result =(Individual) findById(indiv.getId_individual());
-				if ( result==null){
+				Long ind = findByName(indiv);
+				if ( ind==0){
 					indiv= (Individual) CompetitorsManager.persist(indiv);
 				}	
 				
