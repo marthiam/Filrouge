@@ -119,7 +119,7 @@ public class TeamTest {
 		Collection<Competitor> members2 =new HashSet<Competitor>();
 		members2.add(new Individual("Thiami","Maurice", "22-09-1992"));
 		members2.add(new Individual("Ketevi","Mariam", "02-11-1992"));
-		Team myTeam2 = new Team("Barcelon",members2);
+		Team myTeam2 = new Team("Barca",members2);
 		assertTrue(myTeam.equals(myTeam1));
 		assertFalse(myTeam.equals(myTeam2));
 		

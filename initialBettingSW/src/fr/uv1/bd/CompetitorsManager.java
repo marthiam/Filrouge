@@ -72,7 +72,8 @@ public class CompetitorsManager
       psPersist.close();
 	  c.commit();
 	  competiteur.setId_individual(id);
-   
+	  resultSet.close();
+	  psIdValue.close();
       c.setAutoCommit(true);
       c.close();
       
@@ -142,7 +143,7 @@ public class CompetitorsManager
    * Find a competitor by his id.
    * 
    * @param id the id of the competitor to retrieve.
-   * @return the subscriber or null if the id does not exist in the database.
+   * @return the competitor or null if the id does not exist in the database.
    * @throws SQLException
  * @throws BadParametersException 
    */
@@ -266,6 +267,43 @@ public class CompetitorsManager
     
     return competitors;
   }
+  
+  
+  
+  //-----------------------------------------------------------------------------
+  /**
+   * Find a person's id using his firstnam, lastname  and borndate.
+   * 
+   * @param id the id of the competitor to retrieve.
+   * @return the person's id or 0 if it does not exist in the database.
+   * @throws SQLException
+ * @throws BadParametersException 
+   */
+  public static long findByName(Person p) throws SQLException, BadParametersException
+  {
+	// 1 - Get a database connection from the class 'DatabaseConnection' 
+	    Connection c = DataBaseConnection.getConnection();
+	
+	// 2 - Creating a Prepared Statement with the SQL instruction.
+    //     The parameters are represented by question marks. 
+	    PreparedStatement psSelect = c.prepareStatement("select id_personne from personne where prenom=? and nom=? and borndate=? ");
+	    
+	    // 3 - Supplying values for the prepared statement parameters (question marks).
+	    psSelect.setString(1, p.getFirstname());
+	    psSelect.setString(2, p.getLastname());
+	    psSelect.setDate(3, Date.valueOf(p.getBorndateDate()));
+	    
+	    // 4 - Executing Prepared Statement object among the database.
+	    //     The return value is a Result Set containing the data.
+	    ResultSet resultSet = psSelect.executeQuery();
+	    long id=0;
+	    while(resultSet.next()){
+	    	 id=resultSet.getLong("id_personne");
+	    }
+	  
+	  
+	return id;
+  }
   //-----------------------------------------------------------------------------
   /**
    * Update on the database the values from a competitor.
@@ -278,9 +316,11 @@ public class CompetitorsManager
     // 1 - Get a database connection from the class 'DatabaseConnection' 
     Connection c = DataBaseConnection.getConnection();
 
-    // 2 - Creating a Prepared Statement with the SQL instruction.
-    //     The parameters are represented by question marks. 
+    
    if(competitor instanceof Individual){
+	   
+	// 2 - Creating a Prepared Statement with the SQL instruction.
+	   //     The parameters are represented by question marks. 
     PreparedStatement psUpdate = c.prepareStatement("update personne set prenom=?, nom=?,borndate=? where id_personne=?");
 
     // 3 - Supplying values for the prepared statement parameters (question marks).

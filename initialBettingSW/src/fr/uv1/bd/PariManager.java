@@ -13,6 +13,7 @@ import fr.uv1.bettingServices.Subscriber;
 import fr.uv1.bettingServices.Team;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.CompetitionException;
+import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 import fr.uv1.utils.DataBaseConnection;
 import fr.uv1.utils.MyCalendar;
 
@@ -158,6 +159,7 @@ public class PariManager {
 		Connection c = DataBaseConnection.getConnection();
 		PreparedStatement psSelect = c
 				.prepareStatement("select * from pari where id_pari=?");
+		psSelect.setInt(1, id);
 		ResultSet resultSet = psSelect.executeQuery();
 		Pari pari = null;
 		while (resultSet.next()) {
@@ -173,6 +175,7 @@ public class PariManager {
 					int competition_id = resultSet.getInt("id_competition");
 					pari = new PariWinner(mise, subscriber, winner);
 					pari.setCompetition_id(competition_id);
+					pari.setPari_id(id);
 	
 				}
 	
@@ -190,6 +193,7 @@ public class PariManager {
 					int competition_id = resultSet.getInt("id_competition");
 					pari = new PariPodium(mise, subscriber, winner, second, third);
 					pari.setCompetition_id(competition_id);
+					pari.setPari_id(id);
 				}
 			
 			} catch (BadParametersException e) {
@@ -280,6 +284,7 @@ public class PariManager {
 			}
 			psUpdate.setString(4, "pariWinner");
 			psUpdate.setInt(5, pari.getCompetition_id());
+			psUpdate.setInt(6, pari.getPari_id());
 			psUpdate.executeUpdate();
 			psUpdate.close();
 			c.close();
@@ -329,16 +334,33 @@ public class PariManager {
 	// -----------------------------------------------------------------------------
 
 	public static void main(String[] args) throws SQLException{
-		Subscriber sub;
+		ArrayList<Competitor> competitors = new ArrayList<Competitor>();
+		 Team t1;
 		try {
-			sub = new Subscriber("Cisse","Kadi", "07-10-1990", "mcisse" );
-			SubscribersManager.persist(sub);
-			Individual winner = new Individual("Cisse","Mamadou", "28-09-1992");
-			winner.setId_individual(22);
-			Pari pari = new PariWinner(100, sub, winner);
-			pari.setCompetition_id(4);
-			
-			PariManager.persist(pari);
+			t1 = new Team("Telecom");
+
+		 try {
+			t1.addMember(new Individual("Cisse","Mamadou", "28-09-1992"));
+
+		 t1.addMember(new Individual("Cisse","Sanounou", "05-01-1989"));
+		 Team t2 =new Team("Ensta");
+		 t2.addMember(new Individual("Thiam","Pierre", "07-10-1991"));
+		 t2.addMember(new Individual("Thiam","Sami", "05-01-1983"));
+		 Team t3 =new Team("Enib");
+		 t3.addMember(new Individual("Toure","Pinda", "07-10-1990"));
+		 t3.addMember(new Individual("Toure","Kadi", "02-11-1991"));
+		 Team t4 =new Team("Esmisab");
+		 t4.addMember(new Individual("Diarra","Doudou", "07-10-1990"));
+		 t4.addMember(new Individual("Diarra","Oumou", "02-11-1991"));
+		 competitors.add(t1);
+		 competitors.add(t2);
+		 competitors.add(t3);
+		 competitors.add(t4);
+			} catch (ExistingCompetitorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 CompetitorsManager.persist(t1);
 		} catch (BadParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

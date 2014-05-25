@@ -12,6 +12,8 @@ import fr.uv1.bettingServices.Competition;
 import fr.uv1.bettingServices.Competitor;
 import fr.uv1.bettingServices.Individual;
 import fr.uv1.bettingServices.Pari;
+import fr.uv1.bettingServices.PariPodium;
+import fr.uv1.bettingServices.PariWinner;
 import fr.uv1.bettingServices.Team;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.CompetitionException;
@@ -83,7 +85,7 @@ public class CompetitionManager {
 					}
 				
 				} catch (BadParametersException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -141,7 +143,7 @@ public class CompetitionManager {
 					Competitor competiteur = CompetitorsManager.findById(resultSet2.getLong("competiteur_id"));
 					competitors.add(competiteur);
 				} catch (BadParametersException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -163,7 +165,6 @@ public class CompetitionManager {
 				competition.setBetList(betList);
 				competition.setId_competition(id);
 			} catch (BadParametersException | CompetitionException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -204,7 +205,21 @@ public class CompetitionManager {
 		c.close();
 	}
 	
-	
+	public static void update(Competition competition) throws SQLException {
+		Connection c = DataBaseConnection.getConnection();
+		
+			PreparedStatement psUpdate = c
+					.prepareStatement("update competition set nomcompetion=?, closingdate=?, montanttotalmise=? where id_competition=?");
+			psUpdate.setString(1, competition.getNomCompetition());
+			Date date = Date.valueOf(competition.getClosingdate());
+			psUpdate.setDate(2, date);
+			psUpdate.setLong(3, competition.getMontantTotalMise());
+			psUpdate.setInt(4, competition.getId_competition());
+			psUpdate.executeUpdate();
+			psUpdate.close();
+			c.close();
+
+	}
 	
 	
 	public static void main(String[] args) throws SQLException{

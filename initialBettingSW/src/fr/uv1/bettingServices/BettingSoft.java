@@ -1,7 +1,9 @@
 package fr.uv1.bettingServices;
 
+import java.sql.SQLException;
 import java.util.*;
 
+import fr.uv1.bd.SubscribersManager;
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.CompetitionException;
@@ -99,6 +101,11 @@ public class BettingSoft implements Betting {
 		s = new Subscriber(lastName, firstName,borndate,username);
 		// Add it to the collection of subscribers
 		subscribers.add(s);
+		try {
+			SubscribersManager.persist(s); //save in data base   
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return s.getPassword();
 		}
 
@@ -116,6 +123,11 @@ public class BettingSoft implements Betting {
 		if (s != null){
 			long result= s.solde();
 			subscribers.remove(s); // remove it
+			try {
+				SubscribersManager.delete(s); // remove from data base
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			return result;
 		}else{
 			throw new ExistingSubscriberException("Subscriber does not exist");
@@ -133,8 +145,8 @@ public class BettingSoft implements Betting {
 		// Calculate the list of subscribers
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		ArrayList<String> subsData = new ArrayList<String>();
-		for (Subscriber s : subscribers) {
-			subsData.add(s.getLastname());
+		for (Subscriber s : subscribers) {  // parcourt de la liste des joueurs
+			subsData.add(s.getLastname()); 
 			subsData.add(s.getFirstname());
 			subsData.add(s.getBorndate());
 			subsData.add(s.getUsername());
@@ -285,7 +297,9 @@ public class BettingSoft implements Betting {
 	@Override
 	public Competitor createCompetitor(String lastName, String firstName,
 			String borndate, String managerPwd) throws AuthenticationException, BadParametersException{
+		// Authenticate manager
 		this.authenticateMngr(managerPwd);
+		//create a new competitor individual
 		Competitor indiv= new Individual(lastName,firstName,borndate);
 		return indiv;
 	}
@@ -311,7 +325,9 @@ public class BettingSoft implements Betting {
 	public Competitor createCompetitor(String name, String managerPwd)
 			throws AuthenticationException,
 			BadParametersException{
+		// Authenticate manager
 		this.authenticateMngr(managerPwd);
+		//create a new competitor team
 		Competitor team= new Team(name);
 		return team;
 	}
@@ -343,6 +359,12 @@ public class BettingSoft implements Betting {
 			String managerPwd) throws AuthenticationException,
 			ExistingCompetitionException, CompetitionException,
 			ExistingCompetitorException{
+		// Authenticate manager
+		this.authenticateMngr(managerPwd);
+		Competition c = this.searchCompetitionByName(competition); 
+		if (c==null) throw new ExistingCompetitionException("La competition "+ competition+" n'existe pas");
+		if(c.isInThePast()) throw new CompetitionException( "La competition  "+ competition +"est dejà passée" );
+		c.removeCompetitor(competitor);
 		
 	}
 
@@ -368,9 +390,10 @@ public class BettingSoft implements Betting {
 	public void creditSubscriber(String username, long numberTokens, String managerPwd)
 			throws AuthenticationException, ExistingSubscriberException,
 			BadParametersException{
+		// Authenticate manager
 		this.authenticateMngr(managerPwd);
 		Subscriber subs= this.searchSubscriberByUsername(username);
-		subs.crediter(numberTokens);
+		subs.crediter(numberTokens); // credite le compte du joueur 
 	}
 
 	/**
@@ -396,9 +419,10 @@ public class BettingSoft implements Betting {
 	public void debitSubscriber(String username, long numberTokens, String managerPwd)
 			throws AuthenticationException, ExistingSubscriberException,
 			SubscriberException, BadParametersException{
+		// Authenticate manager
 			this.authenticateMngr(managerPwd);
 			Subscriber subs= this.searchSubscriberByUsername(username);
-			subs.debiter(numberTokens);
+			subs.debiter(numberTokens); // debite le compte du joueur 
 	}
 
 	/**
@@ -529,8 +553,12 @@ public class BettingSoft implements Betting {
 	 *             raised if subscriber has not enough tokens.
 	 * @throws BadParametersException
 	 *             raised if number of tokens less than 0.
+	 *             
+	 * @see fr.uv1.bettingServices.Competition#parierSurLeVainqueur(fr.uv1.bettingServices.PariWinner)
 	 * 
 	 */
+	
+	
 	@Override
 	public void betOnWinner(long numberTokens, String competition, Competitor winner,
 			String username, String pwdSubs) throws AuthenticationException,
@@ -586,6 +614,7 @@ public class BettingSoft implements Betting {
 	 *             raised if subscriber has not enough tokens.
 	 * @throws BadParametersException
 	 *             raised if number of tokens less than 0.
+	 *  @see fr.uv1.bettingServices.Competition#parierSurLePodium(fr.uv1.bettingServices.PariPodium)
 	 */
 	public void betOnPodium(long numberTokens, String competition, Competitor winner,
 			Competitor second, Competitor third, String username, String pwdSubs)
@@ -632,6 +661,9 @@ public class BettingSoft implements Betting {
 	 * 
 	 * @throws BadParametersException
 	 *             raised if the new password is invalid.
+	 *             
+	 *             
+	 * @see fr.uv1.bettingServices.Subscriber#changePassword(String, String)
 	 */
 	@Override
 	public void changeSubsPwd(String username, String newPwd, String currentPwd)
@@ -663,19 +695,23 @@ public class BettingSoft implements Betting {
 	 *         </ul>
 	 * <br>
 	 *         All the current bets of the subscriber.
+	 *         
+	 * @see fr.uv1.bettingServices.Subscriber#getParis()
+	 * @see fr.uv1.bettingServices.Subscriber#numberTokenBetted()
 	 */
 	@Override
 	public ArrayList<String> infosSubscriber(String username, String pwdSubs)
 			throws AuthenticationException{
 		ArrayList<String> subsData= new ArrayList<String>();
-		Subscriber s= this.searchSubscriberByUsername(username);
+		Subscriber s= this.searchSubscriberByUsername(username);// chercher le joueur 
+		s.authenticateSubscribe(pwdSubs); 						// authantifie le joueur 
 		subsData.add(s.getLastname());
 		subsData.add(s.getFirstname());
 		subsData.add(s.getBorndate());
 		subsData.add(s.getUsername());
 		subsData.add(""+s.getNumberToken());
 		subsData.add(""+s.numberTokenBetted());
-		subsData.add(s.getParis());
+		subsData.add(s.getParis());                         // ajoute la liste des paris d'un joueur 
 		return subsData; 
 		
 	}
@@ -698,6 +734,9 @@ public class BettingSoft implements Betting {
 	 *             raised if closed competition (closing date is in the past).
 	 * @throws ExistingCompetitionException
 	 *             raised if there is no competition a_competition.
+	 *             
+	 *             
+	 * @see fr.uv1.bettingServices.Competition#supprimerParisCompetition(Subscriber)
 	 */
 	@Override
 	public void deleteBetsCompetition(String competition, String username, 
@@ -710,7 +749,7 @@ public class BettingSoft implements Betting {
 		if (c==null)
 			throw new ExistingCompetitionException("La compétition "+competition+" n'existe pas");
 		
-		c.supprimerParisCompetition(s);
+		c.supprimerParisCompetition(s);  //supprimer les paris d'une competition 
 	}
 
 	/***********************************************************************
@@ -770,6 +809,7 @@ public class BettingSoft implements Betting {
 	 *             a_competition.
 	 * 
 	 * @return a list of String containing the bets for the competition.
+	 * @see fr.uv1.bettingServices.Competition#consulterParis()
 	 */
 	@Override
 	public ArrayList<String> consultBetsCompetition(String competition)
@@ -803,6 +843,7 @@ public class BettingSoft implements Betting {
 	 * @throws BadParametersException
 	 *             raised if the (firstname, lastname, borndate or name if team
 	 *             competitors) of the competitor is invalid.
+	 * @see fr.uv1.bettingServices.Competition#addCompetitor(Competitor)
 	 */
 	@Override
 	public void addCompetitor(String competition, Competitor competitor,
@@ -834,6 +875,7 @@ public class BettingSoft implements Betting {
 	 * @throws CompetitionException
 	 *             raised if the closing date is in the past (competition
 	 *             closed).
+	 * @see fr.uv1.bettingServices.Competition#removeCompetitor(Competitor)
 	 */
 	@Override
 	public void cancelCompetition(String competition, String managerPwd)
@@ -849,7 +891,7 @@ public class BettingSoft implements Betting {
 		for (Pari pari : c.getBetList()){
 			c.supprimerParisCompetition(pari.getSubscriber());
 		}
-		this.competitions.remove(competition);	
+		this.competitions.remove(competition);	 // supprime le competiteur  de la competition
 	}
 
 	

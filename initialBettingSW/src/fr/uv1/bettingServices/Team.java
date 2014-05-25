@@ -7,10 +7,8 @@ import java.util.HashSet;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.ExistingCompetitorException;
 
-/**
- * @author Mariam
- *
- */
+
+
 /**
  * @author Mariam
  *
@@ -38,7 +36,8 @@ public  class Team implements Competitor {
 
 	/**
 	 * Construit une equipe sans menbres 
-	 * @param teamName le 
+	 * @param teamName le nom de l'equip
+	 * 
 	 */
 	public Team(String teamName) throws BadParametersException{
 		setTeamName(teamName);
@@ -46,10 +45,11 @@ public  class Team implements Competitor {
 	}
 
 	/**
-	 * Constructeur  
-	 * @param teamName
-	 * @param menbers
+	 * Constructeur  <br>
+	 * @param teamName le nom de l'equipe 
+	 * @param menbers  la liste des membres de l'equipe
 	 * @throws BadParametersException 
+	 * 			est levee si le nom ou les membres de l'equipe ne sont pas correct
 	 */
 	public Team(String teamName, Collection<Competitor> menbers) throws BadParametersException {
 		setTeamName(teamName);
@@ -57,7 +57,7 @@ public  class Team implements Competitor {
 	}
 
 	/**
-	 * tells if the name of the competitor is a valid one.
+	 * Dis si le nom d'equipe a un nom valide .<br>
 	 * 
 	 * @return true if the competitor has a valid name.
 	 */
@@ -67,7 +67,7 @@ public  class Team implements Competitor {
 	
 	
 	/**
-	 * Renvoie si la competiteur est un menbre de l'equipe
+	 * Renvoie si l'equipe possede comme menbre le competitor<br>
 	 * 			@param c le competiteur a testé
 	 * 			@return true si et seulement si  c est un menbre de l'equie 
 	 * @throws BadParametersException
@@ -86,12 +86,12 @@ public  class Team implements Competitor {
 		return false;
 	}
 	/**
-	 * add a member to a team competitor.
+	 * ajoute un member a  l'equipe .<br>
 	 * 
 	 * @throws ExistingCompetitorException
-	 *             raised if the member is already registered for the team.
+	 *             est levée si  le membre a  dejà été enregistré comme membre de l'équipe.
 	 * @throws BadParametersException
-	 *             raised if the member is not instantiated.
+	 *             est levée si le membre  n'est pas instancié.
 	 */
 	public void addMember(Competitor member) throws ExistingCompetitorException,
 			BadParametersException{
@@ -108,13 +108,12 @@ public  class Team implements Competitor {
 	}
 
 	/**
-	 * delete a member from a team competitor.
+	 * supprime  un membre  de l'equipe .<br>
 	 * 
-	 * @return true if the competitor has been deleted from the team.
 	 * @throws BadParametersException
-	 *             raised if the member is not instantiated.
+	 *               est levée si le membre  n'est pas instancié.
 	 * @throws ExistingCompetitorException
-	 *             raised if the member is not registered for the team.
+	 *             est levée si  le membre n'est un membre de l'équipe.
 	 */
 	public void deleteMember(Competitor member) throws BadParametersException,
 			ExistingCompetitorException{
@@ -125,6 +124,13 @@ public  class Team implements Competitor {
 			throw new ExistingCompetitorException(member +"ne peut pas être supprimer car elle n'existe pas"); 
 		}
 	}
+	
+	
+	/**
+	 * Verifie si le nom de l'equipe verifie les contraintes<br>
+	 * 		@param nomTeam le nom de l'equipe a verifier 
+	 * 		@throws BadParametersException
+	 */
 	private static void checkStringNomTeam(String nomTeam)
 			throws BadParametersException {
 		if (nomTeam == null)
@@ -140,36 +146,38 @@ public  class Team implements Competitor {
 	}
 
 	/**
-	 * @return the id_team
+	 * @return le  id_team
 	 */
 	public long getId_team() {
 		return id_team;
 	}
 
 	/**
-	 * @param id_team the id_team to set
+	 * @param id_team le nouveau identifiant de l'equipe 
 	 */
 	public void setId_team(long id_team) {
 		this.id_team = id_team;
 	}
 
 	/**
-	 * @return the teamName
+	 * @return teamName le nom de l'equipe
 	 */
 	public String getTeamName() {
 		return teamName;
 	}
 
 	/**
-	 * @return the members
+	 * @return members la liste des membres de l'equipe
 	 */
 	public Collection<Competitor> getMembers() {
 		return members;
 	}
 
 	/**
-	 * @param teamName the teamName to set
-	 * @throws BadParametersException 
+	 * Met à jour le nom de l'equipe <br>
+	 * @param teamName le nouveau nom de l'equipe 
+	 * @throws BadParametersException
+	 *         est levée si cet nom n'est pas correct.
 	 */
 	public void setTeamName(String teamName) throws BadParametersException {
 		checkStringNomTeam(teamName);
@@ -177,7 +185,9 @@ public  class Team implements Competitor {
 	}
 
 	/**
-	 * @param members the members to set
+	 * @param members la nouvelle liste des membres de l'equipe 
+	 * 	@throws BadParametersException
+	 * 			est levée si la liste est non instancié 
 	 */
 	public void setMembers(Collection<Competitor> members)throws BadParametersException {
 		if(members==null) throw new BadParametersException();
@@ -185,7 +195,7 @@ public  class Team implements Competitor {
 	}	
 	
 	/**
-	 *  return true si le 2 equipes on le même nom 
+	 * @return true si le 2 equipes on le même nom 
 	 */
 
 	public boolean equals(Object obj){

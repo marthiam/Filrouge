@@ -31,6 +31,14 @@ import fr.uv1.utils.*;
  *         </ul>
  * 
  */
+/**
+ * @author Mariam
+ *
+ */
+/**
+ * @author Mariam
+ *
+ */
 public class Subscriber extends Person implements Serializable {
 	private static final long serialVersionUID = 6050931528781005411L;
 	/*
@@ -63,10 +71,12 @@ public class Subscriber extends Person implements Serializable {
 	 * the subscriber's compte
 	 */
 	private Compte compte;
+	
+	
 	/**
 	 * the subscriber's bets
 	 */
-	private Collection<PariWinner> paris; 
+	private Collection<Pari> paris; 
 
 	/*
 	 *
@@ -190,6 +200,7 @@ public class Subscriber extends Person implements Serializable {
 	/*
 	 * Two subscribers are equal if they have the same username
 	 */
+	
 	@Override
 	public boolean equals(Object an_object) {
 		if (!(an_object instanceof Subscriber))
@@ -203,24 +214,33 @@ public class Subscriber extends Person implements Serializable {
 		return this.username.hashCode();
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.uv1.bettingServices.Person#toString()
+	 */
 	@Override
 	public String toString() {
 		return super.toString();
 	}
 	
 	/**
-	 * @return la lste des paris du joueur 
+	 * @return the string of the subscriber bets.
 	 */
 	public String getParis() {
 		String result ="";
-		for(PariWinner p : paris){
+		for(Pari p : paris){
 			result+= p +" ";
 		}
 		return  result;
 	}
+	
+	
+	
+	/**
+	 * @return the number of token betted.
+	 */
 	public long numberTokenBetted(){
 		long result =0;
-		for(PariWinner p : paris){
+		for(Pari p : paris){
 			result+= p.getMise();
 		}
 		return  result;

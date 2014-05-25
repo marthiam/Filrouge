@@ -3,7 +3,6 @@ package fr.uv1.bettingServices;
 
 import java.util.Calendar;
 
-
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.utils.MyCalendar;
 
@@ -39,6 +38,9 @@ public class Person {
 		return borndate;
 	}
 
+	/**
+	 * @return
+	 */
 	public String getBorndateDate() {
 		String [] s = this.borndate.split("-");
 		String annee = s[2];
@@ -132,6 +134,12 @@ public class Person {
 	
 	
 	
+	/**
+	 * @param y
+	 * @param m
+	 * @param d
+	 * @return
+	 */
 	public static int getYears(int y,int m,int d)
 	{
 	  MyCalendar curr =  MyCalendar.getDate();
@@ -189,7 +197,9 @@ public class Person {
 	}
 	
 
-	public boolean equals(Person p){
+	public boolean equals(Object p){
+		
+		if (p instanceof Person){ return false;}
 		return this.toString().equals(p.toString());
 	}
 	

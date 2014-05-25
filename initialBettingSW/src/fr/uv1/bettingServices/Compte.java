@@ -4,8 +4,11 @@ import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.SubscriberException;
 
 /**
+ * La classe represente le compte d'un  joueur <br>
+ * 
+ * 
  * @author Mariam
- *		La classe represente le compte d'un  joueur 
+ *		
  */
 public class Compte {
 	
