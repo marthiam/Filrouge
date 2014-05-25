@@ -13,15 +13,23 @@ public class Pari {
 	
 	/** Le joueur qui fait ce pari */
 	private Subscriber subscriber;
+	
+	/** La  competition du  pari */
+	private Competition competition;
+	
+
+
 
 	/** L'identifiant de la compétition sur laquelle est fait le pari */
 	private int competition_id;
 	
 	
 	/**
-	 * Constructeur 
+	 * Constructeur  
 	 * @param mise
 	 * 			le montant a misé 
+	 *  @param subscriber 
+	 *  		le joueur qui pari 
 	 * @throws BadParametersException 
 	 * 			est levée la mise est <=0 ou si le subscriber est null 
 	 *
@@ -37,7 +45,8 @@ public class Pari {
 	
 	
 	/**
-	 * @return l'identifiant du pari
+	 * Renvoie l'identifiant du pari
+	 *		 @return l'identifiant du pari
 	 */
 	public int getPari_id() {
 		return this.pari_id;
@@ -47,37 +56,37 @@ public class Pari {
 
 
 	/**
-	 * @param pari_id le nouvel identifiant du pari
+	 * Met à jour l'identifiant du pari 
+	 * 		@param pari_id le nouvel identifiant du pari
 	 */
 	public void setPari_id(int pari_id) {
 		this.pari_id = pari_id;
 	}
 
 
-	
+	/**
+	 * Renvoie la competition du pari
+	 *		 @return la competition du pari 
+	 */
+	public Competition getCompetition() {
+		return competition;
+	}
+
 
 	/**
-	 * @return l'identifiant de la compétition sur laquelle est fait le pari 
+	 * La competition du pari 
+	 * 			@param competition la nouvelle competition 
 	 */
-	public int getCompetition_id() {
-		return competition_id;
+	public void setCompetition(Competition competition) {
+		this.competition = competition;
 	}
 
 
 
 
 	/**
-	 * @param competition_id l'identifiant de la nouvelle compétition 
-	 */
-	public void setCompetition_id(int competition_id) {
-		this.competition_id = competition_id;
-	}
-
-
-
-
-	/**
-	 * @return Le nombre de jetons misé par le joueur
+	 * Renvoie la mise du pari 
+	 * 			@return Le nombre de jetons misé par le joueur
 	 */
 	public long getMise() {
 		return mise;
@@ -95,16 +104,18 @@ public class Pari {
 	}
 
 	/**
-	 * 
-	 * @return Le joueur
+	 * Renvoie le parieur 
+	 * 			@return Le joueur
 	 */
 	public Subscriber getSubscriber() {
 		return subscriber;
 	}
 
 	/**
-	 * @param subscriber Le nouveau joueur
-	 * @throws BadParametersException 
+	 * Met à jour le joueur ayant parié 
+	 * 			@param subscriber Le nouveau joueur
+	 * 			@throws BadParametersException 
+	 * 			est levée si le joueur est non instancié .
 	 */
 	public void setSubscriber(Subscriber subscriber) throws BadParametersException {
 		if (subscriber==null)
