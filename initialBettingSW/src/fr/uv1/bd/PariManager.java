@@ -3,8 +3,14 @@ package fr.uv1.bd;
 import java.sql.*;
 import java.util.*;
 
+import fr.uv1.bettingServices.Competitor;
+import fr.uv1.bettingServices.Individual;
 import fr.uv1.bettingServices.Pari;
 import fr.uv1.bettingServices.PariWinner;
+import fr.uv1.bettingServices.PariPodium;
+import fr.uv1.bettingServices.Subscriber;
+import fr.uv1.bettingServices.Team;
+import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.utils.DataBaseConnection;
 
 /**
@@ -44,20 +50,21 @@ public class PariManager {
 		try {
 			c.setAutoCommit(false);
 			if (pari instanceof PariWinner){
-				
-			
-			PreparedStatement psPersist = c
+				PreparedStatement psPersist = c
 					.prepareStatement("insert into pari(id_pari, id_joueur, mise, " +
-							"competiteurPremiereID, type, id_competition) " +
+							"competiteurpremiereID, type, id_competition) " +
 							"values (?, ?, ?, ?, ?, ?)");
 			
 			
 			psPersist.setInt(1, pari.getPari_id());
-			psPersist.setInt(2, (int) pari.getSubscriber().getId_subscribe());
-			psPersist.setInt(3, (int) pari.getMise());
-			psPersist.setInt(4, ((PariWinner) pari).getWinner().);
+			psPersist.setLong(2, pari.getSubscriber().getId_subscribe());
+			psPersist.setLong(3, pari.getMise());
+			if (((PariWinner) pari).getWinner() instanceof Individual)
+				psPersist.setLong(4, ((Individual) ((PariWinner) pari).getWinner()).getId_individual());
+			else
+				psPersist.setLong(4, ((Team) ((PariWinner) pari).getWinner()).getId_team());
 			psPersist.setString(5, "pariWinner");
-
+			psPersist.setInt(6, pari.getCompetition_id());
 			psPersist.executeUpdate();
 
 			psPersist.close();
@@ -75,6 +82,54 @@ public class PariManager {
 			psIdValue.close();
 			c.commit();
 			pari.setPari_id(id);
+			c.setAutoCommit(true);
+			c.close();
+			}
+			
+			
+			else{
+				PreparedStatement psPersist = c
+						.prepareStatement("insert into pari(id_pari, id_joueur, mise, " +
+								"competiteurpremiereID, competiteurdeuxiemeID, " +
+								"competiteurtroisiemeID, type, id_competition) " +
+								"values (?, ?, ?, ?, ?, ?)");
+				
+				
+				psPersist.setInt(1, pari.getPari_id());
+				psPersist.setLong(2, pari.getSubscriber().getId_subscribe());
+				psPersist.setLong(3, pari.getMise());
+				if (((PariPodium) pari).getWinner() instanceof Individual){
+					psPersist.setLong(4, ((Individual) ((PariPodium) pari).getWinner()).getId_individual());
+					psPersist.setLong(4, ((Individual) ((PariPodium) pari).getSecond()).getId_individual());
+					psPersist.setLong(4, ((Individual) ((PariPodium) pari).getThird()).getId_individual());
+				}
+				else{
+					psPersist.setLong(4, ((Team) ((PariPodium) pari).getWinner()).getId_team());
+					psPersist.setLong(4, ((Team) ((PariPodium) pari).getSecond()).getId_team());
+					psPersist.setLong(4, ((Team) ((PariPodium) pari).getThird()).getId_team());
+				}
+				psPersist.setString(5, "pariPodium");
+
+				psPersist.executeUpdate();
+
+				psPersist.close();
+
+				// Retrieving the value of the id with a request on the
+				// sequence (subscribers_id_seq).
+				PreparedStatement psIdValue = c
+						.prepareStatement("select currval('pari_id_seq') as value_id");
+				ResultSet resultSet = psIdValue.executeQuery();
+				Integer id = null;
+				while (resultSet.next()) {
+					id = resultSet.getInt("value_id");
+				}
+				resultSet.close();
+				psIdValue.close();
+				c.commit();
+				pari.setPari_id(id);
+				c.setAutoCommit(true);
+				c.close();
+			}
 		} catch (SQLException e) {
 			try {
 				c.rollback();
@@ -84,11 +139,9 @@ public class PariManager {
 			c.setAutoCommit(true);
 			throw e;
 		}
-
-		c.setAutoCommit(true);
-		c.close();
-
 		return pari;
+
+
 	}
 
 	// -----------------------------------------------------------------------------
@@ -103,19 +156,51 @@ public class PariManager {
 	public static Pari findById(Integer id) throws SQLException {
 		Connection c = DataBaseConnection.getConnection();
 		PreparedStatement psSelect = c
-				.prepareStatement("select * from bets where id=?");
+				.prepareStatement("select * from pari where id_pari=?");
 		ResultSet resultSet = psSelect.executeQuery();
 		Pari pari = null;
 		while (resultSet.next()) {
-			bet = new Bet(resultSet.getInt("id"),
-					resultSet.getInt("number_of_tokens"),
-					resultSet.getInt("id_subscriber"));
+			Subscriber subscriber;
+			
+			try {
+				subscriber = SubscribersManager.findById(resultSet.getInt("id_joueur"));
+				Long mise = resultSet.getLong("mise");
+				if (resultSet.getString("type").equals("pariWinner")){
+					Competitor winner;
+					winner = CompetitorsManager.findById(resultSet.getInt("competiteurpremiereID"));
+					
+					int competition_id = resultSet.getInt("id_competition");
+					pari = new PariWinner(mise, subscriber, winner);
+					pari.setCompetition_id(competition_id);
+	
+				}
+	
+				
+				else{
+					Competitor winner;
+					winner = CompetitorsManager.findById(resultSet.getInt("competiteurpremiereID"));
+	
+					Competitor second;
+					second = CompetitorsManager.findById(resultSet.getInt("competiteurdeuxiemeID"));
+	
+					Competitor third;
+					third = CompetitorsManager.findById(resultSet.getInt("competiteurtroisiemeID"));
+	
+					int competition_id = resultSet.getInt("id_competition");
+					pari = new PariPodium(mise, subscriber, winner, second, third);
+					pari.setCompetition_id(competition_id);
+				}
+			
+			} catch (BadParametersException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		resultSet.close();
 		psSelect.close();
 		c.close();
 
-		return bet;
+		return pari;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -129,20 +214,20 @@ public class PariManager {
 			throws SQLException {
 		Connection c = DataBaseConnection.getConnection();
 		PreparedStatement psSelect = c
-				.prepareStatement("select * from bets where id_subscriber=? order by id");
-		psSelect.setInt(1, subscriber.getId());
+				.prepareStatement("select * from Pari where id_joueur=? order by id_pari");
+		psSelect.setLong(1, subscriber.getId_subscribe());
 		ResultSet resultSet = psSelect.executeQuery();
-		List<Bet> bets = new ArrayList<Bet>();
+		List<Pari> betList = new ArrayList<Pari>();
+		Pari pari;
 		while (resultSet.next()) {
-			bets.add(new Bet(resultSet.getInt("id"), resultSet
-					.getInt("number_of_tokens"), resultSet
-					.getInt("id_subscriber")));
+			pari = PariManager.findById(resultSet.getInt("id_pari"));
+			betList.add(pari);
 		}
 		resultSet.close();
 		psSelect.close();
 		c.close();
 
-		return bets;
+		return betList;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -155,19 +240,19 @@ public class PariManager {
 	public static List<Pari> findAll() throws SQLException {
 		Connection c = DataBaseConnection.getConnection();
 		PreparedStatement psSelect = c
-				.prepareStatement("select * from bets order by id_subscriber,id");
+				.prepareStatement("select * from pari order by id_joueur,id_pari");
 		ResultSet resultSet = psSelect.executeQuery();
-		List<Bet> bets = new ArrayList<Bet>();
+		List<Pari> betList = new ArrayList<Pari>();
+		Pari pari;
 		while (resultSet.next()) {
-			bets.add(new Bet(resultSet.getInt("id"), resultSet
-					.getInt("number_of_tokens"), resultSet
-					.getInt("id_subscriber")));
+			pari = PariManager.findById(resultSet.getInt("id_pari"));
+			betList.add(pari);
 		}
 		resultSet.close();
 		psSelect.close();
 		c.close();
 
-		return bets;
+		return betList;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -180,14 +265,47 @@ public class PariManager {
 	 */
 	public static void update(Pari pari) throws SQLException {
 		Connection c = DataBaseConnection.getConnection();
-		PreparedStatement psUpdate = c
-				.prepareStatement("update bets set number_of_tokens=?, id_subscriber=? where id=?");
-		psUpdate.setInt(1, bet.getNumberOfTokens());
-		psUpdate.setInt(2, bet.getIdSubscriber());
-		psUpdate.setInt(3, bet.getId());
-		psUpdate.executeUpdate();
-		psUpdate.close();
-		c.close();
+		
+		if (pari instanceof PariWinner){
+			PreparedStatement psUpdate = c
+					.prepareStatement("update pari set id_joueur=?, mise=?, competiteurpremiereID=?, type=?, id_competition=? where id_pari=?");
+			psUpdate.setLong(1, pari.getSubscriber().getId_subscribe());
+			psUpdate.setLong(2, pari.getMise());
+			if (((PariWinner) pari).getWinner() instanceof Individual){
+				psUpdate.setLong(3, ((Individual) ((PariWinner) pari).getWinner()).getId_individual());
+			}
+			else{
+				psUpdate.setLong(3, ((Team) ((PariWinner) pari).getWinner()).getId_team());
+			}
+			psUpdate.setString(4, "pariWinner");
+			psUpdate.setInt(5, pari.getCompetition_id());
+			psUpdate.executeUpdate();
+			psUpdate.close();
+			c.close();
+		}
+		
+		else{
+			PreparedStatement psUpdate = c
+					.prepareStatement("update pari set id_joueur=?, mise=?, competiteurpremiereID=?, competiteurdeuxiemeID=?, competiteurtroisiemeID=?, type=?, id_competition=? where id_pari=?");
+			psUpdate.setLong(1, pari.getSubscriber().getId_subscribe());
+			psUpdate.setLong(2, pari.getMise());
+			if (((PariPodium) pari).getWinner() instanceof Individual){
+				psUpdate.setLong(3, ((Individual) ((PariPodium) pari).getWinner()).getId_individual());
+				psUpdate.setLong(3, ((Individual) ((PariPodium) pari).getSecond()).getId_individual());
+				psUpdate.setLong(3, ((Individual) ((PariPodium) pari).getThird()).getId_individual());
+			}
+			else{
+				psUpdate.setLong(3, ((Team) ((PariPodium) pari).getWinner()).getId_team());
+				psUpdate.setLong(3, ((Team) ((PariPodium) pari).getSecond()).getId_team());
+				psUpdate.setLong(3, ((Team) ((PariPodium) pari).getThird()).getId_team());
+			}
+			psUpdate.setString(4, "pariPodium");
+			psUpdate.setInt(5, pari.getCompetition_id());
+			psUpdate.executeUpdate();
+			psUpdate.close();
+			c.close();
+			
+		}
 	}
 
 	// -----------------------------------------------------------------------------
@@ -198,11 +316,11 @@ public class PariManager {
 	 *            the bet to be deleted.
 	 * @throws SQLException
 	 */
-	public static void delete(Pari bet) throws SQLException {
+	public static void delete(Pari pari) throws SQLException {
 		Connection c = DataBaseConnection.getConnection();
 		PreparedStatement psUpdate = c
-				.prepareStatement("delete from bets where id=?");
-		psUpdate.setInt(1, bet.getId());
+				.prepareStatement("delete from pari where id_pari=?");
+		psUpdate.setInt(1, pari.getPari_id());
 		psUpdate.executeUpdate();
 		psUpdate.close();
 		c.close();
