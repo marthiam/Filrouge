@@ -32,6 +32,7 @@ public class RandPass {
 
 	/**
 	 * Fill the given buffer with random characters.
+	 * 
 	 * @param pass
 	 *            buffer that will hold the password.
 	 * @return the buffer, filled with random characters.

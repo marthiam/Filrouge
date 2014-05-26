@@ -1,10 +1,11 @@
 package fr.uv1.bettingServices.exceptions;
 
 public class ExistingCompetitorException extends Exception {
-	public ExistingCompetitorException(){
+	public ExistingCompetitorException() {
 		super();
 	}
-	public ExistingCompetitorException(String reason){
+
+	public ExistingCompetitorException(String reason) {
 		super(reason);
 	}
 }

@@ -31,118 +31,170 @@ import fr.uv1.utils.*;
  *         </ul>
  * 
  */
+
 /**
  * @author Mariam
- *
- */
-/**
- * @author Mariam
- *
+ * 
  */
 public class Subscriber extends Person implements Serializable {
 	private static final long serialVersionUID = 6050931528781005411L;
-	/*
-	 * Minimal size for a subscriber's username
+	
+	
+	/**
+	 * La taille minimale pour le pseudo du joueur 
 	 */
 	private static final int LONG_USERNAME = 4;
-	/*
-	 * Constraints for a username
+	
+	/**
+	 * Contrainte  pour le pseudo du joueur 
 	 */
 	private static final String REGEX_USERNAME = new String("[a-zA-Z0-9]*");
 
-
 	
-
-	/** 
-	 *  identifiant du subscriber
+	/**
+	 * identifiant du subscriber
 	 */
 	private long id_subscribe;
-	
-	/** 
+
+	/**
+	 * le pseudo du joueur 
 	 * @uml.property name="username"
 	 */
 	private String username;
 	
+	
+
 	/**
-	 * the subscriber's password
+	 * le mot de passe du joueur 
 	 */
 	private String password;
+	
+	
+	
 	/**
-	 * the subscriber's compte
+	 * le compte du joueur 
 	 */
 	private Compte compte;
 	
 	
-	/**
-	 * the subscriber's bets
-	 */
-	private Collection<Pari> paris; 
 
-	/*
-	 *
-	 * @return the compte 
+	/**
+	 * la liste des paris du joueur 
+	 */
+	private Collection<Pari> paris;
+	
+	
+	
+
+	/**
+	 * Renvoie le compte du joueur 
+	 * @return compte
+	 * 				le compte du joueur 
 	 */
 	public Compte getCompte() {
 		return compte;
 	}
 
-	/*
-	 * @param compte the compte to set
+	/**
+	 * Met à jour le compte du joueur 
+	 * 		@param compte 
+	 * 				le nouveau compte du joueur 
 	 */
 	public void setCompte(Compte compte) {
 		this.compte = compte;
 	}
-	/*
-	 *
-	 * @return the number of token 
+
+	/**
+	 * Renvoie le nombre de jetons du joueur 
+	 * 		@return 
+	 * 				le nombre de jetons du joueur 
 	 */
 	public long getNumberToken() {
 		return compte.getSolde();
 	}
+
 	/**
-	 * @return the id_subscribe
+	 * Renvoie l'identifiant du joueur 
+	 * 		@return id_subscribe
+	 * 				l'indentifiant du joueur 
 	 */
 	public long getId_subscribe() {
 		return id_subscribe;
 	}
 
 	/**
-	 * @param id_subscribe the id_subscribe to set
+	 * Met à jour le  identifiant du joueur 
+	 * @param id_subscribe
+	 *            le nouveau identifiant du joueur
 	 */
 	public void setId_subscribe(long id_subscribe) {
 		this.id_subscribe = id_subscribe;
 	}
 
-	/*
-	 * the constructor calculates a password for the subscriber. No test on the
-	 * validity of names
+	
+	/**
+	 * Constructeur 
+	 *		 @param a_name
+	 *					le nom du joueur 
+	 * 		 @param a_firstName
+	 * 					le prenom du joueur 
+	 *  	 @param borndate
+	 *  				la date de naissance du joueur 
+	 *		 @param a_username
+	 *					le pseudo du joueur 
+	 * 		 @throws BadParametersException
+	 * 				est levée si  l'un des parametres est non instancié ou pas valid 
 	 */
-	public Subscriber(String a_name, String a_firstName, String borndate, String a_username) throws BadParametersException {
-		super(a_name ,a_firstName,borndate);
+	public Subscriber(String a_name, String a_firstName, String borndate,
+			String a_username) throws BadParametersException {
+		super(a_name, a_firstName, borndate);
 		this.setUsername(a_username);
 		// Generate password
-		password = RandPass.getPass(Constraints.LONG_PWD);
+		password = RandPass.getPass(Constraints.LONG_PWD); // calcule du mot de passe du joueur 
 		this.setPassword(password);
-		this.compte=new Compte();
+		this.compte = new Compte();
 	}
 
-	
-
+	/**
+	 * Renvoie le pseusdo du joueur 
+	 * @return 
+	 * 		le pseudo du joueur 
+	 */
 	public String getUsername() {
 		return username;
 	}
-	
+
+	/**
+	 * Renvoie le mot de passe du joueur 
+	 * @return
+	 * 		le mot de passe du joueur 
+	 */
 	public String getPassword() {
 		return password;
 	}
 
-
+	/**
+	 * Met à jour le pseudo du joueur 
+	 * 		@param username
+	 * 			le nouveau pseudo du joueur 
+	 * @throws BadParametersException
+	 * 		   est levée si nouveau pseudo est invalide ou non instancié 
+	 */
 	public void setUsername(String username) throws BadParametersException {
 		if (username == null)
 			throw new BadParametersException("username is not valid");
 		checkStringUsername(username);
 		this.username = username;
 	}
+
+	
+	/**
+	 * Met à jour le mot de passe  du joueur 
+	 * 		@param password
+	 * 			le nouveau mot de passe du joueur 
+	 * @throws BadParametersException
+	 * 		   est levée si nouveau mot de passe est invalide ou non instancié 
+	 */
 	
 	private void setPassword(String password) throws BadParametersException {
 		if (password == null)
@@ -151,56 +203,99 @@ public class Subscriber extends Person implements Serializable {
 			throw new BadParametersException("password is not valid");
 		this.password = password;
 	}
-	
+
+	/**
+	 * Authentifie le joueur avec son mot de passe 
+	 * @param a_subscribersPwd
+	 * 				le mot de passe du joueur 
+	 * @throws AuthenticationException
+	 * 				est  mot de passe est  non instancié ou pas correct
+	 */
 	public void authenticateSubscribe(String a_subscribersPwd)
 			throws AuthenticationException {
 		if (a_subscribersPwd == null)
-			throw new AuthenticationException("invalid manager's password");
+			throw new AuthenticationException("invalid subscriber's password");
 
 		if (!this.password.equals(a_subscribersPwd))
-			throw new AuthenticationException("incorrect manager's password");
-	}
-	/**
-	 * Change the subscriber's password
-	 * @param password
-	 * @throws BadParametersException
-	 */
-	public void changePassword(String newPwd, String currentPwd) throws BadParametersException , AuthenticationException{
-			// Authenticate manager
-			authenticateSubscribe(currentPwd);
-			// Change password if valid
-			setPassword(newPwd);
+			throw new AuthenticationException("incorrect subscriber's password");
 	}
 
-	/*
-	 * check if this subscriber has the username of the parameter
+	/**
+	 * Change le mot de passe du joueur 
 	 * 
-	 * @param username the username to check
+	 * @param password
+	 * 			le nouveau mot de passe 
+	 * @throws BadParametersException
+	 * 			est levée si le mot de passe est invalide 
+	 *  @throws AuthenticationException
+	 *  		est levée si le mot de passe est incorret 
+	 */
+	public void changePassword(String newPwd, String currentPwd)
+			throws BadParametersException, AuthenticationException {
+		// Authenticate manager
+		authenticateSubscribe(currentPwd);
+		// Change password if valid
+		setPassword(newPwd);
+	}
+
+	/**
+	 * Verifie si le joueur possède le pseudo passé en parametre comme pseudo 
 	 * 
-	 * @return true if this username is the same as the parameter false
-	 * otherwise
+	 * @param username 
+	 * 			le pseudo a verifié 
+	 * 
+	 * @return 
+	 * 			Vraie si le pseudo passé en paramètre est le même que celui du joueur 
 	 */
 	public boolean hasUsername(String username) {
 		if (username == null)
 			return false;
 		return this.username.equals(username);
 	}
-	public void crediter(long argent) throws BadParametersException{
+	
+	
+	/**
+	 * Ajoute au compte du joueur le nombre de jetons passés en paramètre.
+	 * @param argent
+	 * 			le nombre de jetons a ajouté .
+	 * @throws BadParametersException
+	 * 			est levée si le nombre demandé est <0 
+	 * @see fr.uv1.bettingServices.Compte#crediterCompte(long)
+	 */
+	public void crediter(long argent) throws BadParametersException {
 		this.compte.crediterCompte(argent);
 	}
-	
-	public void debiter(long argent) throws BadParametersException, SubscriberException{
+
+	/**
+	 * Envele du compte du joueur le nombre de jetons passés en paramètre.
+	 * @param argent
+	 * 			le nombre de jetons a enlevé .
+	 * @throws BadParametersException
+	 * 			est levée si le nombre demandé est <0 
+	 * @throws SubscriberException
+	 * 			est levée si le joueur n'a pas assez de jetons pour effectuer cette operation
+	 * @see fr.uv1.bettingServices.Compte#debiterCompte(long)
+	 */
+	public void debiter(long argent) throws BadParametersException,
+			SubscriberException {
 		this.compte.debiterCompte(argent);
 	}
-	
-	public long solde(){
+
+	/**
+	 * Renvoie le solde du compte du joueur.
+	 * @return
+	 * 		le nombre de jetons que possède le joueur.
+	 */
+	public long solde() {
 		return this.compte.getSolde();
 	}
 
-	/*
-	 * Two subscribers are equal if they have the same username
+	/**
+	 * Renvoie si deux joueur sont égaux.
+	 * @return 
+	 * 		si deux joueurs ont le même psudo.
 	 */
-	
+
 	@Override
 	public boolean equals(Object an_object) {
 		if (!(an_object instanceof Subscriber))
@@ -209,12 +304,18 @@ public class Subscriber extends Person implements Serializable {
 		return this.username.equals(s.getUsername());
 	}
 
+	/* 
+	 * (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		return this.username.hashCode();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see fr.uv1.bettingServices.Person#toString()
 	 */
 	@Override
@@ -222,39 +323,41 @@ public class Subscriber extends Person implements Serializable {
 		return super.toString();
 	}
 	
+
 	/**
-	 * @return the string of the subscriber bets.
+	 * Renvoie la chaîne de caratères representant les paris en cours du joueurs.
+	 * @return 
+	 * 			les paris du joueur sous forme de chaône de caractères.
 	 */
 	public String getParis() {
-		String result ="";
-		for(Pari p : paris){
-			result+= p +" ";
+		String result = "";
+		for (Pari p : paris) {
+			result += p + " ";
 		}
-		return  result;
+		return result;
 	}
-	
-	
-	
+
 	/**
-	 * @return the number of token betted.
+	 * Renvoie le nombre de jetions  pariés  par le joueur.
+	 * 		@return 
+	 * 				le nombre de jetons pariés par le joueur.
 	 */
-	public long numberTokenBetted(){
-		long result =0;
-		for(Pari p : paris){
-			result+= p.getMise();
+	public long numberTokenBetted() {
+		long result = 0;
+		for (Pari p : paris) {
+			result += p.getMise();
 		}
-		return  result;
+		return result;
 	}
-	/**
-	 * check the validity of a string for a subscriber username, letters and
-	 * digits are allowed. username length should at least be LONG_USERNAME
-	 * charactersserialVersionUID
+
+	/*
+	 * Verifie la validité de la cha^ne de caractère du pseudo du joueur 
 	 * 
 	 * @param a_username
-	 *            string to check.
+	 *            la chaîne de caractère a verifié.
 	 * 
 	 * @throws BadParametersException
-	 *             raised if invalid.
+	 *             est levée si elle est invalide.
 	 */
 	private static void checkStringUsername(String a_username)
 			throws BadParametersException {
@@ -269,6 +372,5 @@ public class Subscriber extends Person implements Serializable {
 			throw new BadParametersException("the username " + a_username
 					+ " does not verify constraints ");
 	}
-	
-	
+
 }

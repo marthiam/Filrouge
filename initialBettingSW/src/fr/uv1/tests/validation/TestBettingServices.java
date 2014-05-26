@@ -81,8 +81,8 @@ public abstract class TestBettingServices extends ValidationTest {
 			}
 
 			this.getBetting().subscribe(new String("Prou"),
-					new String("Bernard"),new String("02/11/1992"), new String("nanard"),
-					this.getManagerPassword());
+					new String("Bernard"), new String("02/11/1992"),
+					new String("nanard"), this.getManagerPassword());
 			if (this.getBetting().listSubscribers(this.getManagerPassword())
 					.size() != 7) {
 				System.out.println("le nombre de joueurs est incorrect ");
@@ -125,7 +125,8 @@ public abstract class TestBettingServices extends ValidationTest {
 		} catch (AuthenticationException e) {
 		}
 		try {
-			this.getBetting().changeMngrPwd(new String("sdhjuikl$*"), new String("qsd"));
+			this.getBetting().changeMngrPwd(new String("sdhjuikl$*"),
+					new String("qsd"));
 			System.out
 					.println("l'utilisation d'un password gestionnaire incorrect n'a pas levé d'exception");
 		} catch (AuthenticationException e) {
@@ -182,33 +183,38 @@ public abstract class TestBettingServices extends ValidationTest {
 	}
 
 	private void testSubscribe() throws AuthenticationException,
-			ExistingSubscriberException, BadParametersException, SubscriberException {
+			ExistingSubscriberException, BadParametersException,
+			SubscriberException {
 
 		// Tests entries : null
 		try {
-			this.getBetting().subscribe(null, new String("Albert"),new String("02/11/1992"),
-					new String("worldChamp"), this.getManagerPassword());
+			this.getBetting().subscribe(null, new String("Albert"),
+					new String("02/11/1992"), new String("worldChamp"),
+					this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un nom non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 		try {
-			this.getBetting().subscribe(new String("Duran"), null,new String("02/11/1992"),
-					new String("worldChamp"), this.getManagerPassword());
+			this.getBetting().subscribe(new String("Duran"), null,
+					new String("02/11/1992"), new String("worldChamp"),
+					this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un prénom non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 		try {
 			this.getBetting().subscribe(new String("Duran"),
-					new String("Albert"),new String("02/11/1992"), null, this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"), null,
+					this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un pseudo non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 		try {
 			this.getBetting().subscribe(new String("Duran"),
-					new String("Albert"),new String("02/11/1992"), new String("worldChamp"), null);
+					new String("Albert"), new String("02/11/1992"),
+					new String("worldChamp"), null);
 			System.out
 					.println("l'ajout d'un joueur avec un mdp gestionnaire non instancié n'a pas levé d'exception");
 		} catch (AuthenticationException e) {
@@ -216,31 +222,33 @@ public abstract class TestBettingServices extends ValidationTest {
 
 		// Tests entries : invalid format
 		try {
-			this.getBetting().subscribe(new String(" "), new String("Albert"),new String("02/11/1992"),
-					new String("worldChamp"), this.getManagerPassword());
+			this.getBetting().subscribe(new String(" "), new String("Albert"),
+					new String("02/11/1992"), new String("worldChamp"),
+					this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un nom invalide ( ) n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 		try {
-			this.getBetting().subscribe(new String("Duran"), new String(" "),new String("02/11/1992"),
-					new String("worldChamp"), this.getManagerPassword());
+			this.getBetting().subscribe(new String("Duran"), new String(" "),
+					new String("02/11/1992"), new String("worldChamp"),
+					this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un prénom invalide ( ) n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 		try {
 			this.getBetting().subscribe(new String("Duran87"),
-					new String("Albert"),new String("02/11/1992"), new String("worldChamp"),
-					this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"),
+					new String("worldChamp"), this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un nom invalide (Duran87) n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
 		try {
 			this.getBetting().subscribe(new String("87Duran87"),
-					new String("Albert"),new String("02/11/1992"), new String("worldChamp"),
-					this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"),
+					new String("worldChamp"), this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un nom invalide (87Duran87) n'a pas levé d'exception");
 		} catch (BadParametersException e) {
@@ -248,8 +256,8 @@ public abstract class TestBettingServices extends ValidationTest {
 
 		try {
 			this.getBetting().subscribe(new String("-Duran87"),
-					new String("Albert"),new String("02/11/1992"), new String("worldChamp"),
-					this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"),
+					new String("worldChamp"), this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un nom invalide (-Duran87) n'a pas levé d'exception");
 		} catch (BadParametersException e) {
@@ -257,8 +265,8 @@ public abstract class TestBettingServices extends ValidationTest {
 
 		try {
 			this.getBetting().subscribe(new String("Nobel"),
-					new String("Alfred"),new String("02/11/1992"), new String("tnt"),
-					this.getManagerPassword());
+					new String("Alfred"), new String("02/11/1992"),
+					new String("tnt"), this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un pseudo invalide (tnt) n'a pas levé d'exception");
 		} catch (BadParametersException e) {
@@ -266,8 +274,8 @@ public abstract class TestBettingServices extends ValidationTest {
 
 		try {
 			this.getBetting().subscribe(new String("Nobel"),
-					new String("Alfred"),new String("02/11/1992"), new String("tnt988987-"),
-					this.getManagerPassword());
+					new String("Alfred"), new String("02/11/1992"),
+					new String("tnt988987-"), this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur avec un pseudo invalide (tnt988987-) n'a pas levé d'exception");
 		} catch (BadParametersException e) {
@@ -275,8 +283,8 @@ public abstract class TestBettingServices extends ValidationTest {
 
 		try {
 			this.getBetting().subscribe(new String("Duran"),
-					new String("Roberto"),new String("02/11/1992"), new String("worldChamp"),
-					new String("abef"));
+					new String("Roberto"), new String("02/11/1992"),
+					new String("worldChamp"), new String("abef"));
 			System.out
 					.println("l'ajout d'un joueur avec un password gestionnaire incorrect n'a pas levé d'exception");
 		} catch (AuthenticationException e) {
@@ -285,8 +293,8 @@ public abstract class TestBettingServices extends ValidationTest {
 		// Tests with valid parameters
 		try {
 			this.getBetting().subscribe(new String("Duran"),
-					new String("Albert"),new String("02/11/1992"), new String("fanfan"),
-					this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"),
+					new String("fanfan"), this.getManagerPassword());
 		} catch (ExistingSubscriberException | BadParametersException e) {
 			System.out
 					.println("l'ajout d'un nouveau joueur (Duran, fanfan) a levé une exception "
@@ -294,8 +302,8 @@ public abstract class TestBettingServices extends ValidationTest {
 		}
 		try {
 			this.getBetting().subscribe(new String("Duran Dorton"),
-					new String("Albert"),new String("02/11/1992"), new String("fanfen"),
-					this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"),
+					new String("fanfen"), this.getManagerPassword());
 		} catch (ExistingSubscriberException | BadParametersException e) {
 			System.out
 					.println("l'ajout d'un nouveau joueur (Duran Dorton, fanfen) a levé une exception "
@@ -304,8 +312,8 @@ public abstract class TestBettingServices extends ValidationTest {
 
 		try {
 			this.getBetting().subscribe(new String("Nobel"),
-					new String("Alfred"),new String("02/11/1992"), new String("9tnt988987"),
-					this.getManagerPassword());
+					new String("Alfred"), new String("02/11/1992"),
+					new String("9tnt988987"), this.getManagerPassword());
 		} catch (BadParametersException e) {
 			System.out
 					.println("l'ajout d'un nouveau joueur (Nobel Alfred tnt988987) a levé une exception");
@@ -314,8 +322,8 @@ public abstract class TestBettingServices extends ValidationTest {
 		// The same subscriber
 		try {
 			this.getBetting().subscribe(new String("Duran"),
-					new String("Albert"),new String("02/11/1992"), new String("fanfan"),
-					this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"),
+					new String("fanfan"), this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur existant (Duran, fanfan) n'a pas levé d'exception");
 		} catch (ExistingSubscriberException e) {
@@ -323,8 +331,8 @@ public abstract class TestBettingServices extends ValidationTest {
 		// same firstname, username ; different lastname
 		try {
 			this.getBetting().subscribe(new String("Durano"),
-					new String("Albert"),new String("02/11/1992"), new String("fanfan"),
-					this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"),
+					new String("fanfan"), this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur existant (Durano, fanfan) n'a pas levé d'exception");
 		} catch (ExistingSubscriberException e) {
@@ -332,8 +340,8 @@ public abstract class TestBettingServices extends ValidationTest {
 		// same lastname, username; different firstname
 		try {
 			this.getBetting().subscribe(new String("Duran"),
-					new String("Alfred"),new String("02/11/1992"), new String("fanfan"),
-					this.getManagerPassword());
+					new String("Alfred"), new String("02/11/1992"),
+					new String("fanfan"), this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur existant (Duran, fanfan) n'a pas levé d'exception ");
 		} catch (ExistingSubscriberException e) {
@@ -341,8 +349,8 @@ public abstract class TestBettingServices extends ValidationTest {
 		// same lastname, firstname; different username
 		try {
 			this.getBetting().subscribe(new String("Duran"),
-					new String("Albert"),new String("02/11/1992"), new String("fanfin"),
-					this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"),
+					new String("fanfin"), this.getManagerPassword());
 		} catch (ExistingSubscriberException e) {
 			System.out
 					.println("l'ajout d'un joueur pas inscrit (Duran, fanfin) a levé l'exception "
@@ -352,8 +360,8 @@ public abstract class TestBettingServices extends ValidationTest {
 		// same firstname; different lastname, username
 		try {
 			this.getBetting().subscribe(new String("Durano"),
-					new String("Albert"),new String("02/11/1992"), new String("fanfin"),
-					this.getManagerPassword());
+					new String("Albert"), new String("02/11/1992"),
+					new String("fanfin"), this.getManagerPassword());
 			System.out
 					.println("l'ajout d'un joueur inscrit (Durano, fanfin) n'a pas levé d'exception ");
 		} catch (ExistingSubscriberException e) {
@@ -362,8 +370,8 @@ public abstract class TestBettingServices extends ValidationTest {
 		// same lastname; different username and firstname
 		try {
 			this.getBetting().subscribe(new String("Duran"),
-					new String("Morgan"),new String("02/11/1992"), new String("fanfon"),
-					this.getManagerPassword());
+					new String("Morgan"), new String("02/11/1992"),
+					new String("fanfon"), this.getManagerPassword());
 		} catch (ExistingSubscriberException e) {
 			System.out
 					.println("l'ajout d'un nouveau joueur (Duran, fanfon) a levé l'exception "
@@ -372,8 +380,9 @@ public abstract class TestBettingServices extends ValidationTest {
 
 		// different lastname, firstname and username
 		try {
-			this.getBetting().subscribe(new String("Mato"), new String("Anna"),new String("02/11/1992"),
-					new String("salto"), this.getManagerPassword());
+			this.getBetting().subscribe(new String("Mato"), new String("Anna"),
+					new String("02/11/1992"), new String("salto"),
+					this.getManagerPassword());
 		} catch (ExistingSubscriberException e) {
 			System.out
 					.println("l'ajout d'un nouveau joueur (Mato, salto) a levé l'exception "
@@ -458,52 +467,66 @@ public abstract class TestBettingServices extends ValidationTest {
 					+ ")");
 		}
 	}
-	
-	
-	
-	
-	private void testBetOnPodium() throws AuthenticationException, CompetitionException,
-	ExistingCompetitionException, SubscriberException,
-	BadParametersException, ExistingSubscriberException{
-		
+
+	private void testBetOnPodium() throws AuthenticationException,
+			CompetitionException, ExistingCompetitionException,
+			SubscriberException, BadParametersException,
+			ExistingSubscriberException {
+
 		ArrayList<Competitor> competitors = new ArrayList<Competitor>();
-		competitors.add(new Individual("Coulibaly","Mamadou", "28-09-1992"));
-		competitors.add(new Individual("Cisse","Sanounou", "05-01-1989"));
-		competitors.add(new Individual("Cisse","Pinda", "07-10-1990"));
-		competitors.add(new Individual("Thiam","Sali", "05-01-1989"));
-		competitors.add(new Individual("Taure","Aminata", "07-10-1990"));
-		Competition comp=new Competition("courseA", new MyCalendar(2014,06,2),competitors);
-		String joueurPW =this.getBetting().subscribe("Dupond","Max","02-10-2014","dmax", this.getManagerPassword());
-		
+		competitors.add(new Individual("Coulibaly", "Mamadou", "28-09-1992"));
+		competitors.add(new Individual("Cisse", "Sanounou", "05-01-1989"));
+		competitors.add(new Individual("Cisse", "Pinda", "07-10-1990"));
+		competitors.add(new Individual("Thiam", "Sali", "05-01-1989"));
+		competitors.add(new Individual("Taure", "Aminata", "07-10-1990"));
+		Competition comp = new Competition("courseA", new MyCalendar(2014, 06,
+				2), competitors);
+		String joueurPW = this.getBetting().subscribe("Dupond", "Max",
+				"02-10-2014", "dmax", this.getManagerPassword());
+
 		// Tests parameters : null
-	try {
-	
-	this.getBetting().betOnPodium(0,"courseA",new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",joueurPW);
-		System.out
-				.println("parier zero jeton n'a pas levé d'exception");
-	} catch (BadParametersException e) {
-	}
-	try {
-		
-		this.getBetting().betOnPodium(200,null,new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",joueurPW);
+		try {
+
+			this.getBetting().betOnPodium(0, "courseA",
+					new Individual("Taure", "Aminata", "07-10-1990"),
+					new Individual("Thiam", "Sali", "05-01-1989"),
+					new Individual("Coulibaly", "Mamadou", "28-09-1992"),
+					"dmax", joueurPW);
+			System.out.println("parier zero jeton n'a pas levé d'exception");
+		} catch (BadParametersException e) {
+		}
+		try {
+
+			this.getBetting().betOnPodium(200, null,
+					new Individual("Taure", "Aminata", "07-10-1990"),
+					new Individual("Thiam", "Sali", "05-01-1989"),
+					new Individual("Coulibaly", "Mamadou", "28-09-1992"),
+					"dmax", joueurPW);
 			System.out
 					.println(" parier sur une competition dont le nom est non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
-	try {
-		
-		this.getBetting().betOnPodium(200,"courseA",null,new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),"dmax",joueurPW);
+		try {
+
+			this.getBetting().betOnPodium(200, "courseA", null,
+					new Individual("Thiam", "Sali", "05-01-1989"),
+					new Individual("Coulibaly", "Mamadou", "28-09-1992"),
+					"dmax", joueurPW);
 			System.out
 					.println("parier sur un competiteur non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
-	try {
-		
-		this.getBetting().betOnPodium(200,"courseA",new Individual("Taure","Aminata", "07-10-1990"),new Individual("Thiam","Sali", "05-01-1989"),new Individual("Coulibaly","Mamadou", "28-09-1992"),null,joueurPW);
+		try {
+
+			this.getBetting().betOnPodium(200, "courseA",
+					new Individual("Taure", "Aminata", "07-10-1990"),
+					new Individual("Thiam", "Sali", "05-01-1989"),
+					new Individual("Coulibaly", "Mamadou", "28-09-1992"), null,
+					joueurPW);
 			System.out
 					.println("le pari fait par un joueur dont le username est non instancié n'a pas levé d'exception");
 		} catch (BadParametersException e) {
 		}
-	
+
 	}
 }

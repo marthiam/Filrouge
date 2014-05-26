@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 
-
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
 import fr.uv1.bettingServices.exceptions.CompetitionException;
@@ -17,250 +16,303 @@ import fr.uv1.bettingServices.exceptions.SubscriberException;
 import fr.uv1.utils.MyCalendar;
 
 
-
-
 /**
- * @author mcisse
- *
+ * @author Mariam
+ * 
  */
-
 /**
  * @author Mariam
  *
  */
 public class Competition {
-	
+
 	/** La taille minimum du nom d'une compétition */
 	private static final int LONG_COMPETITION = 4;
-	
-	/**La contrainte que le nom de la compétition doit verifier */
-	private static final String REGEX_COMPETITION = new String("[a-zA-Z0-9\\-\\_]*");
-	
+
+	/** La contrainte que le nom de la compétition doit verifier */
+	private static final String REGEX_COMPETITION = new String(
+			"[a-zA-Z0-9\\-\\_]*");
+
 	/** L'identifiant de la compétition */
 	private int id_competition;
-	
-	/**Le nom de la compétition*/
 
-	
+	/** Le nom de la compétition */
+
 	private String nomCompetition;
-	
-	
 
-	
-	/**La date de la compétition*/
-	private MyCalendar dateCompetition;	
-	
-	/**Le montant total misé sur la compétition*/
+	/** La date de la compétition */
+	private MyCalendar dateCompetition;
+
+	/** Le montant total misé sur la compétition */
 
 	private long montantTotalMise;
-	
-	
-	/**La liste des compétiteurs */
-	
-	
+
+	/** La liste des compétiteurs */
+
 	private Collection<Competitor> competitors;
-	
+
 	/** La liste des paris */
 	private ArrayList<Pari> betList;
-	
-	
 
 	/**
-	 * @param nomCompetition Le nom de la competition
-	 * @param dateCompetition La date de la competition
-	 * @param montantTotalMise Le montant total misé sur la compétition
-	 * @param competitors La liste des compétiteurs
-	 * @throws BadParametersException 
-	 * @throws CompetitionException 
-	 * @throws ExistingCompetitorException 
-	 */
-	public Competition(String nomCompetition, MyCalendar dateCompetition, ArrayList<Competitor> competitors) throws BadParametersException, CompetitionException{
+	 * Constructeur 
+	 * @param nomCompetition
+	 *            Le nom de la competition
+	 * @param dateCompetition
+	 *            La date de la competition
+	 * @param montantTotalMise
+	 *            Le montant total misé sur la compétition
+	 * @param competitors
+	 *            La liste des compétiteurs
+	 * @throws BadParametersException
+	 * 				est levée si l'un de paramètre est invalide ou non  instancié 
+	 * 			
+	 * @throws CompetitionException
+	 * 				est levée si la date de fermeture de la competition est passée
 	
-		
+	 * 				
+	 */
+	public Competition(String nomCompetition, MyCalendar dateCompetition,
+			ArrayList<Competitor> competitors) throws BadParametersException,
+			CompetitionException {
+
 		this.setNomCompetition(nomCompetition);
 		this.setDateCompetition(dateCompetition);
-		this.montantTotalMise=0;		
-		this.competitors= new ArrayList<Competitor>();
+		this.montantTotalMise = 0;
+		this.competitors = new ArrayList<Competitor>();
 		this.setCompetitors(competitors);
 		this.betList = new ArrayList<Pari>();
-		
+
 	}
 
-	
-	
-	
 	/**
-	 * @return the id_compétition
+	 * Renvoie l'identifiant de la competition 
+	 * @return  id_compétition
+	 * 				l'identifiant de la competition 
 	 */
 	public int getId_competition() {
 		return id_competition;
 	}
 
-
-
-
 	/**
-	 * @param id_compétition the id_compétition to set
+	 * Met à jour l'identifiant de la competition 
+	 * @param id_compétition
+	 *           le nouveau identifiant  
 	 */
 	public void setId_competition(int id_competition) {
 		this.id_competition = id_competition;
 	}
 
-
-
-
 	/**
-	 * @return le nom de la compétition
+	 * Renvoie  le  nom de la compétition 
+	 * @return 
+	 * 		le nom de la compétition
 	 */
 	public String getNomCompetition() {
 		return nomCompetition;
 	}
 
 	/**
-	 * @param nomCompetition le nouveau nom de la compétition
+	 * Met à le jour nom de la compétition
+	 * @param nomCompetition
+	 *            le nouveau nom de la compétition
 	 */
-	public void setNomCompetition(String nomCompetition) throws BadParametersException{
+	public void setNomCompetition(String nomCompetition)
+			throws BadParametersException {
 		checkStringNomCompetition(nomCompetition);
 		this.nomCompetition = nomCompetition;
 	}
 
 	/**
-	 * @return la date de la compétition
+	 * Renvoie la date de fermetue de competion 
+	 * @return 
+	 * 			la date de fermeture de la compétition
 	 */
-	public  MyCalendar getDateCompetition() {
+	public MyCalendar getDateCompetition() {
 		return dateCompetition;
 	}
 
 	/**
-	 * @param date la nouvelle date de la compétition
-	 * @throws BadParametersException 
+	 * Met à jour la date de fermetue de competion 
+	 * @param date
+	 *            la nouvelle date de la compétition
+	 * @throws BadParametersException
+	 * 				est levée si la date n'est pas instancié 
+	 * @throws CompetitionException
+	 * 				est levée si la date est passée 
 	 */
 
-	public void setDateCompetition( MyCalendar newDate) throws CompetitionException {
-		if (newDate.isInThePast() || newDate==null)
+	public void setDateCompetition(MyCalendar newDate)
+			throws CompetitionException, BadParametersException {
+		if(newDate ==null)throw new BadParametersException("la date de fermeture doit être instancié ");
+		if (newDate.isInThePast() )
 			throw new CompetitionException("Cette date est passée");
 
 		this.dateCompetition = newDate;
 	}
 
-
 	/**
-	 * @return Le montant total misé sur la compétition
+	 * Renvoie le montant total misé sur la competition 
+	 * @return
+	 * 			 Le montant total misé sur la compétition
 	 */
-	public  long getMontantTotalMise() {
+	public long getMontantTotalMise() {
 		return montantTotalMise;
 	}
 
 	/**
-	 * @param newMontantTotalMise Le montant total misé sur la compétition 
-	 * @throws BadParametersException 
+	 * Met à jour le montant total misé sur la competition 
+	 * @param newMontantTotalMise
+	 *            Le nouveau montant total misé sur la compétition
+	 * @throws BadParametersException
+	 * 			  est leveé si ce montant est <0
 	 */
-	public void setMontantTotalMise(long newMontantTotalMise) throws BadParametersException {
-		if (newMontantTotalMise<0)
-			throw new BadParametersException(newMontantTotalMise + " est un montant total invalide");
+	public void setMontantTotalMise(long newMontantTotalMise)
+			throws BadParametersException {
+		if (newMontantTotalMise < 0)
+			throw new BadParametersException(newMontantTotalMise
+					+ " est un montant total invalide");
 		this.montantTotalMise = newMontantTotalMise;
-	}	
-	
+	}
+
 	/**
-	 * @return La liste des competiteurs de la competition
+	 * Renvoie les competiteurs de la competition
+	 * @return 
+	 * 		La liste des competiteurs de la competition
 	 */
 	public Collection<Competitor> getCompetitors() {
 		return competitors;
 	}
 
 	/**
-	 * @param competitors La nouvelle liste de competiteurs
-	 * @throws CompetitionException 
-	 * @throws BadParametersException 
-	 * @throws ExistingCompetitorException 
+	 * Met à jour le  competiteurs de competition 
+	 * @param competitors
+	 *            La nouvelle liste de competiteurs
+	 * @throws CompetitionException
+	 * 			est levée si le nombre de competiteur est <2 ou si ils ne sont pas du même type reel 
+	 * @throws BadParametersException
+	 * 			est levée si la liste ou  l'un des competiteur  est non instancié  ou si  elle est vide
+	 * @see fr.uv1.bettingServices.Competition#addCompetitor(Competitor)
 	 */
-	public void setCompetitors(ArrayList<Competitor> competitors) throws CompetitionException, BadParametersException {
-		
-	if (competitors==null || competitors.size()==0)
-			throw new BadParametersException("La liste des compétiteurs n'a pas été instancié");
-		if (competitors.size()<2){
-			throw new CompetitionException("Une compétition doit avoir au moins deux competiteurs");
-		}
-			int i=0;
+	public void setCompetitors(ArrayList<Competitor> competitors)
+			throws CompetitionException, BadParametersException {
 
-			if (competitors.get(i) instanceof Individual){
-				while (i<competitors.size()){
-					if (!( competitors.get(i) instanceof Individual)){
-						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
-								"meme classe");
-					}else{
-						this.addCompetitor(((ArrayList<Competitor>) competitors).get(i));
-						i++;
-					}
+		if (competitors == null || competitors.size() == 0)
+			throw new BadParametersException(
+					"La liste des compétiteurs n'a pas été instancié");
+		if (competitors.size() < 2) {
+			throw new CompetitionException(
+					"Une compétition doit avoir au moins deux competiteurs");
+		}
+		int i = 0;
+
+		if (competitors.get(i) instanceof Individual) {
+			while (i < competitors.size()) {
+				if (!(competitors.get(i) instanceof Individual)) {
+					throw new CompetitionException(
+							"Les compétiteurs d'une compétition doivent être instance d'une "
+									+ "meme classe");
+				} else {
+					this.addCompetitor(((ArrayList<Competitor>) competitors)
+							.get(i));
+					i++;
 				}
-				
-			}else{
-			
-			i=0;
-			if (competitors.get(i) instanceof Team){
-				Team team = (Team) ((ArrayList<Competitor>) competitors).get(i);
-				while (i<competitors.size()){
-					if (!( competitors.get(i) instanceof Team)){
-						
-						throw new CompetitionException("Les compétiteurs d'une compétition doivent être instance d'une " +
-								"meme classe");
-					}else{
-						if (team.getMembers()==null ) throw new CompetitionException();
-						this.addCompetitor(((ArrayList<Competitor>) competitors).get(i));
-						i++;
-					}
-						
-				}
-							 }
 			}
-		
+
+		} else {
+
+			i = 0;
+			if (competitors.get(i) instanceof Team) {
+				Team team = (Team) ((ArrayList<Competitor>) competitors).get(i);
+				while (i < competitors.size()) {
+					if (!(competitors.get(i) instanceof Team)) {
+
+						throw new CompetitionException(
+								"Les compétiteurs d'une compétition doivent être instance d'une "
+										+ "meme classe");
+					} else {
+						if (team.getMembers() == null)
+							throw new CompetitionException();
+						this.addCompetitor(((ArrayList<Competitor>) competitors)
+								.get(i));
+						i++;
+					}
+
+				}
+			}
+		}
+
 	}
-	
 
 	/**
-	 * @return La liste des paris sur la compétition
+	 * Renvoie les paris d'une competition 
+	 * 
+	 * @return 
+	 * 			La liste des paris sur la compétition
 	 */
 	public ArrayList<Pari> getBetList() {
 		return betList;
 	}
 
 	/**
-	 * @param betList La nouvelle liste de pari
+	 * Met à jour les paris d'une competition 
+	 * @param betList
+	 *            La nouvelle liste de pari
+	 * @throws BadParametersException 
+	 * 			est levée si la nouvelle liste de paris ne correspond pas à cette competition.
 	 */
-	public void setBetList(ArrayList<Pari> betList) {
-		this.betList = betList;
+	public void setBetList(ArrayList<Pari> betList) throws BadParametersException {
+		
+		for(Pari p : betList){
+			if(p instanceof PariWinner  ){
+				if(!(this.participe(((PariWinner) p).getWinner()))){
+					throw new  BadParametersException("cette liste de paris ne correspont  pas à cette competition");
+				}
+			}else{
+				if(!(this.participe(((PariPodium) p).getWinner())) ||! (this.participe(((PariPodium) p).getSecond())) || !(this.participe(((PariPodium) p).getThird())) ){
+					throw new  BadParametersException("cette liste de paris ne correspont  pas à cette competition");
+				}	
+			}
+			this.montantTotalMise +=p.getMise();
+			
+			}
+		
+	this.betList = betList;
+	}
+
+
+	/**
+	 * Renvoie si le competiteur participe à la competirion 
+	 * @param competitor
+	 * 			le competitor à regarder 
+	 * @return
+	 *  		vraie  si le competiteur est un competiteur de cette competition
+	 */
+	public boolean participe(Competitor competitor ){
+		
+		for (Competitor c :this.competitors ){
+			if(c.equals(competitor)){
+				return true;
+			}
+		}
+		return false ; 
 	}
 
 	/**
-	 * delete all bets made by a subscriber on a competition.<br>
-	 * subscriber's account is credited with a number of tokens corresponding to
-	 * the bets made by the subscriber for the competition.
-	 * 
-	 * @param competition
-	 *            competition's name.
-	 * @param username
-	 *            subscriber's username.
-	 * @param pwdSubs
-	 *            subscriber's password.
-	 * 
-	 * @throws AuthenticationException
-	 *             raised if (username, password) does not exist.
-	 * @throws CompetitionException
-	 *             raised if closed competition (closing date is in the past).
-	 * @throws ExistingCompetitionException
-	 *             raised if there is no competition a_competition.
+	 * From interface Competitor
 	 */
-	
-	public void supprimerParisCompetition(Subscriber subscriber) throws CompetitionException{
-		
+
+	public void supprimerParisCompetition(Subscriber subscriber)
+			throws CompetitionException {
+
 		long numberTokens = 0;
 
 		if (this.isInThePast())
 			throw new CompetitionException("La compétition est fermée");
-		for (Pari pari : this.betList){
+		for (Pari pari : this.betList) {
 			if (pari.getSubscriber().equals(subscriber))
 				numberTokens += pari.getMise();
-				this.betList.remove(pari);
+			this.betList.remove(pari);
 		}
 		try {
 			subscriber.crediter(numberTokens);
@@ -268,9 +320,6 @@ public class Competition {
 			e.printStackTrace();
 		}
 	}
-
-	
-
 
 	/**
 	 * bet a winner for a competition <br>
@@ -301,53 +350,55 @@ public class Competition {
 	 *             raised if number of tokens less than 0.
 	 * 
 	 */
-	
-	public void parierSurLeVainqueur(PariWinner pari
-			) throws AuthenticationException,
-			CompetitionException, ExistingCompetitionException,
-			SubscriberException, BadParametersException{
-		if(pari==null) throw new BadParametersException("paramètre pari non instancié");
+
+	public void parierSurLeVainqueur(PariWinner pari)
+			throws AuthenticationException, CompetitionException,
+			ExistingCompetitionException, SubscriberException,
+			BadParametersException {
+		if (pari == null)
+			throw new BadParametersException("paramètre pari non instancié");
 		boolean trouve = this.getCompetitors().contains(pari.getWinner());
 
-		if (!trouve){
-			throw new CompetitionException("Ce competiteur ne participe pas à cette competition");
+		if (!trouve) {
+			throw new CompetitionException(
+					"Ce competiteur ne participe pas à cette competition");
 		}
-		
+
 		if (this.isInThePast())
-			throw new CompetitionException("La date de la competition est passée");
-		
-		
-		if (pari.getWinner() instanceof Individual){
-			Person subcriber = (Person)pari.getSubscriber();
+			throw new CompetitionException(
+					"La date de la competition est passée");
+
+		if (pari.getWinner() instanceof Individual) {
+			Person subcriber = (Person) pari.getSubscriber();
 			Person competiteur;
-			for( Competitor c : this.getCompetitors() ){
-				competiteur = (Person)c;
-				if( competiteur.equals(subcriber)){
-					throw new CompetitionException("Le joueur est un competiteur de la competition");
+			for (Competitor c : this.getCompetitors()) {
+				competiteur = (Person) c;
+				if (competiteur.equals(subcriber)) {
+					throw new CompetitionException(
+							"Le joueur est un competiteur de la competition");
 				}
 			}
-		}else if (pari.getWinner() instanceof Team){
+		} else if (pari.getWinner() instanceof Team) {
 			Team team;
 			Person competiteur = null;
-			for (Competitor competitor : this.getCompetitors()){
+			for (Competitor competitor : this.getCompetitors()) {
 				team = (Team) competitor;
-				for(Competitor member : team.getMembers()){
-				competiteur = (Person) member;
-				if(pari.getSubscriber().equals(competiteur)){
-						throw new CompetitionException("Le joueur fait partie d'une équipe de la compétition");
+				for (Competitor member : team.getMembers()) {
+					competiteur = (Person) member;
+					if (pari.getSubscriber().equals(competiteur)) {
+						throw new CompetitionException(
+								"Le joueur fait partie d'une équipe de la compétition");
+					}
 				}
-			  }
 			}
 		}
-		
+
 		pari.getSubscriber().debiter(pari.getMise());
 		betList.add(pari);
 		this.montantTotalMise += pari.getMise();
-		
-	}
-	
 
-	
+	}
+
 	/**
 	 * bet on podium <br>
 	 * The number of tokens of the subscriber is debited.
@@ -383,57 +434,62 @@ public class Competition {
 	 */
 	public void parierSurLePodium(PariPodium paripod)
 			throws CompetitionException, SubscriberException,
-			BadParametersException{
-		
-		if (paripod==null) throw new BadParametersException("pari avec un pariPodium non instancié");
-	
-		
-		boolean trouveWinner = this.getCompetitors().contains(paripod.getWinner());
-		boolean trouveSecond = this.getCompetitors().contains(paripod.getSecond());
-		boolean trouveThird = this.getCompetitors().contains(paripod.getThird());
-		
-		
+			BadParametersException {
+
+		if (paripod == null)
+			throw new BadParametersException(
+					"pari avec un pariPodium non instancié");
+
+		boolean trouveWinner = this.getCompetitors().contains(
+				paripod.getWinner());
+		boolean trouveSecond = this.getCompetitors().contains(
+				paripod.getSecond());
+		boolean trouveThird = this.getCompetitors()
+				.contains(paripod.getThird());
+
 		if (!trouveWinner || !trouveSecond || !trouveThird)
-			throw new CompetitionException("Un 1 ou plusieurs de ces trois competiteurs ne participe pas " +
-					"à cette competition");
-		
+			throw new CompetitionException(
+					"Un 1 ou plusieurs de ces trois competiteurs ne participe pas "
+							+ "à cette competition");
+
 		if (this.isInThePast())
-			throw new CompetitionException("La date de la competition est passée");
-		
-		if (paripod.getWinner() instanceof Individual){
+			throw new CompetitionException(
+					"La date de la competition est passée");
+
+		if (paripod.getWinner() instanceof Individual) {
 			Person competiteur;
-			for (Competitor competitor : this.getCompetitors()){
-				competiteur=(Person) competitor;
+			for (Competitor competitor : this.getCompetitors()) {
+				competiteur = (Person) competitor;
 				if (paripod.getSubscriber().equals(competiteur))
-					throw new CompetitionException("Le joueur est un competiteur de la competition");
+					throw new CompetitionException(
+							"Le joueur est un competiteur de la competition");
 			}
-			
-		} else if (paripod.getWinner() instanceof Team){
+
+		} else if (paripod.getWinner() instanceof Team) {
 			Person competiteur;
 			Team team;
-			for (Competitor competitor : this.getCompetitors()){
+			for (Competitor competitor : this.getCompetitors()) {
 				team = (Team) competitor;
-				if( team !=null){
+				if (team != null) {
 				}
-				
-			
-				for (Competitor member : team.getMembers()){
-					competiteur=(Person)member;
-					if (paripod.getSubscriber().equals(competiteur)){
-						throw new CompetitionException("Le joueur fait partie d'une equipe de la competition");
+
+				for (Competitor member : team.getMembers()) {
+					competiteur = (Person) member;
+					if (paripod.getSubscriber().equals(competiteur)) {
+						throw new CompetitionException(
+								"Le joueur fait partie d'une equipe de la competition");
 					}
 				}
 			}
 		}
-		
-		
+
 		paripod.getSubscriber().debiter(paripod.getMise());
 		// On ajoute le pari à la liste des paris de la compétition
 
 		this.betList.add(paripod);
 		this.montantTotalMise += paripod.getMise();
 	}
-	
+
 	/**
 	 * settle bets on winner. <br>
 	 * Each subscriber betting on this competition with winner a_winner is
@@ -459,37 +515,43 @@ public class Competition {
 	 * @throws CompetitionException
 	 *             raised if there is no competitor a_winner for the
 	 *             competition; competition still opened.
-	 * @throws BadParametersException 
+	 * @throws BadParametersException
 	 */
-	
-	public void solderPariWinner(Competitor winner) throws CompetitionException, BadParametersException{
+
+	public void solderPariWinner(Competitor winner)
+			throws CompetitionException, BadParametersException {
 
 		if (winner == null)
-			throw new BadParametersException("Le vainqueur n'a pas été instancié");
-		
+			throw new BadParametersException(
+					"Le vainqueur n'a pas été instancié");
+
 		long tokensBettedForWinner = 0;
 		long tokensWonBySubscriber = 0;
 
 		boolean trouve = this.competitors.contains(winner);
 		boolean found = false;
-		
+
 		if (!trouve)
-			throw new CompetitionException("Ce competiteur ne participe pas à cette competition");
-			
+			throw new CompetitionException(
+					"Ce competiteur ne participe pas à cette competition");
+
 		if (!(this.isInThePast()))
-			throw new CompetitionException("Cette compétition est toujours ouverte");
-		
-		for (Pari pari : this.betList){
-			if (pari instanceof PariWinner && ((PariWinner) pari).getWinner().equals(winner)){
-					tokensBettedForWinner += pari.getMise();
+			throw new CompetitionException(
+					"Cette compétition est toujours ouverte");
+
+		for (Pari pari : this.betList) {
+			if (pari instanceof PariWinner
+					&& ((PariWinner) pari).getWinner().equals(winner)) {
+				tokensBettedForWinner += pari.getMise();
 			}
 		}
-		
-		for (Pari pari : this.betList){
-			if (pari instanceof PariWinner){
-				if (((PariWinner) pari).getWinner().equals(winner)){
+
+		for (Pari pari : this.betList) {
+			if (pari instanceof PariWinner) {
+				if ( pari.getWinner().equals(winner)) {
 					found = true;
-					tokensWonBySubscriber = (pari.getMise()*this.montantTotalMise)/tokensBettedForWinner;
+					tokensWonBySubscriber = (pari.getMise() * this.montantTotalMise)
+							/ tokensBettedForWinner;
 					try {
 						pari.getSubscriber().crediter(tokensWonBySubscriber);
 					} catch (BadParametersException e) {
@@ -498,16 +560,14 @@ public class Competition {
 				}
 			}
 		}
-		if (!found){
-			for (Pari pari : this.betList){
+		if (!found) {
+			for (Pari pari : this.betList) {
 				pari.getSubscriber().crediter(pari.getMise());
 				this.betList.remove(pari);
 			}
 		}
-			
+
 	}
-
-
 
 	/**
 	 * settle bets on podium. <br>
@@ -540,20 +600,25 @@ public class Competition {
 	 *             competitor (firstname, lastname, borndate or name for teams)
 	 *             a_winner, a_second or a_third for the competition;
 	 *             competition still opened
-	 * @throws BadParametersException 
+	 * @throws BadParametersException
 	 */
-	
-	public void solderPariPodium(Competitor winner, Competitor second, Competitor third)throws CompetitionException, BadParametersException{
-		
+
+	public void solderPariPodium(Competitor winner, Competitor second,
+			Competitor third) throws CompetitionException,
+			BadParametersException {
+
 		if (winner == null)
-			throw new BadParametersException("Le vainqueur n'a pas été instancié");
-		
+			throw new BadParametersException(
+					"Le vainqueur n'a pas été instancié");
+
 		if (second == null)
-			throw new BadParametersException("Le deuxième n'a pas été instancié");
-		
+			throw new BadParametersException(
+					"Le deuxième n'a pas été instancié");
+
 		if (third == null)
-			throw new BadParametersException("Le troisième n'a pas été instancié");
-		
+			throw new BadParametersException(
+					"Le troisième n'a pas été instancié");
+
 		long tokensBettedForPodium = 0;
 		long tokensWonBySubscriber = 0;
 		boolean found = false;
@@ -562,29 +627,32 @@ public class Competition {
 		boolean trouveThird = this.competitors.contains(third);
 
 		if (!trouveWinner || !trouveSecond || !trouveThird)
-			throw new CompetitionException("Un ou plusieurs de ces trois competiteurs ne participe pas " +
-					"à cette compétition");
-		
+			throw new CompetitionException(
+					"Un ou plusieurs de ces trois competiteurs ne participe pas "
+							+ "à cette compétition");
+
 		if (!(this.isInThePast()))
-			throw new CompetitionException("Cette compétition est toujours ouverte");
-		
-		for (Pari pari : this.betList){
-			if (pari instanceof PariPodium){
-				if (((PariPodium) pari).getWinner().equals(winner) 
-					&& ((PariPodium) pari).getSecond().equals(second) 
-					&& ((PariPodium) pari).getThird().equals(third)){
+			throw new CompetitionException(
+					"Cette compétition est toujours ouverte");
+
+		for (Pari pari : this.betList) {
+			if (pari instanceof PariPodium) {
+				if (((PariPodium) pari).getWinner().equals(winner)
+						&& ((PariPodium) pari).getSecond().equals(second)
+						&& ((PariPodium) pari).getThird().equals(third)) {
 					tokensBettedForPodium += pari.getMise();
 				}
 			}
 		}
-		
-		for (Pari pari : this.betList){
-			if (pari instanceof PariPodium){
-				if (((PariPodium) pari).getWinner().equals(winner) 
-					&& ((PariPodium) pari).getSecond().equals(second) 
-					&& ((PariPodium) pari).getThird().equals(third)){
+
+		for (Pari pari : this.betList) {
+			if (pari instanceof PariPodium) {
+				if (((PariPodium) pari).getWinner().equals(winner)
+						&& ((PariPodium) pari).getSecond().equals(second)
+						&& ((PariPodium) pari).getThird().equals(third)) {
 					found = true;
-					tokensWonBySubscriber = (pari.getMise()*this.montantTotalMise)/tokensBettedForPodium;
+					tokensWonBySubscriber = (pari.getMise() * this.montantTotalMise)
+							/ tokensBettedForPodium;
 					try {
 						pari.getSubscriber().crediter(tokensWonBySubscriber);
 					} catch (BadParametersException e) {
@@ -593,110 +661,82 @@ public class Competition {
 				}
 			}
 		}
-		
-		if (!found){
-			for (Pari pari : this.betList){
+
+		if (!found) {
+			for (Pari pari : this.betList) {
 				pari.getSubscriber().crediter(pari.getMise());
 				this.betList.remove(pari);
 			}
 		}
-		
+
 	}
-	
-	/**
-	 * consult bets on a competition.
-	 * @return a list of String containing the bets for the competition.
-	 */
-
-	public ArrayList<String> consulterParis(){
-		
-		String infoPariSubscriber;
-		ArrayList<String> infoPari = new ArrayList<String>();
-		if (((ArrayList<Competitor>) this.competitors).get(0) instanceof Individual){
-			for (Pari pari : this.betList){
-				infoPariSubscriber = "";
-				if (pari instanceof PariWinner)
-					infoPariSubscriber+= pari.getSubscriber().getUsername()+" "
-							+((Person)((PariWinner)pari).getWinner()).getFirstname()+" "
-							+((Person)((PariWinner)pari).getWinner()).getLastname()+" "
-							+pari.getMise();
-					infoPari.add(infoPariSubscriber);
-				if (pari instanceof PariPodium)
-					infoPariSubscriber+= pari.getSubscriber().getUsername()+" "
-							+((Person)((PariPodium)pari).getWinner()).getFirstname()+" "
-							+((Person)((PariPodium)pari).getWinner()).getLastname()+" "
-							+((Person)((PariPodium)pari).getSecond()).getFirstname()+" "
-							+((Person)((PariPodium)pari).getSecond()).getLastname()+" "
-							+((Person)((PariPodium)pari).getThird()).getFirstname()+" "
-							+((Person)((PariPodium)pari).getThird()).getLastname()+" "
-							+pari.getMise();
-					infoPari.add(infoPariSubscriber);
-			}
-		}
-		
-		if (((ArrayList<Competitor>) this.competitors).get(0) instanceof Team){
-			for (Pari pari : this.betList){
-				infoPariSubscriber = "";
-				if (pari instanceof PariWinner)
-					infoPariSubscriber+= pari.getSubscriber().getUsername()+" "
-							+((Team)((PariWinner)pari).getWinner()).getTeamName()+" "
-							+pari.getMise();
-					infoPari.add(infoPariSubscriber);
-				if (pari instanceof PariPodium)
-					infoPariSubscriber+= pari.getSubscriber().getUsername()+" "
-							+((Team)((PariPodium)pari).getWinner()).getTeamName()+" "
-							+((Team)((PariPodium)pari).getSecond()).getTeamName()+" "
-							+((Team)((PariPodium)pari).getThird()).getTeamName()+" "
-							+pari.getMise();
-					infoPari.add(infoPariSubscriber);
-			}
-		}
-		return infoPari;
-		
-		
-	}
-	
-	
-	
-	
-	
-	
 
 	/**
-	 * Ajoute un  competiteur à la compétition <br>
-	 * @param newCompetitor le nouveau competiteur 
-	 * @throws CompetitionException 
-	 * 		 est levée si le competiteur a dejà été ajouté .
-	 * @throws BadParametersException
-	 * 		est levée si le competiteur n'est pas instancié .
-	 */
-	public void addCompetitor(Competitor newCompetitor) throws CompetitionException, BadParametersException{
-		if (newCompetitor==null)throw new BadParametersException("competiteur non instancié");
-
-		if ( this.competitors!=null && this.competitors.contains(newCompetitor)) {
-			throw new CompetitionException(" le competiteur  " + newCompetitor.toString() + " a deja été ajouter");
-		} 
-		
-		this.competitors.add(newCompetitor);// ajoute un nouveau competiteur 
-		}
-
-		
-
-	
-	/**
-	 * Dit si la competition à une date passée 
+	 * Consulte la liste des paris de la  competition.
+	 * 
 	 * @return 
-	 * 		Vrai si le closing date de la compétition est dans le passé
-	 * 		Faux sinon
+	 * 		une liste de chaîne contenant les pariss de la competition.
+	 */
+
+	public ArrayList<String> consulterParis() {
+
+		String infoPari;
+		ArrayList<String> infoParis = new ArrayList<String>();
+		
+			for (Pari pari : this.betList) {
+				infoPari = pari.getSubscriberInfo();
+				infoParis.add(infoPari);
+				infoPari= pari.winnerInfo();
+				infoParis.add(infoPari);
+					if (pari instanceof PariPodium){
+						infoPari=( (PariPodium) pari).secondInfo();
+						infoParis.add(infoPari);
+						infoPari=( (PariPodium)pari).thirdInfo();
+						infoParis.add(infoPari);
+					}
+			}
+		return infoParis;
+
+	}
+
+	/**
+	 * Ajoute un competiteur à la compétition <br>
+	 * 
+	 * @param newCompetitor
+	 *            le nouveau competiteur
+	 * @throws CompetitionException
+	 *             est levée si le competiteur a dejà été ajouté .
+	 * @throws BadParametersException
+	 *             est levée si le competiteur n'est pas instancié .
+	 */
+	public void addCompetitor(Competitor newCompetitor)
+			throws CompetitionException, BadParametersException {
+		if (newCompetitor == null)
+			throw new BadParametersException("competiteur non instancié");
+
+		if (this.competitors != null
+				&& this.competitors.contains(newCompetitor)) {
+			throw new CompetitionException(" le competiteur  "
+					+ newCompetitor.toString() + " a deja été ajouter");
+		}
+
+		this.competitors.add(newCompetitor);// ajoute un nouveau competiteur
+	}
+
+	/**
+	 * Renvoie si la competition à une date passée
+	 * 
+	 * @return vrai si le closing date de la compétition est dans le passé Faux
+	 *         sinon
 	 * 
 	 */
-	public boolean isInThePast(){
+	public boolean isInThePast() {
 		return this.getDateCompetition().isInThePast();
 	}
-	
-	
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -708,7 +748,9 @@ public class Competition {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -732,37 +774,37 @@ public class Competition {
 		}
 		return true;
 	}
-	
-	
 
-	
 	/**
+	 * Renvoie si la liste des paris de la competition est vide
 	 * @return 
-	 * 		Vrai si la liste des paris de la compétition est vide
-	 * 		Faux sinon
+	 * 			vrai si la liste des paris de la compétition est vide Faux sinon
 	 */
-	public boolean IsEmptybetList(){
+	public boolean IsEmptybetList() {
 		return this.betList.isEmpty();
 	}
-	
+
 	/**
-	 * supprime un competiteur  de la  competition.
+	 * supprime un competiteur de la competition.
 	 * 
-	 *@throws ExistingCompetitorException
+	 * @throws ExistingCompetitorException
 	 *             est levée si le competiteur ne participe pas à la competition
 	 * */
-	public void removeCompetitor(Competitor competitor ) throws ExistingCompetitorException{
-		if(!(this.competitors.contains(competitor))){
-			throw new ExistingCompetitorException("le competiteur "+ competitor +" ne participe à la compeetition "+this.nomCompetition );
+	public void removeCompetitor(Competitor competitor)
+			throws ExistingCompetitorException {
+		if (!(this.competitors.contains(competitor))) {
+			throw new ExistingCompetitorException("le competiteur "
+					+ competitor + " ne participe à la compeetition "
+					+ this.nomCompetition);
 		}
 		this.competitors.remove(competitor);
-		
-		
+
 	}
+
 	/**
-	 * Cette méthode verifie la validité du nom d'une compétition.
-	 * Seuls les lettres, les chiffres, les tirets et underscore sont autorisés.
-	 * La taille de la chaine de caractères doit être au moins LONG_COMPETITION caractères
+	 * Cette méthode verifie la validité du nom d'une compétition. Seuls les
+	 * lettres, les chiffres, les tirets et underscore sont autorisés. La taille
+	 * de la chaine de caractères doit être au moins LONG_COMPETITION caractères
 	 * 
 	 * @param nomCompetition
 	 *            Le nom de la compétition à verifier
@@ -773,28 +815,33 @@ public class Competition {
 	private static void checkStringNomCompetition(String nomCompetition)
 			throws BadParametersException {
 		if (nomCompetition == null)
-			throw new BadParametersException("Le nom de la compétition n'a pas été instancié");
-		
+			throw new BadParametersException(
+					"Le nom de la compétition n'a pas été instancié");
+
 		if (nomCompetition.length() < LONG_COMPETITION)
-			throw new BadParametersException("Le nom de la compétition est moins que "
-					+ LONG_COMPETITION + "caractères");
+			throw new BadParametersException(
+					"Le nom de la compétition est moins que "
+							+ LONG_COMPETITION + "caractères");
 		// Seuls les lettres et les chiffres sont autorisés
 		if (!nomCompetition.matches(REGEX_COMPETITION))
 			throw new BadParametersException("la competition " + nomCompetition
 					+ " ne verifie pas les contraintes ");
-	}	
-	
-	/** 
-	 * Renvoie la date de fermeture de la competition sous forme de chaine de caractère
-	 * @return la chaine de caractère correspondant 
+	}
+
+	/**
+	 * Renvoie la date de fermeture de la competition sous forme de chaine de
+	 * caractère
+	 * 
+	 * @return la chaine de caractère correspondant
 	 */
 	public String getClosingdate() {
-		return this.getDateCompetition().get(Calendar.YEAR)+"-"+(this.getDateCompetition().get(Calendar.MONTH)+1)+
-				"-"+this.getDateCompetition().get(Calendar.DATE);
+		return this.getDateCompetition().get(Calendar.YEAR) + "-"
+				+ (this.getDateCompetition().get(Calendar.MONTH) + 1) + "-"
+				+ this.getDateCompetition().get(Calendar.DATE);
 	}
-	
+
 	@Override
-	public String toString(){
-		return this.nomCompetition + " " + this.getClosingdate(); 
+	public String toString() {
+		return this.nomCompetition + " " + this.getClosingdate();
 	}
 }

@@ -1,6 +1,7 @@
 package fr.uv1.bettingServices;
 
 import fr.uv1.bettingServices.exceptions.*;
+
 /**
  * 
  * @author segarra <br>
@@ -17,7 +18,7 @@ public interface Competitor {
 	 * @return true if the competitor has a valid name.
 	 */
 	boolean hasValidName();
-	
+
 	/**
 	 * add a member to a team competitor.
 	 * 

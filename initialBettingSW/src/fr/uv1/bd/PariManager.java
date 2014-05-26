@@ -43,11 +43,13 @@ public class PariManager {
 	 *            the bet to be stored.
 	 * @return the bet with the updated value for the id.
 	 * @throws SQLException
-	 * @throws ExistingSubscriberException 
-	 * @throws BadParametersException 
-	 * @throws ExistingCompetitionException 
+	 * @throws ExistingSubscriberException
+	 * @throws BadParametersException
+	 * @throws ExistingCompetitionException
 	 */
-	public static Pari persist(Pari pari) throws SQLException, ExistingSubscriberException, BadParametersException, ExistingCompetitionException {
+	public static Pari persist(Pari pari) throws SQLException,
+			ExistingSubscriberException, BadParametersException,
+			ExistingCompetitionException {
 		// Two steps in this method which must be managed in an atomic
 		// (unique) transaction:
 		// 1 - insert the new bet;
@@ -58,70 +60,84 @@ public class PariManager {
 		Connection c = DataBaseConnection.getConnection();
 		try {
 			c.setAutoCommit(false);
-			if (pari instanceof PariWinner){
-				PariWinner pariwin = (PariWinner)pari;
+			if (pari instanceof PariWinner) {
+				PariWinner pariwin = (PariWinner) pari;
 				PreparedStatement psPersist = c
-					.prepareStatement("insert into pari(id_joueur, mise, " +
-							"competiteurpremiere_id, type, id_competition)" +
-							" values (?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
-			
+						.prepareStatement(
+								"insert into pari(id_joueur, mise, "
+										+ "competiteurpremiere_id, type, id_competition)"
+										+ " values (?, ?, ?, ?, ?)",
+								PreparedStatement.RETURN_GENERATED_KEYS);
 
-			psPersist.setInt(1, pariwin.getPari_id());
-			long subsId = CompetitorsManager.findByName(pariwin.getSubscriber());
-			if (subsId==0 ){
-				  throw new ExistingSubscriberException("le joueur "+ pariwin.getSubscriber() + "n'est pas enregistré dans la base " );
-			}
-			psPersist.setLong(2, subsId );
-			psPersist.setLong(3, pari.getMise());
-			if (pariwin.getWinner() instanceof Individual){
-				psPersist.setLong(4, ((Individual) pariwin.getWinner()).getId_individual());
-			}else{
-				psPersist.setLong(4, ((Team) pariwin.getWinner()).getId_team());
-			}
-			psPersist.setString(5, "pariWinner");
-			long id_comp=CompetitionManager.findByName(pariwin.getCompetition());
-			if(id_comp==0)throw new ExistingCompetitionException("La competition "+pariwin.getCompetition()+" n'existe pas" );
-			psPersist.setLong(6,id_comp );
-			
-			psPersist.executeUpdate();
+				psPersist.setInt(1, pariwin.getPari_id());
+				long subsId = CompetitorsManager.findByName(pariwin
+						.getSubscriber());
+				if (subsId == 0) {
+					throw new ExistingSubscriberException("le joueur "
+							+ pariwin.getSubscriber()
+							+ "n'est pas enregistré dans la base ");
+				}
+				psPersist.setLong(2, subsId);
+				psPersist.setLong(3, pari.getMise());
+				if (pariwin.getWinner() instanceof Individual) {
+					psPersist.setLong(4, ((Individual) pariwin.getWinner())
+							.getId_individual());
+				} else {
+					psPersist.setLong(4,
+							((Team) pariwin.getWinner()).getId_team());
+				}
+				psPersist.setString(5, "pariWinner");
+				long id_comp = CompetitionManager.findByName(pariwin
+						.getCompetition());
+				if (id_comp == 0)
+					throw new ExistingCompetitionException("La competition "
+							+ pariwin.getCompetition() + " n'existe pas");
+				psPersist.setLong(6, id_comp);
 
-			psPersist.close();
+				psPersist.executeUpdate();
 
-			// Retrieving the value of the id with a request on the
-			// sequence (subscribers_id_seq).
-			PreparedStatement psIdValue = c
-					.prepareStatement("select currval('pari_id_seq') as value_id");
-			ResultSet resultSet = psIdValue.executeQuery();
-			Integer id = null;
-			while (resultSet.next()) {
-				id = resultSet.getInt("value_id");
-			}
-			resultSet.close();
-			psIdValue.close();
-			c.commit();
-			pari.setPari_id(id);
-			c.setAutoCommit(true);
-			c.close();
-			}else{
+				psPersist.close();
+
+				// Retrieving the value of the id with a request on the
+				// sequence (subscribers_id_seq).
+				PreparedStatement psIdValue = c
+						.prepareStatement("select currval('pari_id_seq') as value_id");
+				ResultSet resultSet = psIdValue.executeQuery();
+				Integer id = null;
+				while (resultSet.next()) {
+					id = resultSet.getInt("value_id");
+				}
+				resultSet.close();
+				psIdValue.close();
+				c.commit();
+				pari.setPari_id(id);
+				c.setAutoCommit(true);
+				c.close();
+			} else {
 				PreparedStatement psPersist = c
-						.prepareStatement("insert into pari(id_pari, id_joueur, mise, " +
-								"competiteurpremiere_id, competiteurdeuxieme_id, " +
-								"competiteurtroisieme_id, type, id_competition) " +
-								"values (?, ?, ?, ?, ?, ?)");
-				
-				
+						.prepareStatement("insert into pari(id_pari, id_joueur, mise, "
+								+ "competiteurpremiere_id, competiteurdeuxieme_id, "
+								+ "competiteurtroisieme_id, type, id_competition) "
+								+ "values (?, ?, ?, ?, ?, ?)");
+
 				psPersist.setInt(1, pari.getPari_id());
 				psPersist.setLong(2, pari.getSubscriber().getId_subscribe());
 				psPersist.setLong(3, pari.getMise());
-				if (((PariPodium) pari).getWinner() instanceof Individual){
-					psPersist.setLong(4, ((Individual) ((PariPodium) pari).getWinner()).getId_individual());
-					psPersist.setLong(4, ((Individual) ((PariPodium) pari).getSecond()).getId_individual());
-					psPersist.setLong(4, ((Individual) ((PariPodium) pari).getThird()).getId_individual());
-				}
-				else{
-					psPersist.setLong(4, ((Team) ((PariPodium) pari).getWinner()).getId_team());
-					psPersist.setLong(4, ((Team) ((PariPodium) pari).getSecond()).getId_team());
-					psPersist.setLong(4, ((Team) ((PariPodium) pari).getThird()).getId_team());
+				if (((PariPodium) pari).getWinner() instanceof Individual) {
+					psPersist.setLong(4, ((Individual) ((PariPodium) pari)
+							.getWinner()).getId_individual());
+					psPersist.setLong(4, ((Individual) ((PariPodium) pari)
+							.getSecond()).getId_individual());
+					psPersist.setLong(4, ((Individual) ((PariPodium) pari)
+							.getThird()).getId_individual());
+				} else {
+					psPersist.setLong(4, ((Team) ((PariPodium) pari)
+							.getWinner()).getId_team());
+					psPersist.setLong(4, ((Team) ((PariPodium) pari)
+							.getSecond()).getId_team());
+					psPersist.setLong(4,
+							((Team) ((PariPodium) pari).getThird())
+									.getId_team());
 				}
 				psPersist.setString(5, "pariPodium");
 
@@ -156,7 +172,6 @@ public class PariManager {
 		}
 		return pari;
 
-
 	}
 
 	// -----------------------------------------------------------------------------
@@ -177,39 +192,46 @@ public class PariManager {
 		Pari pari = null;
 		while (resultSet.next()) {
 			Subscriber subscriber;
-			
-			try {
-				subscriber = SubscribersManager.findById(resultSet.getInt("id_joueur"));
-				Long mise = resultSet.getLong("mise");
-				if (resultSet.getString("type").equals("pariWinner")){
 
-					Competitor winner = CompetitorsManager.findById(resultSet.getInt("competiteurpremiere_id"));
-					Competition competition = CompetitionManager.findById(resultSet.getInt("id_competition")) ;
+			try {
+				subscriber = SubscribersManager.findById(resultSet
+						.getInt("id_joueur"));
+				Long mise = resultSet.getLong("mise");
+				if (resultSet.getString("type").equals("pariWinner")) {
+
+					Competitor winner = CompetitorsManager.findById(resultSet
+							.getInt("competiteurpremiere_id"));
+					Competition competition = CompetitionManager
+							.findById(resultSet.getInt("id_competition"));
 					pari = new PariWinner(mise, subscriber, winner);
 					pari.setPari_id(id);
 					pari.setCompetition(competition);
-	
-				}else{
+
+				} else {
 					Competitor winner;
-					winner = CompetitorsManager.findById(resultSet.getInt("competiteurpremiere_id"));
-	
+					winner = CompetitorsManager.findById(resultSet
+							.getInt("competiteurpremiere_id"));
+
 					Competitor second;
-					second = CompetitorsManager.findById(resultSet.getInt("competiteurdeuxieme_id"));
-	
+					second = CompetitorsManager.findById(resultSet
+							.getInt("competiteurdeuxieme_id"));
+
 					Competitor third;
-					third = CompetitorsManager.findById(resultSet.getInt("competiteurtroisieme_id"));
-	
-					Competition competition = CompetitionManager.findById(resultSet.getInt("id_competition")) ;
-					pari = new PariPodium(mise, subscriber, winner, second, third);
+					third = CompetitorsManager.findById(resultSet
+							.getInt("competiteurtroisieme_id"));
+
+					Competition competition = CompetitionManager
+							.findById(resultSet.getInt("id_competition"));
+					pari = new PariPodium(mise, subscriber, winner, second,
+							third);
 
 					pari.setPari_id(id);
 
 					pari.setCompetition(competition);
 
 				}
-			
+
 			} catch (BadParametersException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -279,59 +301,68 @@ public class PariManager {
 	 * @param bet
 	 *            the bet to be updated.
 	 * @throws SQLException
-	 * @throws ExistingCompetitionException 
+	 * @throws ExistingCompetitionException
 	 */
-	public static void update(Pari pari) throws SQLException, ExistingCompetitionException {
+	public static void update(Pari pari) throws SQLException,
+			ExistingCompetitionException {
 		Connection c = DataBaseConnection.getConnection();
-		
-		if (pari instanceof PariWinner){
+
+		if (pari instanceof PariWinner) {
 			PreparedStatement psUpdate = c
 					.prepareStatement("update pari set id_joueur=?, mise=?, competiteurpremiere_id=?, type=?, id_competition=? where id_pari=?");
 			psUpdate.setLong(1, pari.getSubscriber().getId_subscribe());
 			psUpdate.setLong(2, pari.getMise());
-			PariWinner pariwin = (PariWinner)pari;
-			if ( pariwin.getWinner() instanceof Individual){
-				psUpdate.setLong(3, ((Individual) pariwin.getWinner()).getId_individual());
-			}
-			else{
+			PariWinner pariwin = (PariWinner) pari;
+			if (pariwin.getWinner() instanceof Individual) {
+				psUpdate.setLong(3,
+						((Individual) pariwin.getWinner()).getId_individual());
+			} else {
 				psUpdate.setLong(3, ((Team) pariwin.getWinner()).getId_team());
 			}
 			psUpdate.setString(4, "pariWinner");
 
-			long id_comp=CompetitionManager.findByName(pariwin.getCompetition());
-			if(id_comp==0)throw new ExistingCompetitionException("La competition "+pariwin.getCompetition()+" n'existe pas" );
+			long id_comp = CompetitionManager.findByName(pariwin
+					.getCompetition());
+			if (id_comp == 0)
+				throw new ExistingCompetitionException("La competition "
+						+ pariwin.getCompetition() + " n'existe pas");
 			psUpdate.setLong(5, id_comp);
 			psUpdate.setInt(6, pari.getPari_id());
 			psUpdate.executeUpdate();
 			psUpdate.close();
 			c.close();
 		}
-		
-		else{
+
+		else {
 			PreparedStatement psUpdate = c
 					.prepareStatement("update pari set id_joueur=?, mise=?, competiteurpremiere_id=?, competiteurdeuxieme_id=?, competiteurtroisieme_id=?, type=?, id_competition=? where id_pari=?");
 			psUpdate.setLong(1, pari.getSubscriber().getId_subscribe());
 			psUpdate.setLong(2, pari.getMise());
-			PariPodium paripod= (PariPodium)pari;
-			
-			if (((PariPodium) pari).getWinner() instanceof Individual){
-				psUpdate.setLong(3, ((Individual) paripod.getWinner()).getId_individual());
-				psUpdate.setLong(3, ((Individual) paripod.getSecond()).getId_individual());
-				psUpdate.setLong(3, ((Individual) paripod.getThird()).getId_individual());
-			}
-			else{
+			PariPodium paripod = (PariPodium) pari;
+
+			if (((PariPodium) pari).getWinner() instanceof Individual) {
+				psUpdate.setLong(3,
+						((Individual) paripod.getWinner()).getId_individual());
+				psUpdate.setLong(3,
+						((Individual) paripod.getSecond()).getId_individual());
+				psUpdate.setLong(3,
+						((Individual) paripod.getThird()).getId_individual());
+			} else {
 				psUpdate.setLong(3, ((Team) paripod.getWinner()).getId_team());
 				psUpdate.setLong(3, ((Team) paripod.getSecond()).getId_team());
 				psUpdate.setLong(3, ((Team) paripod.getThird()).getId_team());
 			}
 			psUpdate.setString(4, "pariPodium");
-			long id_comp=CompetitionManager.findByName(paripod.getCompetition());
-			if(id_comp==0)throw new ExistingCompetitionException("La competition "+paripod.getCompetition()+" n'existe pas" );
+			long id_comp = CompetitionManager.findByName(paripod
+					.getCompetition());
+			if (id_comp == 0)
+				throw new ExistingCompetitionException("La competition "
+						+ paripod.getCompetition() + " n'existe pas");
 			psUpdate.setLong(5, id_comp);
 			psUpdate.executeUpdate();
 			psUpdate.close();
 			c.close();
-			
+
 		}
 	}
 
@@ -352,41 +383,39 @@ public class PariManager {
 		psUpdate.close();
 		c.close();
 	}
+
 	// -----------------------------------------------------------------------------
 
-	public static void main(String[] args) throws SQLException{
+	public static void main(String[] args) throws SQLException {
 		ArrayList<Competitor> competitors = new ArrayList<Competitor>();
-		 Team t1;
+		Team t1;
 		try {
 			t1 = new Team("Telecom");
 
-		 try {
-			t1.addMember(new Individual("Cisse","Mamadou", "28-09-1992"));
+			try {
+				t1.addMember(new Individual("Cisse", "Mamadou", "28-09-1992"));
 
-		 t1.addMember(new Individual("Cisse","Sanounou", "05-01-1989"));
-		 Team t2 =new Team("Ensta");
-		 t2.addMember(new Individual("Thiam","Pierre", "07-10-1991"));
-		 t2.addMember(new Individual("Thiam","Sami", "05-01-1983"));
-		 Team t3 =new Team("Enib");
-		 t3.addMember(new Individual("Toure","Pinda", "07-10-1990"));
-		 t3.addMember(new Individual("Toure","Kadi", "02-11-1991"));
-		 Team t4 =new Team("Esmisab");
-		 t4.addMember(new Individual("Diarra","Doudou", "07-10-1990"));
-		 t4.addMember(new Individual("Diarra","Oumou", "02-11-1991"));
-		 competitors.add(t1);
-		 competitors.add(t2);
-		 competitors.add(t3);
-		 competitors.add(t4);
+				t1.addMember(new Individual("Cisse", "Sanounou", "05-01-1989"));
+				Team t2 = new Team("Ensta");
+				t2.addMember(new Individual("Thiam", "Pierre", "07-10-1991"));
+				t2.addMember(new Individual("Thiam", "Sami", "05-01-1983"));
+				Team t3 = new Team("Enib");
+				t3.addMember(new Individual("Toure", "Pinda", "07-10-1990"));
+				t3.addMember(new Individual("Toure", "Kadi", "02-11-1991"));
+				Team t4 = new Team("Esmisab");
+				t4.addMember(new Individual("Diarra", "Doudou", "07-10-1990"));
+				t4.addMember(new Individual("Diarra", "Oumou", "02-11-1991"));
+				competitors.add(t1);
+				competitors.add(t2);
+				competitors.add(t3);
+				competitors.add(t4);
 			} catch (ExistingCompetitorException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		 CompetitorsManager.persist(t1);
+			CompetitorsManager.persist(t1);
 		} catch (BadParametersException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 
 }

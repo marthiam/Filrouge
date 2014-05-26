@@ -212,7 +212,8 @@ public interface Betting {
 	 * @return Competitor instance.
 	 */
 	Competitor createCompetitor(String lastName, String firstName,
-			String borndate, String managerPwd) throws AuthenticationException, BadParametersException;
+			String borndate, String managerPwd) throws AuthenticationException,
+			BadParametersException;
 
 	/**
 	 * create competitor (team) instance. If the competitor is already
@@ -232,8 +233,7 @@ public interface Betting {
 	 * @return Competitor instance.
 	 */
 	Competitor createCompetitor(String name, String managerPwd)
-			throws AuthenticationException,
-			BadParametersException;
+			throws AuthenticationException, BadParametersException;
 
 	/**
 	 * delete a competitor for a competition.

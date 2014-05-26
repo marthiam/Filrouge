@@ -1,10 +1,11 @@
 package fr.uv1.bettingServices.exceptions;
 
 public class SubscriberException extends Exception {
-	public SubscriberException(){
+	public SubscriberException() {
 		super();
 	}
-	public SubscriberException(String reason){
+
+	public SubscriberException(String reason) {
 		super(reason);
-	}	
+	}
 }
