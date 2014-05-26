@@ -4,7 +4,7 @@
 package fr.uv1.bettingServices;
 
 import fr.uv1.bettingServices.exceptions.BadParametersException;
-import fr.uv1.bettingServices.exceptions.SubscriberException;
+
 
 /**
  * @author mcisse

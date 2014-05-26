@@ -5,10 +5,6 @@ import fr.uv1.bettingServices.exceptions.SubscriberException;
 
 public class PariPodium extends Pari {
 
-	/** Le vainqueur de la competition */
-	private Competitor winner;
-	
-	
 	/** Le deuxième de la compétition */
 	private Competitor second;
 	
@@ -37,26 +33,24 @@ public class PariPodium extends Pari {
 		this.setThird(third);
 	}
 
-	/**
-	 * @return Le vainqueur de la competition
-	 */
-	public Competitor getWinner() {
-		return winner;
-	}
-
 
 
 	/**
-	 * @return Le deuxième de la compétition
+	 * Renvoie le deuxieme du pari .
+	 * @return 
+	 * 		le competiteur deuxieme .
 	 */
 	public Competitor getSecond() {
 		return second;
 	}
 
 	/**
-	 * @param second
-	 *            Le deuxième de la compétition
+	 * Met à jour le deuxieme  du pari .
+	 * 
+	 * @param third
+	 *            Le nouveau competiteur  deuxieme  
 	 * @throws BadParametersException
+	 * 			est levée si cet competiteur n'est pas instancié.
 	 */
 	public void setSecond(Competitor second) throws BadParametersException {
 		if (second == null)
@@ -66,16 +60,21 @@ public class PariPodium extends Pari {
 	}
 
 	/**
-	 * @return Le troisième de la compétition
+	 * Renvoie le troisième du pari .
+	 * @return 
+	 * 		le competiteur troisième .
 	 */
 	public Competitor getThird() {
 		return third;
 	}
 
 	/**
+	 * Met à jour le troisième du pari .
+	 * 
 	 * @param third
-	 *            Le troisième de la compétition
+	 *            Le nouveau competiteur  troisième  
 	 * @throws BadParametersException
+	 * 			est levée si cet competiteur n'est pas instancié.
 	 */
 	public void setThird(Competitor third) throws BadParametersException {
 		if (third == null)
@@ -86,14 +85,20 @@ public class PariPodium extends Pari {
 	
 	
 	/**
-	 * @return Le troisième de la compétition
+	 * Retourne les informations concernant le  troisième du pari.
+	 * @return
+	 * 		 les information du competitteur troisième.
+	 * 		
 	 */
 	public String  thirdInfo() {
 		return this.third.toString();
 	}
 	
 	/**
-	 * @return Le troisième de la compétition
+	 * Retourne les informations concernant le  second du pari.
+	 * @return
+	 * 		 les information du competitteur second.
+	 * 		
 	 */
 	public String  secondInfo() {
 		return this.second.toString();

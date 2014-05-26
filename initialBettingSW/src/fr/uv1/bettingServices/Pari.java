@@ -16,8 +16,6 @@ public class Pari {
 	/** La competition du pari */
 	private Competition competition;
 
-	/** L'identifiant de la compétition sur laquelle est fait le pari */
-	private int competition_id;
 	
 	
 	/** Le competiteur sur lequel le joueur a parié */
@@ -142,9 +140,11 @@ public class Pari {
 	}
 	
 	/**
+	 * Met à jour  le competiteur  sur le quel on pari
 	 * @param winner
-	 *            the winner to set
+	 *            le  competiteur gagnant du pari
 	 * @throws BadParametersException
+	 * 				est levée si ce competiteur est non instancié .
 	 */
 	public void setWinner(Competitor winner) throws BadParametersException {
 		if (winner == null)
@@ -153,12 +153,25 @@ public class Pari {
 		this.winner = winner;
 	}
 	
-	
+	/**
+	 * Retourne les infomations dconcernant le parieur.
+	 * @return
+	 * 		 les information du parieur .
+	 * 	
+	 */
 	public String getSubscriberInfo() {
 		return   this.getSubscriber().toString() + " "+ this.mise;
 	}
+	
+	/**
+	 * Retourne les infos concernant le  gagnant du pari.
+	 * @return
+	 * 		 les information du competitteur gagnant.
+	 * 		
+	 */
 	public String winnerInfo() {
 		return   this.getWinner().toString();
 	}
+	
 
 }

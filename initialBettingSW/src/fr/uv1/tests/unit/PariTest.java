@@ -22,10 +22,12 @@ public class PariTest {
 	private Competition competition;
 	private ArrayList<Competitor> competitors;
 	private Subscriber sub;
+	private Competitor indiv;
 
 	@Before
 	public void beforeTest() throws BadParametersException,
 			CompetitionException {
+		 indiv = new Individual("Cisse", "Tenin", "28-09-1987");
 		competitors = new ArrayList<Competitor>();
 		competitors.add(new Individual("Cisse", "Mamadou", "28-09-1992"));
 		competitors.add(new Individual("Cisse", "Sanounou", "05-01-1989"));
@@ -37,7 +39,8 @@ public class PariTest {
 
 	@Test
 	public void TestPari() throws BadParametersException {
-		pari = new Pari(100, sub);
+		
+		pari = new Pari(100, sub,indiv);
 		assertTrue(pari.getMise() == 100);
 		assertTrue(pari.getSubscriber().equals(sub));
 	}
@@ -45,33 +48,33 @@ public class PariTest {
 	@Test(expected = BadParametersException.class)
 	public void testMontantInvalide() throws BadParametersException,
 			SubscriberException {
-		new Pari(-100, sub);
+		new Pari(-100, sub,indiv);
 	}
 
 	@Test(expected = BadParametersException.class)
 	public void testNullSubscriberPari() throws BadParametersException,
 			SubscriberException {
-		new Pari(100, null);
+		new Pari(100, null,indiv);
 	}
 
 	@Test
 	public void testGetMise() throws BadParametersException,
 			SubscriberException {
-		pari = new Pari(100, sub);
+		pari = new Pari(100, sub,indiv);
 		assertTrue(pari.getMise() == 100);
 	}
 
 	@Test
 	public void testGetSubscriber() throws BadParametersException,
 			SubscriberException {
-		pari = new Pari(100, sub);
+		pari = new Pari(100, sub,indiv);
 		assertTrue(pari.getSubscriber().equals(sub));
 	}
 
 	@Test
 	public void testSetMise() throws BadParametersException,
 			SubscriberException {
-		pari = new Pari(100, sub);
+		pari = new Pari(100, sub,indiv);
 		pari.setMise(200);
 		assertFalse(pari.getMise() == 100);
 	}
@@ -79,7 +82,7 @@ public class PariTest {
 	@Test
 	public void testSetSubscriber() throws BadParametersException,
 			SubscriberException {
-		pari = new Pari(100, sub);
+		pari = new Pari(100, sub,indiv);
 		pari.setSubscriber(new Subscriber("Cisse", "Nene", "26-03-1996",
 				"ncisse"));
 		assertFalse(pari.getSubscriber().equals(sub));
@@ -88,7 +91,8 @@ public class PariTest {
 	@Test
 	public void testSetCompetition() throws BadParametersException,
 			CompetitionException, SubscriberException {
-		pari = new Pari(100, sub);
+		
+		pari = new Pari(100, sub,indiv);
 		ArrayList<Competitor> newcompetitors = new ArrayList<Competitor>();
 		newcompetitors.add(new Individual("Cisse", "Tenin", "28-09-1987"));
 		newcompetitors.add(new Individual("Cisse", "Aminata", "05-01-1991"));
@@ -98,13 +102,13 @@ public class PariTest {
 	@Test(expected = BadParametersException.class)
 	public void testSetMontantInvalide() throws BadParametersException,
 			SubscriberException {
-		pari = new Pari(100, sub);
+		pari = new Pari(100, sub,indiv);
 		pari.setMise(-100);
 	}
 
 	@Test(expected = BadParametersException.class)
 	public void testSetNullSubscriber() throws BadParametersException {
-		pari = new Pari(100, sub);
+		pari = new Pari(100, sub,indiv);
 		pari.setSubscriber(null);
 	}
 

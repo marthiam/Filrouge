@@ -53,6 +53,7 @@ public class Competition {
 
 	/** La liste des paris */
 	private ArrayList<Pari> betList;
+	
 
 	/**
 	 * Constructeur 
@@ -298,10 +299,15 @@ public class Competition {
 		return false ; 
 	}
 
-	/**
-	 * From interface Competitor
-	 */
+	
 
+	/**
+	 *Supprime les paris d'un joueur 
+	 * @param subscriber
+	 * 				le joueur dont on doit supprimer les paris 
+	 * @throws CompetitionException
+	 * 				est levée si la date fermeture de la competition est passée 
+	 */
 	public void supprimerParisCompetition(Subscriber subscriber)
 			throws CompetitionException {
 
