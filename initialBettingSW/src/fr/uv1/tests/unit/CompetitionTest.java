@@ -172,8 +172,10 @@ public class CompetitionTest extends Thread {
 			throws BadParametersException, CompetitionException,
 			AuthenticationException, ExistingCompetitionException,
 			SubscriberException {
+		competitors.add(new Individual("Cisse", "Sanounou", "05-01-1989"));
 		competition = new Competition(new String("Tennis"), new MyCalendar(
 				2014, 12, 1), competitors);
+		
 		sub = new Subscriber("Cisse", "Sanounou", "05-01-1989", "scisse");
 		sub.crediter(300);
 		pariwin = new PariWinner(100, sub, competiteur);
@@ -1138,6 +1140,24 @@ public class CompetitionTest extends Thread {
 		competition.solderPariWinner(c1);
 
 	}
+	@Test
+	public void testSolderPariWinnerCompetitionSansParis() throws BadParametersException,
+			CompetitionException, AuthenticationException,
+			ExistingCompetitionException, SubscriberException {
+		competitors = new ArrayList<Competitor>();
+		Competitor c1 = new Individual("Cisse", "Mamadou", "28-09-1992");
+		Competitor c2 = new Individual("Cisse", "Sanounou", "05-01-1989");
+		Competitor c3 = new Individual("Thiam", "Pierre", "07-10-1991");
+		competitors.add(c1);
+		competitors.add(c2);
+		competitors.add(c3);
+		competition = new Competition(new String("Course"), new MyCalendar(
+				2014, 12, 18), competitors);
+		MyCalendar.setDate(2014, 12, 20);
+		competition.solderPariWinner(c1);
+		MyCalendar.setDate();
+	}
+
 
 	@Test
 	public void testSolderPariWinner() throws BadParametersException,

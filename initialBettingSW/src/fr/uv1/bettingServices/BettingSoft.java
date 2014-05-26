@@ -3,6 +3,8 @@ package fr.uv1.bettingServices;
 import java.sql.SQLException;
 import java.util.*;
 
+import fr.uv1.bd.CompetitionManager;
+import fr.uv1.bd.CompetitorsManager;
 import fr.uv1.bd.SubscribersManager;
 import fr.uv1.bettingServices.exceptions.AuthenticationException;
 import fr.uv1.bettingServices.exceptions.BadParametersException;
@@ -259,6 +261,11 @@ public class BettingSoft implements Betting {
 		if (this.competitions.contains(c))
 			throw new ExistingCompetitionException(
 					"Une compétition avec le même nom existe déjà");
+		try {
+			CompetitionManager.persist(c); // create it in the data base
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		this.competitions.add(c);
 
 	}
@@ -292,6 +299,11 @@ public class BettingSoft implements Betting {
 		this.authenticateMngr(managerPwd);
 		// create a new competitor individual
 		Competitor indiv = new Individual(lastName, firstName, borndate);
+		try {
+			CompetitorsManager.persist(indiv); // create it in data base 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return indiv;
 	}
 
@@ -319,6 +331,11 @@ public class BettingSoft implements Betting {
 		this.authenticateMngr(managerPwd);
 		// create a new competitor team
 		Competitor team = new Team(name);
+		try {
+			CompetitorsManager.persist(team); //create a competitor in data base
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return team;
 	}
 
@@ -358,7 +375,14 @@ public class BettingSoft implements Betting {
 		if (c.isInThePast())
 			throw new CompetitionException("La competition  " + competition
 					+ "est dejà passée");
+		
 		c.removeCompetitor(competitor);
+		try {
+			CompetitorsManager.delete(competitor); //delete it from data base 
+		} catch (SQLException e) {
+	
+			e.printStackTrace();
+		}
 
 	}
 

@@ -48,37 +48,54 @@ public class CompetitorsManager {
 		try {
 			c.setAutoCommit(false);
 
-			if (competitor instanceof Individual) {
-				PreparedStatement psPersist = c
-						.prepareStatement(
-								"insert into personne(prenom,nom,borndate,type)  values (?,?,?,?)",
-								PreparedStatement.RETURN_GENERATED_KEYS);
-				Individual competiteur = (Individual) competitor;
-				psPersist.setString(1, competiteur.getFirstname());
-				psPersist.setString(2, competiteur.getLastname());
-
-				Date date = Date.valueOf(competiteur.getBorndateDate());
-				System.out.println("voici la date" + date);
-				psPersist.setDate(3, date);
-				psPersist.setString(4, "CompetiteurIndiv");
-
-				psPersist.executeUpdate();
-				PreparedStatement psIdValue = c
-						.prepareStatement("select currval('personne_id_seq') as value_id");
-				ResultSet resultSet = psIdValue.executeQuery();
-				Integer id = null;
-				while (resultSet.next()) {
-					id = resultSet.getInt("value_id");
+			if (competitor instanceof Individual) {  // type individuel 
+				
+				
+				// on test s'il est deja  dans la base de données 
+				long idcompet=0;
+				try {
+					idcompet = PersonsManager.findByName((Person)competitor);
+				} catch (BadParametersException e2) {
+					e2.printStackTrace();
 				}
-				psPersist.close();
-				c.commit();
-				competiteur.setId_individual(id);
-				resultSet.close();
-				psIdValue.close();
-				c.setAutoCommit(true);
-				c.close();
-
-				return competiteur;
+				if(idcompet!=0){
+					//il y est 
+					((Individual) competitor).setId_individual(idcompet);
+					
+					return competitor;
+				}else{
+					//il n'y est pas 
+					PreparedStatement psPersist = c
+							.prepareStatement(
+									"insert into personne(prenom,nom,borndate,type)  values (?,?,?,?)",
+									PreparedStatement.RETURN_GENERATED_KEYS);
+					Individual competiteur = (Individual) competitor;
+					psPersist.setString(1, competiteur.getFirstname());
+					psPersist.setString(2, competiteur.getLastname());
+	
+					Date date = Date.valueOf(competiteur.getBorndateDate());
+					System.out.println("voici la date" + date);
+					psPersist.setDate(3, date);
+					psPersist.setString(4, "CompetiteurIndiv");
+	
+					psPersist.executeUpdate();
+					PreparedStatement psIdValue = c
+							.prepareStatement("select currval('personne_id_seq') as value_id");
+					ResultSet resultSet = psIdValue.executeQuery();
+					Integer id = null;
+					while (resultSet.next()) {
+						id = resultSet.getInt("value_id");
+					}
+					psPersist.close();
+					c.commit();
+					competiteur.setId_individual(id);
+					resultSet.close();
+					psIdValue.close();
+					c.setAutoCommit(true);
+					c.close();
+	
+					return competiteur;
+				}
 
 			} else {
 				PreparedStatement psPersist = c.prepareStatement(
@@ -105,13 +122,12 @@ public class CompetitorsManager {
 					System.out.println("membre de l'equipe "
 							+ competiteur.getTeamName() + " :" + member);
 					Individual indiv = (Individual) member;
-					Long ind = findByName(indiv);
-					if (ind == 0) {
-						indiv = (Individual) CompetitorsManager.persist(indiv);
-					}
+					Long ind = PersonsManager.findByName(indiv);
+					
+					indiv = (Individual) CompetitorsManager.persist(indiv);
 
 					PreparedStatement psPersistMember = c
-							.prepareStatement("insert into estMembreDe(member_id,team_id)  values (?,?)");
+								.prepareStatement("insert into estMembreDe(member_id,team_id)  values (?,?)");
 					psPersistMember.setLong(1, indiv.getId_individual());
 					psPersistMember.setLong(2, competiteur.getId_team());
 					psPersistMember.executeUpdate();
@@ -269,42 +285,7 @@ public class CompetitorsManager {
 		return competitors;
 	}
 
-	// -----------------------------------------------------------------------------
-	/**
-	 * Find a person's id using his firstnam, lastname and borndate.
-	 * 
-	 * @param id
-	 *            the id of the competitor to retrieve.
-	 * @return the person's id or 0 if it does not exist in the database.
-	 * @throws SQLException
-	 * @throws BadParametersException
-	 */
-	public static long findByName(Person p) throws SQLException,
-			BadParametersException {
-		// 1 - Get a database connection from the class 'DatabaseConnection'
-		Connection c = DataBaseConnection.getConnection();
-
-		// 2 - Creating a Prepared Statement with the SQL instruction.
-		// The parameters are represented by question marks.
-		PreparedStatement psSelect = c
-				.prepareStatement("select id_personne from personne where prenom=? and nom=? and borndate=? ");
-
-		// 3 - Supplying values for the prepared statement parameters (question
-		// marks).
-		psSelect.setString(1, p.getFirstname());
-		psSelect.setString(2, p.getLastname());
-		psSelect.setDate(3, Date.valueOf(p.getBorndateDate()));
-
-		// 4 - Executing Prepared Statement object among the database.
-		// The return value is a Result Set containing the data.
-		ResultSet resultSet = psSelect.executeQuery();
-		long id = 0;
-		while (resultSet.next()) {
-			id = resultSet.getLong("id_personne");
-		}
-
-		return id;
-	}
+	
 
 	// -----------------------------------------------------------------------------
 	/**

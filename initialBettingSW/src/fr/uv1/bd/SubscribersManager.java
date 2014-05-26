@@ -35,45 +35,61 @@ public class SubscribersManager {
 	 * @throws SQLException
 	 */
 	public static Subscriber persist(Subscriber subscriber) throws SQLException {
-		// Two steps in this methods which must be managed in an atomic
-		// (unique) transaction:
-		// 1 - insert the new subscriber;
-		// 2 - once the insertion is OK, in order to set up the value
-		// of the id, a request is done to get this value by
-		// requesting the sequence (subscribers_id_seq) in the
-		// database.
-		Connection c = DataBaseConnection.getConnection();
-
-		try {
-			c.setAutoCommit(false);
-			PreparedStatement psPersist = c
-					.prepareStatement(
-							"insert into personne(prenom,nom,borndate,type,username,password,solde)  values (?,?,?,?,?,?,?)",
-							PreparedStatement.RETURN_GENERATED_KEYS);
-
-			psPersist.setString(1, subscriber.getFirstname());
-			psPersist.setString(2, subscriber.getLastname());
-
-			Date date = Date.valueOf(subscriber.getBorndateDate());
-			System.out.println("voici la date" + date);
-			psPersist.setDate(3, date);
-			psPersist.setString(4, "Joueur");
-			psPersist.setString(5, subscriber.getUsername());
-			psPersist.setString(6, subscriber.getPassword());
-			psPersist.setLong(7, subscriber.solde());
-			psPersist.executeUpdate();
-			PreparedStatement psIdValue = c
-					.prepareStatement("select currval('personne_id_seq') as value_id");
-			ResultSet resultSet = psIdValue.executeQuery();
-			Integer id = null;
-			while (resultSet.next()) {
-				id = resultSet.getInt("value_id");
+	
+		
+		long idsub=0;
+			try {
+				idsub = PersonsManager.findByName(subscriber);
+			} catch (BadParametersException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			}
-			psPersist.close();
-			c.commit();
-			subscriber.setId_subscribe(id);
+		if(idsub!=0){
+			
+			subscriber.setId_subscribe(idsub);
+		}else{
+			
+			// Two steps in this methods which must be managed in an atomic
+			// (unique) transaction:
+			// 1 - insert the new subscriber;
+			// 2 - once the insertion is OK, in order to set up the value
+			// of the id, a request is done to get this value by
+			// requesting the sequence (subscribers_id_seq) in the
+			// database.
+			Connection c = DataBaseConnection.getConnection();
+			try {
+				
 
-		} catch (SQLException e) {
+				
+				c.setAutoCommit(false);
+				PreparedStatement psPersist = c
+						.prepareStatement(
+								"insert into personne(prenom,nom,borndate,type,username,password,solde)  values (?,?,?,?,?,?,?)",
+								PreparedStatement.RETURN_GENERATED_KEYS);
+	
+				psPersist.setString(1, subscriber.getFirstname());
+				psPersist.setString(2, subscriber.getLastname());
+	
+				Date date = Date.valueOf(subscriber.getBorndateDate());
+				System.out.println("voici la date" + date);
+				psPersist.setDate(3, date);
+				psPersist.setString(4, "Joueur");
+				psPersist.setString(5, subscriber.getUsername());
+				psPersist.setString(6, subscriber.getPassword());
+				psPersist.setLong(7, subscriber.solde());
+				psPersist.executeUpdate();
+				PreparedStatement psIdValue = c
+						.prepareStatement("select currval('personne_id_seq') as value_id");
+				ResultSet resultSet = psIdValue.executeQuery();
+				Integer id = null;
+				while (resultSet.next()) {
+					id = resultSet.getInt("value_id");
+				}
+				psPersist.close();
+				c.commit();
+				subscriber.setId_subscribe(id);
+
+		   } catch (SQLException e) {
 			try {
 				c.rollback();
 			} catch (SQLException e1) {
@@ -81,11 +97,11 @@ public class SubscribersManager {
 			}
 			c.setAutoCommit(true);
 			throw e;
-		}
+		 }
 
 		c.setAutoCommit(true);
 		c.close();
-
+	}
 		return subscriber;
 	}
 

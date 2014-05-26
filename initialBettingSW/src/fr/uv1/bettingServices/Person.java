@@ -255,10 +255,6 @@ public class Person {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object p) {
-
-		if (p instanceof Person) {
-			return false;
-		}
 		return this.toString().equals(p.toString());
 	}
 

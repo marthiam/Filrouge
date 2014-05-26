@@ -298,10 +298,13 @@ public class Subscriber extends Person implements Serializable {
 
 	@Override
 	public boolean equals(Object an_object) {
-		if (!(an_object instanceof Subscriber))
+		if (an_object instanceof Subscriber){
+			Subscriber s = (Subscriber) an_object;
+			return this.username.equals(s.getUsername());
+			
+		}else if (an_object instanceof Person ) return super.equals(an_object);
 			return false;
-		Subscriber s = (Subscriber) an_object;
-		return this.username.equals(s.getUsername());
+		
 	}
 
 	/* 

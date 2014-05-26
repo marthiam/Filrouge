@@ -70,7 +70,7 @@ public class PariManager {
 								PreparedStatement.RETURN_GENERATED_KEYS);
 
 				psPersist.setInt(1, pariwin.getPari_id());
-				long subsId = CompetitorsManager.findByName(pariwin
+				long subsId = PersonsManager.findByName(pariwin
 						.getSubscriber());
 				if (subsId == 0) {
 					throw new ExistingSubscriberException("le joueur "
